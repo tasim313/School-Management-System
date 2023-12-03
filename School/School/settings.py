@@ -1,0 +1,72 @@
+from School.Settings.auth import(
+    ALLOWED_HOSTS,
+    AUTH_PASSWORD_VALIDATORS,
+    AUTH_USER_MODEL,
+    AUTHENTICATION_BACKENDS,
+    BASE_DIR,
+    DEBUG,
+    DEFAULT_AUTO_FIELD,
+    REST_FRAMEWORK,
+    ROOT_URLCONF,
+    SECRET_KEY,
+    WSGI_APPLICATION
+)
+
+
+from School.Settings.base import(
+    INSTALLED_APPS,
+    LANGUAGE_CODE ,
+    TIME_ZONE,
+    USE_I18N,
+    USE_TZ
+)
+
+
+from School.Settings.database import(
+    DATABASES
+)
+
+
+from School.Settings.middleware import(
+    MIDDLEWARE
+)
+
+from School.Settings.static import(
+    STATIC_URL,
+    MEDIA_ROOT,
+    MEDIA_URL,
+    MEDIA_URL_2 
+)
+
+from School.Settings.templates import(
+    TEMPLATES
+)
+
+
+
+ALLOWED_HOSTS,
+AUTH_PASSWORD_VALIDATORS,
+AUTH_USER_MODEL,
+AUTHENTICATION_BACKENDS,
+BASE_DIR,
+DEBUG,
+DEFAULT_AUTO_FIELD,
+REST_FRAMEWORK,
+ROOT_URLCONF,
+SECRET_KEY,
+WSGI_APPLICATION
+
+INSTALLED_APPS,
+LANGUAGE_CODE ,
+TIME_ZONE,
+USE_I18N,
+USE_TZ,
+
+DATABASES,
+MIDDLEWARE,
+STATIC_URL,
+MEDIA_ROOT,
+MEDIA_URL,
+MEDIA_URL_2,
+TEMPLATES,
+
