@@ -39,7 +39,8 @@ from .utills import(
     get_website_school_academic_class_routine_documents_pdf,
     get_website_get_gallery_image,
     get_news_events_slug,
-    get_news_events_image
+    get_news_events_image,
+    get_blog_slug
 )
 
 from .choice import(
@@ -430,3 +431,53 @@ class NewsEvents(UniversalModel):
 
     def __str__(self):
         return self.headline 
+    
+
+
+class BlogCategory(UniversalModel):
+    name = models.CharField(max_length=100, unique=True)
+    school_blog_category_website_information = models.ForeignKey(
+        WebsiteInformation,
+        on_delete=models.DO_NOTHING,
+        related_name='blog_categories',
+        verbose_name='School Website Blog Category'
+    )
+
+    def __str__(self):
+        return self.name
+    
+
+class BlogTag(UniversalModel):
+    name = models.CharField(max_length=100, unique=True)
+    school_blog_tag_website_information = models.ForeignKey(
+        WebsiteInformation,
+        on_delete=models.DO_NOTHING,
+        related_name='blog_tags',
+        verbose_name='School Website Blog Tag'
+    )
+
+    def __str__(self):
+        return self.name
+    
+
+class Blog(UniversalModel):
+    school_blog_website_information = models.OneToOneField(
+        WebsiteInformation,
+        on_delete=models.DO_NOTHING,
+        related_name='school_website_blog_information',
+        verbose_name='School Website Blog Information'
+    )
+    slug = AutoSlugField(populate_from=get_blog_slug, unique=True, null=True, db_index=True)
+    title = models.CharField(max_length=300, blank=True, null=True, db_index=True, verbose_name='Title')
+    content = models.TextField(max_length=None, blank=True, null=True, verbose_name='Content')
+    publish_date = models.DateTimeField(auto_now_add=True)
+    
+    categories = models.ManyToManyField(BlogCategory, blank=True, verbose_name='Categories')
+    tags = models.ManyToManyField(BlogTag, blank=True, verbose_name='Tags')
+
+    class Meta:
+        ordering = ['-publish_date']
+        verbose_name_plural = 'School Blog Posts'
+
+    def __str__(self):
+        return self.title

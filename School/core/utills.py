@@ -118,3 +118,7 @@ def get_news_events_slug(instance):
 def get_news_events_image(instance, filename):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'website-news-events-image'}{'image'}-{filename}{str(instance.uid).split('-')[0]}"
+
+def get_blog_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'blog'}{str(instance.uid).split('-')[0]}"
