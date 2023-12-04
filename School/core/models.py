@@ -36,7 +36,8 @@ from .utills import(
     get_website_school_academic_lesson_plan_documents_pdf,
     get_website_school_academic_calendar_documents_pdf,
     get_website_school_academic_syllabus_documents_pdf,
-    get_website_school_academic_class_routine_documents_pdf
+    get_website_school_academic_class_routine_documents_pdf,
+    get_website_get_gallery_image
 )
 
 from .choice import(
@@ -370,3 +371,20 @@ class AcademicInformation(UniversalModel):
     def __str__(self):
         return f"Academic Information for {self.school_academic_information.name}"
 
+
+
+
+class WebSiteGalleryInformation(UniversalModel):
+    school_website_gallery =  models.OneToOneField(WebsiteInformation, on_delete=models.CASCADE, related_name='school_website_gallery_information')
+    image = VersatileImageField(
+        upload_to=get_website_get_gallery_image,
+        null=True, blank=True,
+        verbose_name='Image'
+    )
+
+    class Meta:
+        verbose_name_plural = 'School Website Gallery Images'
+        ordering = ['-createdAt']  
+
+    def __str__(self):
+        return f"Gallery Image for {self.school_website_gallery.name}"

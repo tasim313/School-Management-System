@@ -104,3 +104,8 @@ def get_website_school_academic_syllabus_documents_pdf(instance, filename):
 def get_website_school_academic_class_routine_documents_pdf(instance, filename):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'class-routine-pdf'}{'document'}-{filename}{str(instance.uid).split('-')[0]}"
+
+
+def get_website_get_gallery_image(instance, filename):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'website-gallery-image'}{'image'}-{filename}{str(instance.uid).split('-')[0]}"
