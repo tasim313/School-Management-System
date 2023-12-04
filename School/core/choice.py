@@ -30,3 +30,8 @@ class AdmissionBranch(models.TextChoices):
 class AdmissionDivision(models.TextChoices):
     BANGLA = 'bangla', 'বাংলা'
     ENGLISH = 'english', 'ইংরেজি'
+
+
+class NewsEventsStatus(models.TextChoices):
+    NEWS = 'news', 'News'
+    EVENT = 'event', 'Event'

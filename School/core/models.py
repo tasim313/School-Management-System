@@ -37,7 +37,9 @@ from .utills import(
     get_website_school_academic_calendar_documents_pdf,
     get_website_school_academic_syllabus_documents_pdf,
     get_website_school_academic_class_routine_documents_pdf,
-    get_website_get_gallery_image
+    get_website_get_gallery_image,
+    get_news_events_slug,
+    get_news_events_image
 )
 
 from .choice import(
@@ -45,6 +47,7 @@ from .choice import(
     AdmissionClass,
     AdmissionBranch,
     AdmissionDivision,
+    NewsEventsStatus,
 )
 
 
@@ -388,3 +391,42 @@ class WebSiteGalleryInformation(UniversalModel):
 
     def __str__(self):
         return f"Gallery Image for {self.school_website_gallery.name}"
+    
+
+
+
+class NewsEvents(UniversalModel):
+    school_website_news_events =  models.OneToOneField(WebsiteInformation, on_delete=models.DO_NOTHING, related_name='school_website_news_events_information')
+    news_events_status = models.CharField(
+        max_length=100,
+        choices=NewsEventsStatus.choices,
+        db_index=True,
+        default=NewsEventsStatus.NEWS,
+        verbose_name='Type'
+    )
+    slug = AutoSlugField(populate_from=get_news_events_slug,
+                         unique=True,
+                         null=True,
+                         db_index=True)
+    headline = models.CharField(max_length=300,
+                                blank=True,
+                                null=True,
+                                db_index=True,
+                                verbose_name='Title')
+    description = models.TextField(max_length=None,
+                                   validators=[MinLengthValidator(11)],
+                                   blank=True,
+                                   null=True,
+                                   )
+    publish_date = models.DateTimeField(blank=True, null=True)
+
+    image = VersatileImageField(
+        upload_to=get_news_events_image,
+        null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-publish_date']
+        verbose_name_plural = 'News and Events'
+
+    def __str__(self):
+        return self.headline 
