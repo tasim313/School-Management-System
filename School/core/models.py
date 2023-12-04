@@ -40,7 +40,9 @@ from .utills import(
     get_website_get_gallery_image,
     get_news_events_slug,
     get_news_events_image,
-    get_blog_slug
+    get_blog_slug,
+    get_social_media_slug,
+    get_alumni_section_slug
 )
 
 from .choice import(
@@ -480,4 +482,43 @@ class Blog(UniversalModel):
         verbose_name_plural = 'School Blog Posts'
 
     def __str__(self):
-        return self.title
+        return self.title 
+
+
+class SocialMedia(UniversalModel):
+    school_social_media_website_information = models.OneToOneField(
+        WebsiteInformation,
+        on_delete=models.CASCADE,
+        related_name='social_media_info',
+        verbose_name='SocialMedia Website Information'
+    )
+    facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook URL')
+    twitter_url = models.URLField(blank=True, null=True, verbose_name='Twitter URL')
+    instagram_url = models.URLField(blank=True, null=True, verbose_name='Instagram URL')
+    linkedin_url = models.URLField(blank=True, null=True, verbose_name='LinkedIn URL')
+    slug = AutoSlugField(populate_from=get_social_media_slug, unique=True, null=True, db_index=True)
+
+    class Meta:
+        verbose_name_plural = 'Social Media Information'
+
+    def __str__(self):
+        return f"Social Media Information for {self.school_social_media_website_information.name}"
+    
+
+class AlumniSection(UniversalModel):
+    school_alumni_section_website_information = models.OneToOneField(
+        WebsiteInformation,
+        on_delete=models.CASCADE,
+        related_name='alumni_section_info',
+        verbose_name='School Website Alumni Information'
+    )
+    slug = AutoSlugField(populate_from=get_alumni_section_slug, unique=True, null=True, db_index=True)
+    about_alumni = models.TextField(blank=True, null=True, verbose_name='About Alumni')
+    alumni_events = models.TextField(blank=True, null=True, verbose_name='Alumni Events')
+    alumni_news = models.TextField(blank=True, null=True, verbose_name='Alumni News')
+
+    class Meta:
+        verbose_name_plural = 'Alumni Section Information'
+
+    def __str__(self):
+        return f"Alumni Section Information for {self.school_alumni_section_website_information.name}"

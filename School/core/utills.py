@@ -122,3 +122,11 @@ def get_news_events_image(instance, filename):
 def get_blog_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'blog'}{str(instance.uid).split('-')[0]}"
+
+def get_social_media_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'social-media'}{str(instance.school_social_media_website_information.uid).split('-')[0]}"
+
+def get_alumni_section_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'alumni-section'}{str(instance.school_alumni_section_website_information.uid).split('-')[0]}"
