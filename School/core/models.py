@@ -529,3 +529,99 @@ class AlumniSection(UniversalModel):
 
 
 
+class WebsiteTeacherInformation(UniversalModel):
+    school_teacher_website_information = models.ForeignKey(
+       WebsiteInformation,
+       on_delete=models.DO_NOTHING,
+       related_name='teachers',
+       verbose_name='School Website Teacher Information'
+    )
+    slug = AutoSlugField(populate_from=get_website_teacher_slug, unique=True, null=True, db_index=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    position = models.CharField(max_length=255, verbose_name='Position')
+    bio = models.TextField(blank=True, null=True, verbose_name='Biography')
+    contact_email = models.EmailField(blank=True, null=True, verbose_name='Contact Email')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Contact Phone')
+
+
+    class Meta:
+        verbose_name_plural = 'Teachers'
+
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.position}"
+  
+
+
+class WebsiteManagingCommitteeMemberInformation(UniversalModel):
+   school_managing_committee_member_website_information = models.ForeignKey(
+       WebsiteInformation,
+       on_delete=models.DO_NOTHING,
+       related_name='ManagingCommitteeMember',
+       verbose_name='School Website ManagingCommitteeMember Information'
+   )
+   slug = AutoSlugField(populate_from=get_website_managing_committee_member_slug, unique=True, null=True, db_index=True)
+   first_name = models.CharField(max_length=255)
+   last_name = models.CharField(max_length=255)
+   position = models.CharField(max_length=255, verbose_name='Position')
+   bio = models.TextField(blank=True, null=True, verbose_name='Biography')
+   contact_email = models.EmailField(blank=True, null=True, verbose_name='Contact Email')
+   contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Contact Phone')
+   
+   class Meta:
+       verbose_name_plural = 'ManagingCommitteeMember'
+
+
+   def __str__(self):
+       return f"{self.first_name} {self.last_name} - {self.position}"
+   
+
+
+
+
+class WebsiteStaffInformation(UniversalModel):
+   school_staff_website_information = models.ForeignKey(
+       WebsiteInformation,
+       on_delete=models.DO_NOTHING,
+       related_name='staff',
+       verbose_name='School Website Staff Information'
+   )
+   slug = AutoSlugField(populate_from=get_website_staff_slug, unique=True, null=True, db_index=True)
+   first_name = models.CharField(max_length=255)
+   last_name = models.CharField(max_length=255)
+   position = models.CharField(max_length=255, verbose_name='Position')
+   bio = models.TextField(blank=True, null=True, verbose_name='Biography')
+   contact_email = models.EmailField(blank=True, null=True, verbose_name='Contact Email')
+   contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Contact Phone')
+
+
+   class Meta:
+       verbose_name_plural = 'Staff Members'
+
+
+   def __str__(self):
+       return f"{self.first_name} {self.last_name} - {self.position}"
+
+
+
+
+class WebSiteFacultyInformation(UniversalModel):
+    school_faculty_website_information = models.ForeignKey(
+        WebsiteInformation,
+        on_delete=models.DO_NOTHING,
+        related_name='faculty_members',
+        verbose_name='School Faculty Website Information'
+    )
+    slug = AutoSlugField(populate_from=get_website_faculty_slug, unique=True, null=True, db_index=True)
+    teachers = models.ManyToManyField(WebsiteTeacherInformation, blank=True, related_name='faculty_membership', verbose_name='Teachers')
+    staff_members = models.ManyToManyField(WebsiteManagingCommitteeMemberInformation, blank=True, related_name='faculty_membership', verbose_name='Staff Members')
+    managing_committee_member = models.ManyToManyField(WebsiteManagingCommitteeMemberInformation, blank=True, related_name="Managing_Committee_Member_Information")
+    
+    class Meta:
+        verbose_name_plural = 'Faculty Members'
+
+
+    def __str__(self):
+       return f"Faculty Members for {self.school_faculty_website_information.name}"
+
