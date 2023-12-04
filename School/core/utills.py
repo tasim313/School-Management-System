@@ -130,3 +130,23 @@ def get_social_media_slug(instance):
 def get_alumni_section_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'alumni-section'}{str(instance.school_alumni_section_website_information.uid).split('-')[0]}"
+
+
+def get_website_teacher_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'website-teacher'}{str(instance.school_teacher_website_information.uid).split('-')[0]}"
+
+
+def get_website_managing_committee_member_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'managing_committee_member'}{str(instance.school_managing_committee_member_website_information.uid).split('-')[0]}"
+
+
+def get_website_staff_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'website-staff'}{str(instance.school_staff_website_information.uid).split('-')[0]}"
+
+
+def get_website_faculty_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'website-staff'}{str(instance.school_faculty_website_information.uid).split('-')[0]}"
