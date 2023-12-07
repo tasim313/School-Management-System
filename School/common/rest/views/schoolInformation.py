@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication 
 from rest_framework import filters
 
 
@@ -12,7 +12,7 @@ from ..serializers import schoolInformation
 
 class SchoolInformationOnBoardingCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     queryset = SchoolInformationOnBoarding.objects.all()
     serializer_class =  schoolInformation.SchoolInformationOnBoardingCreateSerializer
 
@@ -39,7 +39,7 @@ class SchoolInformationOnBoardingList(generics.ListAPIView):
 
 class SchoolInformationOnBoardingRetrieveUpdate(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     queryset = SchoolInformationOnBoarding.objects.all()
     serializer_class = schoolInformation.SchoolInformationOnBoardingUpdateSerializer
     lookup_field = 'uid'

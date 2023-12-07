@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication 
 from rest_framework import status, serializers
 
 from ..serializers import Register
@@ -9,7 +9,7 @@ from ..serializers import Register
 
 class StudentRegisterAPIView(generics.CreateAPIView):
     serializer_class = Register.StudentRegisterSerializer
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
