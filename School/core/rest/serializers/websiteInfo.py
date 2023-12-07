@@ -83,7 +83,16 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
             label=" Email Address",
             allow_blank=True,
             )   
+    
+    def validate(self, attrs):
+        
+        uid = attrs['uid']
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
+        return attrs
+    
     def create(self, validated_data):
 
         uid = validated_data['uid']

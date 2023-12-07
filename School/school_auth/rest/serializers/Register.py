@@ -70,6 +70,11 @@ class RegisterSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        uid = attrs['uid']
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
         return attrs
     
@@ -144,6 +149,11 @@ class SchoolAdminRegisterSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        uid = attrs['uid']
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
         return attrs
 
@@ -290,6 +300,11 @@ class StudentRegisterSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        uid = attrs['uid']
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
         return attrs
 
