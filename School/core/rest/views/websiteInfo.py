@@ -3,8 +3,20 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 from rest_framework import status, serializers
+from rest_framework.generics import RetrieveAPIView
+from django.shortcuts import get_object_or_404
 
 from ..serializers import websiteInfo
+
+from ...models import (
+    WebsiteInformation,
+    SchoolAddressInformation,
+    SchoolContactInformation
+)
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SchoolWebsiteAPIView(generics.CreateAPIView):
@@ -31,3 +43,15 @@ class SchoolWebsiteAPIView(generics.CreateAPIView):
                 'errors': e.detail
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+
+class WebsiteInformationListView(generics.ListAPIView):
+    queryset = WebsiteInformation.objects.all()
+    serializer_class = websiteInfo.WebsiteInformationSerializer
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        return self.queryset.filter(school_website__slug=school_slug)
+
+    

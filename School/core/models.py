@@ -119,6 +119,9 @@ class WebsiteInformation(UniversalModel):
 
     class Meta:
         verbose_name_plural = 'School Website Information'
+        indexes = [
+            models.Index(fields=['school_website']),
+        ]
 
     def __str__(self):
         return self.name
@@ -143,6 +146,9 @@ class SchoolAddressInformation(UniversalModel):
 
     class Meta:
         verbose_name_plural = 'School Address Information'
+        indexes = [
+            models.Index(fields=['school_address']),
+        ]
 
     def __str__(self):
         return self.school_address.name
@@ -159,6 +165,10 @@ class SchoolContactInformation(UniversalModel):
 
     class Meta:
         verbose_name_plural = 'School Contact Information'
+        indexes = [
+            models.Index(fields=['school_contact']),
+            models.Index(fields=['school_contact_address']),
+        ]
 
     def __str__(self):
         return self.school_contact.name 

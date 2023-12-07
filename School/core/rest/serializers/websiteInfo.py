@@ -19,6 +19,8 @@ from ...utills import(
     get_school_website_favicon,
 )
 
+from common.rest.serializers import schoolInformation
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -94,7 +96,6 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
         return attrs
     
     def create(self, validated_data):
-
         uid = validated_data['uid']
         name = validated_data['name']
         logo = validated_data['logo']
@@ -102,46 +103,77 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
 
         request = self.context['request']
         user = request.user
-        
+
         website_obj = WebsiteInformation.objects.all().count()
 
         school_information_instance = get_school_instance(uid)
 
         if website_obj > 0:
-            msg = 'Access denied: You Can not create new Website Information, Please update previous information or delete previous data'
-            raise serializers.ValidationError(msg)
-            
+                        msg = 'Access denied: You cannot create new Website Information. Please update previous information or delete previous data.'
+                        raise serializers.ValidationError(msg)
+
         else:
                 website = WebsiteInformation.objects.create(
-                        school_website_id = school_information_instance,
-                        name=name,
-                        logo=logo,
-                        favicon=favicon,
-                        user_created= user,
-                        status=Status.Active
-                        )
+                school_website_id=school_information_instance,
+                name=name,
+                logo=logo,
+                favicon=favicon,
+                user_created=user,
+                status=Status.Active
+                )
 
                 school_address = SchoolAddressInformation.objects.create(
-                        school_address_id = website.id,
-                        divisions = validated_data.get('divisions'),
-                        district = validated_data.get('district'),
-                        upazila = validated_data.get('upazila'),
-                        pourashava = validated_data.get('pourashava'),
-                        union_parishad = validated_data.get('union_parishad'),
-                        ward = validated_data.get('ward'),
-                        mouza = validated_data.get('mouza'),
-                        village = validated_data.get('village'),
-                        house_holding_number = validated_data.get('house_holding_number'),
-                        post_office = validated_data.get('post_office'),
-                        post_code = validated_data.get('post_code')
-
-                        )
-                
-                school_contact = SchoolContactInformation.objects.create(
-                        school_contact_id = website.id,
-                        school_contact_address_id = school_address.id,
-                        phone = validated_data.get('phone'),
-                        email = validated_data.get('email')
+                school_address_id=website.id,
+                divisions=validated_data.get('divisions'),
+                district=validated_data.get('district'),
+                upazila=validated_data.get('upazila'),
+                pourashava=validated_data.get('pourashava'),
+                union_parishad=validated_data.get('union_parishad'),
+                ward=validated_data.get('ward'),
+                mouza=validated_data.get('mouza'),
+                village=validated_data.get('village'),
+                house_holding_number=validated_data.get('house_holding_number'),
+                post_office=validated_data.get('post_office'),
+                post_code=validated_data.get('post_code')
                 )
-            
-        return website
+
+                school_contact = SchoolContactInformation.objects.create(
+                school_contact_id=website.id,
+                school_contact_address_id=school_address.id,
+                phone=validated_data.get('phone'),
+                email=validated_data.get('email')
+                )
+
+                return website
+
+
+
+
+class SchoolContactInformationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolContactInformation
+        fields = ["uid", "phone", "email", "slug"]
+
+
+
+
+class SchoolAddressInformationSerializer(serializers.ModelSerializer):
+    school_contact_address = SchoolContactInformationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = SchoolAddressInformation
+        fields = [
+            'uid', 'slug', 'divisions', "district", "upazila", "pourashava", 
+            "union_parishad", "ward", "mouza", "village", "house_holding_number", 
+            "post_office", "post_code", "school_contact_address"
+        ]
+
+
+
+class WebsiteInformationSerializer(serializers.ModelSerializer):
+    school_address_information = SchoolAddressInformationSerializer(many=True, read_only=True)
+    school_website = schoolInformation.SchoolInformationOnBoardingListSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = WebsiteInformation 
+        fields = ['uid', 'name', 'logo', 'favicon', 'slug',"school_website",'school_address_information']
