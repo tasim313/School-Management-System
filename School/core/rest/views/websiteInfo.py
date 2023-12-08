@@ -54,4 +54,38 @@ class WebsiteInformationListView(generics.ListAPIView):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_website__slug=school_slug)
 
-    
+
+
+class SchoolWebsiteUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = websiteInfo.SchoolWebsiteUpdateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'uid'
+    allowed_methods = ['PUT', 'PATCH',]
+
+    def get_queryset(self):
+        return WebsiteInformation.objects.all() 
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            response_data = {
+                'message': 'School Website Information update successful.',
+                'data': serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        except serializers.ValidationError as e:
+            error_data = {
+                'message': 'School Website Information update failed.',
+                'errors': e.detail
+            }
+            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_update(self, serializer):
+        serializer.save(user_updated=self.request.user)
