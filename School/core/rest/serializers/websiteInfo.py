@@ -290,4 +290,3 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
                 instance.save()
 
                 return instance
-        
