@@ -3,15 +3,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 from rest_framework import status, serializers
-from rest_framework.generics import RetrieveAPIView
-from django.shortcuts import get_object_or_404
+
 
 from ..serializers import websiteInfo
 
 from ...models import (
-    WebsiteInformation,
-    SchoolAddressInformation,
-    SchoolContactInformation
+    WebsiteInformation
 )
 
 import logging
