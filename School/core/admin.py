@@ -51,7 +51,7 @@ admin.site.register(SchoolSection, SchoolSectionAdmin)
 
 class WebsiteInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        # 'school_website',
+        "uid",
         'name',
         'logo',
         'favicon',
@@ -61,7 +61,7 @@ class WebsiteInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'user_created',
         'user_updated'
         )
-    # list_filter = ('school_website__name', 'name', 'slug',)
+    list_filter = ('name', 'slug',)
 
 admin.site.register(WebsiteInformation, WebsiteInformationAdmin)
 
