@@ -4,6 +4,10 @@ from core.rest.views import admission
 urlpatterns = [
     path('',
         admission.SchoolAdmissionView.as_view(),
-        name='school-website-information-create'
+        name='school-admission-list-create'
+    ),
+    path('<uuid:uid>/',
+        admission.SchoolAdmissionDetail.as_view(),
+        name='school-admission-detail'
     ),
 ]
