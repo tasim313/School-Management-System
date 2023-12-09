@@ -104,9 +104,8 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
         request = self.context['request']
         user = request.user
 
-        website_obj = WebsiteInformation.objects.all().count()
-
         school_information_instance = get_school_instance(uid)
+        website_obj = WebsiteInformation.objects.filter(school_website=school_information_instance).count()
 
         if website_obj > 0:
                         msg = 'Access denied: You cannot create new Website Information. Please update previous information or delete previous data.'
