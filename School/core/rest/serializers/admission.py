@@ -80,6 +80,8 @@ class SchoolAdmissionSerializer(ModelSerializer):
     class Meta:
         model = SchoolAdmission
         fields = [
+            "id",
+            "uid",
             "title",
             "admission_class",
             "admission_branch",
@@ -166,3 +168,27 @@ class SchoolAdmissionSerializer(ModelSerializer):
         )
 
         return admission
+
+
+class SchoolAdmissionEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolAdmission
+        fields = [
+            "id",
+            "uid",
+            "title",
+            "admission_class",
+            "admission_branch",
+            "admission_division",
+            "number_of_seats",
+            "limit_of_age",
+            "collection_of_prospectus",
+            "fill_the_application_form",
+            "online_admission_form_date_time",
+            "admission_process_college_information_website",
+            "digital_lottery_time_information",
+            "admission_application_rules",
+            "other_description",
+            "remark",
+            "pdf_file",
+        ]
