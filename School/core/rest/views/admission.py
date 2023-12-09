@@ -1,6 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 from core.rest.serializers.admission import (
     SchoolAdmissionSerializer,
@@ -10,7 +10,7 @@ from core.models import SchoolAdmission
 
 
 class SchoolAdmissionView(ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = SchoolAdmissionSerializer
 
@@ -21,7 +21,7 @@ class SchoolAdmissionView(ListCreateAPIView):
 
 
 class SchoolAdmissionDetail(RetrieveUpdateDestroyAPIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = SchoolAdmissionEditSerializer
     queryset = SchoolAdmission.objects.all()
