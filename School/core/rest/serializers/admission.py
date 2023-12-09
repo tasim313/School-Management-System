@@ -150,6 +150,17 @@ class SchoolAdmissionSerializer(ModelSerializer):
                 validated_data["school_admission"] = website_info
             else:
                 validated_data["school_admission"] = website_info
+        else:
+            website_info = WebsiteInformation.objects.create(
+                    school_website_id=school.id,
+                    name=name,
+                    logo=logo,
+                    favicon=favicon,
+                    user_created=user,
+                    status=Status.Active,
+                )
+            validated_data["school_admission"] = website_info
+
         admission = SchoolAdmission.objects.create(
             **validated_data
         )

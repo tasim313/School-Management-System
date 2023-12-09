@@ -7,8 +7,8 @@ from core.models import SchoolAdmission
 
 
 class SchoolAdmissionView(ListCreateAPIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = SchoolAdmissionSerializer
 
     def get_queryset(self):
