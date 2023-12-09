@@ -4,7 +4,7 @@ from django.conf import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-pwc#_n^zb)$_e^76@*rxy!l&kfn^5cck11e2%_n-6vciw#z0kk"
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 

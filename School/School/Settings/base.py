@@ -41,3 +41,17 @@ TIME_ZONE = 'Asia/Dhaka'
 USE_I18N = True
 
 USE_TZ = True
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+DCS_SESSION_COOKIE_SAMESITE = "None"
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://195.35.21.202',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:5000',
+    ]
