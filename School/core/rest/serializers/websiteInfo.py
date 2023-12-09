@@ -26,6 +26,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class SchoolWebsiteLiteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WebsiteInformation
+        fields = [
+            "id",
+            "slug",
+            "name",
+            "logo",
+        ]
 
 
 class SchoolWebsiteCreateSerializer(serializers.Serializer):
