@@ -103,7 +103,7 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
 
         request = self.context['request']
         user = request.user
-
+        
         school_information_instance = get_school_instance(uid)
 
         website_obj = WebsiteInformation.objects.filter(school_website=school_information_instance).count()
@@ -288,5 +288,5 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
 
                 # Save the changes to the website instance
                 instance.save()
-
+                
                 return instance
