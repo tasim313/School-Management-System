@@ -41,3 +41,57 @@ TIME_ZONE = 'Asia/Dhaka'
 USE_I18N = True
 
 USE_TZ = True
+
+
+
+SITE_ID = 2
+
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:3000",
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://195.35.21.202:3000',
+    'http://195.35.21.202:3001',
+    
+]
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:3000",
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://195.35.21.202:3000',
+    'http://195.35.21.202:3001',
+    ]
+DCS_SESSION_COOKIE_SAMESITE = "None"
+
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_PATH = '/'
+CSRF_COOKIE_HTTPONLY = True
