@@ -10,7 +10,6 @@ DJANGO_MIDDLEWARE = [
 ]
 
 THIRD_PARTY_MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
