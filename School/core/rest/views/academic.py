@@ -8,7 +8,7 @@ from core.rest.serializers.academic import AcademicInformationListSerializer
 
 
 class AcademicInformationList(ListCreateAPIView):
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
     serializer_class = AcademicInformationListSerializer
 
