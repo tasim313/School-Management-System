@@ -1,8 +1,12 @@
+from requests import Response
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
 
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from common.choice import SchoolType
+from common.mixins import WebsiteInfoMixin, SchoolInfoMixin
 
 from core.models import (
     AcademicInformation,
@@ -21,9 +25,14 @@ from core.rest.serializers.websiteInfo import SchoolWebsiteLiteSerializer
 # from core.utills import get_or_create_website_info
 
 
-class AcademicInformationListSerializer(serializers.ModelSerializer):
+class AcademicInformationListSerializer(
+    WebsiteInfoMixin,
+    SchoolInfoMixin,
+    ModelSerializer,
+):
     school_academic_information = SchoolWebsiteLiteSerializer(read_only=True)
     website_info_uid = serializers.UUIDField(write_only=True, required=False)
+    school_uid = serializers.UUIDField(write_only=True, required=False)
     website_name = serializers.CharField(
         max_length=2000,
         allow_blank=True,
@@ -77,7 +86,7 @@ class AcademicInformationListSerializer(serializers.ModelSerializer):
             "id",
             "uid",
             "slug",
-            # "title",
+            "title",
             "code_of_conducts",
             "guideline_for_parents",
             "dress_code",
@@ -94,6 +103,7 @@ class AcademicInformationListSerializer(serializers.ModelSerializer):
             "website_favicon",
             "website_info_uid",
             # school information
+            "school_uid",
             "school_name",
             "school_address",
             "school_phone",
@@ -102,55 +112,6 @@ class AcademicInformationListSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        request = self.context["request"]
-        user = request.user
-
-        website_name = validated_data.pop("website_name", None)
-        website_logo = validated_data.pop("website_logo", None)
-        website_favicon = validated_data.pop("website_favicon", None)
-        address = validated_data.pop("address", None)
-        website_info_uuid = validated_data.pop("website_info_uuid", None)
-        # onboard school data
-        school_name = validated_data.pop("school_name", None)
-        school_address = validated_data.pop("school_address", None)
-        school_phone = validated_data.pop("school_phone", None)
-        school_type = validated_data.pop("school_type", None)
-        # Retrieve the school if it exists, or create it if it doesn't
-        school, created = SchoolInformationOnBoarding.objects.get_or_create(
-            name=school_name,
-            address=school_address,
-            defaults={
-                "phone": school_phone,
-                "school_type": school_type,
-            },
-        )
-        website_info = None
-        # if website info is provided then we retrieve and use it
-        if website_info_uuid:
-            website_info = WebsiteInformation.objects.filter(uid=website_info_uuid)
-
-            # website uid is not given or not by the uuid but info is given then
-            # we create it with given info
-            if not website_info.exists():
-                website_info = WebsiteInformation.objects.create(
-                    school_website_id=school.id,
-                    name=website_name,
-                    logo=website_logo,
-                    favicon=website_favicon,
-                    user_created=user,
-                    status=Status.Active,
-                )
-                validated_data["school_admission"] = website_info
-            else:
-                validated_data["school_admission"] = website_info
-        else:
-            website_info = WebsiteInformation.objects.create(
-                school_website_id=school.id,
-                name=website_name,
-                logo=website_logo,
-                favicon=website_favicon,
-                user_created=user,
-                status=Status.Active,
-            )
-            validated_data["school_admission"] = website_info
+        school = self.create_or_get_school_info(validated_data)
+        validated_data = self.create_or_get_website_info(validated_data, school)
         return super().create(validated_data)

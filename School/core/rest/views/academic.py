@@ -13,5 +13,5 @@ class AcademicInformationList(ListCreateAPIView):
     serializer_class = AcademicInformationListSerializer
 
     def get_queryset(self):
-        queryset = AcademicInformation.objects.all()
+        queryset = AcademicInformation.objects.all().order_by("-createdAt")
         return queryset
