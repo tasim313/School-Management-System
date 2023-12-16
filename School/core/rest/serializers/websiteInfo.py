@@ -7,6 +7,7 @@ from ...models import (
     WebsiteInformation,
     SchoolAddressInformation,
     SchoolContactInformation,
+    WebSiteGalleryInformation,
 )
 
 from common.helpers import get_school_instance
@@ -424,3 +425,29 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+
+class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebSiteGalleryInformation
+        fields = [
+            "id",
+            "uid",
+            "slug",
+            "image",
+            "school_website_gallery",
+        ]
+
+
+class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):
+    school_website_gallery = SchoolWebsiteLiteSerializer()
+
+    class Meta:
+        model = WebSiteGalleryInformation
+        fields = [
+            "id",
+            "uid",
+            "slug",
+            "image",
+            "school_website_gallery",
+        ]
