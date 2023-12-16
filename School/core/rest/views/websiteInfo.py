@@ -12,6 +12,7 @@ from ...models import (
     WebsiteInformation,
     SchoolAddressInformation,
     SchoolContactInformation,
+    WebSiteGalleryInformation,
 )
 
 import logging
@@ -92,3 +93,14 @@ class SchoolWebsiteUpdateAPIView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user_updated=self.request.user)
+
+
+class WebsiteGalleryInfoList(generics.ListCreateAPIView):
+    queryset = WebSiteGalleryInformation.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = websiteInfo.WebsiteGalleryInfoListSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return websiteInfo.websiteInfo.WebsiteGalleryInfoPostSerializer
