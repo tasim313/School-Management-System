@@ -182,7 +182,7 @@ class SchoolAddressInformationSerializer(serializers.ModelSerializer):
 class WebsiteInformationSerializer(serializers.ModelSerializer):
     school_address_information = SchoolAddressInformationSerializer(many=True, read_only=True)
     school_website = schoolInformation.SchoolInformationOnBoardingListSerializer(many=False, read_only=True)
-
+   
     class Meta:
         model = WebsiteInformation 
         fields = ['uid', 'name', 'logo', 'favicon', 'slug',"school_website",'school_address_information']
