@@ -1,3 +1,4 @@
+from dataclasses import fields
 from requests import Response
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
@@ -7,7 +8,9 @@ from phonenumber_field.serializerfields import PhoneNumberField
 
 from common.choice import SchoolType
 from common.mixins import WebsiteInfoMixin, SchoolInfoMixin
-
+from common.rest.serializers.schoolInformation import (
+    SchoolInformationOnBoardingListSerializer,
+)
 from core.models import (
     AcademicInformation,
     SchoolInformationOnBoarding,
@@ -115,3 +118,53 @@ class AcademicInformationListSerializer(
         school = self.create_or_get_school_info(validated_data)
         validated_data = self.create_or_get_website_info(validated_data, school)
         return super().create(validated_data)
+
+
+class AcademicInformationDetailSerializer(ModelSerializer):
+    school_academic_information = SchoolWebsiteLiteSerializer(read_only=True)
+    school_information = SchoolInformationOnBoardingListSerializer(
+        source="school_academic_information__school_website",
+        read_only=True,
+    )
+    website_info_uid = serializers.UUIDField(write_only=True, required=False)
+    # school_uid = serializers.UUIDField(write_only=True, required=False)
+
+    class Meta:
+        model = AcademicInformation
+        fields = [
+            "id",
+            "uid",
+            "slug",
+            "title",
+            "code_of_conducts",
+            "guideline_for_parents",
+            "dress_code",
+            "homework_and_lecture_documents",
+            "lesson_plan",
+            "academic_calendar",
+            "syllabus",
+            "class_routine",
+            "co_curricular_activities",
+            "school_academic_information",
+            "school_information",
+            # uid related fields
+            "website_info_uid",
+            # "school_uid",
+        ]
+
+    def update(self, instance, validated_data):
+        # school_uid = validated_data.pop("school_uid", None)
+        website_info_uid = validated_data.pop("website_info_uid", None)
+        if website_info_uid:
+            try:
+                school_academic_information = WebsiteInformation().objects.get(
+                    uid=website_info_uid
+                )
+                validated_data[
+                    "school_academic_information"
+                ] = school_academic_information
+            except WebsiteInformation.DoesNotExist:
+                return serializers.ValidationError(
+                    {"detail": "Given WebsiteInformation Doesn't Exists!"}
+                )
+        return super().update(instance, validated_data)
