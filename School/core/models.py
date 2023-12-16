@@ -535,6 +535,7 @@ class AcademicInformation(UniversalModel):
 
 
 class WebSiteGalleryInformation(UniversalModel):
+    # TODO: make common and easy to understand FK field name: website_information
     school_website_gallery = models.OneToOneField(
         WebsiteInformation,
         on_delete=models.CASCADE,
@@ -552,7 +553,7 @@ class WebSiteGalleryInformation(UniversalModel):
         ordering = ["-createdAt"]
 
     def __str__(self):
-        return f"Gallery Image for {self.school_website_gallery.name}"
+        return f"Gallery Image for {self.school_website_gallery}"
 
 
 class NewsEvents(UniversalModel):
