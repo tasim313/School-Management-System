@@ -7,4 +7,9 @@ urlpatterns = [
         academic.AcademicInformationList.as_view(),
         name="school-admission-list-create",
     ),
+    path(
+        "<uuid:uid>/",
+        academic.AcademicInformationDetail.as_view(),
+        name="school-admission-detail",
+    ),
 ]
