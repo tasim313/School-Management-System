@@ -19,6 +19,8 @@ from core.choice import (
     Status
 )
 
+from ..serializers import websiteInfo
+
 
 class CreateWebsiteHomeSliderContentSerializer(serializers.Serializer):
     uid = serializers.UUIDField(format='hex_verbose', write_only=True)
@@ -64,3 +66,25 @@ class CreateWebsiteHomeSliderContentSerializer(serializers.Serializer):
                 )
 
         return sliderContent
+    
+
+
+class SliderContentFileListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebsiteHomeSliderContentFile
+        fields = ["uid", "image", "slug"]
+
+
+class SliderContentListSerializer(serializers.ModelSerializer):
+    websiteInfo = websiteInfo.WebsiteInformationSerializer(many=False, read_only=True, source='website_home_slider_content')
+    file = SliderContentFileListSerializer(many=True, read_only=True, source='home_content_info')
+    class Meta:
+        model =  WebsiteHomeSliderContent
+        fields = [
+            'uid',
+            'slug',
+            'title',
+            'description',
+            'file',
+            'websiteInfo'
+        ]

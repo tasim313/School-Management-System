@@ -40,3 +40,17 @@ class WebsiteHomeSliderContentAPIView(generics.CreateAPIView):
                 'errors': e.detail
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class SliderContentListView(generics.ListAPIView):
+    serializer_class = sliderContent.SliderContentListSerializer
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        
+        queryset = WebsiteHomeSliderContent.objects.filter(
+            website_home_slider_content__school_website__slug=school_slug,
+            status="Active",
+        ).select_related('website_home_slider_content')
+
+        return queryset
