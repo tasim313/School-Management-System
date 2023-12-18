@@ -100,7 +100,7 @@ class SchoolWebsiteUpdateAPIView(generics.UpdateAPIView):
 class WebsiteGalleryInfoList(generics.ListCreateAPIView):
     queryset = WebSiteGalleryInformation.objects.all()
     authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = websiteInfo.WebsiteGalleryInfoListSerializer
 
     def get_serializer_class(self):

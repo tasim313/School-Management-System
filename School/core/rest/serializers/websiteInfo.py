@@ -234,12 +234,8 @@ class SchoolAddressInformationSerializer(serializers.ModelSerializer):
 
 
 class WebsiteInformationSerializer(serializers.ModelSerializer):
-    school_address_information = SchoolAddressInformationSerializer(
-        many=True, read_only=True
-    )
-    school_website = schoolInformation.SchoolInformationOnBoardingListSerializer(
-        many=False, read_only=True
-    )
+    school_address_information = SchoolAddressInformationSerializer(many=True, read_only=True)
+    school_website = schoolInformation.SchoolInformationOnBoardingListSerializer(many=False, read_only=True)
 
     class Meta:
         model = WebsiteInformation
@@ -436,10 +432,6 @@ class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
             "image",
             "school_website_gallery",
         ]
-
-    def create(self, validated_data):
-        website_info = WebSiteGalleryInformation.objects.create(**validated_data)
-        return website_info
 
 
 class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):

@@ -59,9 +59,11 @@ def get_school_website_logo(instance, filename):
     return f"{uid}{'website-logo'}-{filename}-{str(instance.uid).split('-')[0]}"
 
 
+
 def get_school_website_favicon(instance, filename):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'website-favicon'}-{filename}-{str(instance.uid).split('-')[0]}"
+
 
 
 def get_website_home_slider_content_image(instance, filename):
