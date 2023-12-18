@@ -104,3 +104,15 @@ class WebsiteGalleryInfoList(generics.ListCreateAPIView):
         if self.request.method == "POST":
             return websiteInfo.WebsiteGalleryInfoPostSerializer
         return websiteInfo.WebsiteGalleryInfoListSerializer
+
+
+class WebsiteGalleryInfoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = WebSiteGalleryInformation.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uid"
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return websiteInfo.WebsiteGalleryInfoPostSerializer
+        return websiteInfo.WebsiteGalleryInfoListSerializer
