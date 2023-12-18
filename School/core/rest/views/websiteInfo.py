@@ -1,10 +1,12 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status, serializers
 from rest_framework.generics import RetrieveAPIView
+
 from django.shortcuts import get_object_or_404
+
 
 from ..serializers import websiteInfo
 
@@ -98,9 +100,10 @@ class SchoolWebsiteUpdateAPIView(generics.UpdateAPIView):
 class WebsiteGalleryInfoList(generics.ListCreateAPIView):
     queryset = WebSiteGalleryInformation.objects.all()
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = websiteInfo.WebsiteGalleryInfoListSerializer
 
     def get_serializer_class(self):
         if self.request.method == "POST":
-            return websiteInfo.websiteInfo.WebsiteGalleryInfoPostSerializer
+            return websiteInfo.WebsiteGalleryInfoPostSerializer
+        return websiteInfo.WebsiteGalleryInfoListSerializer

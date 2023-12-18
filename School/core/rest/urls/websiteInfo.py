@@ -18,13 +18,13 @@ urlpatterns = [
         name="school_website_information",
     ),
     path(
-        "update/<uuid:uid>/",
-        SchoolWebsiteUpdateAPIView.as_view(),
-        name="school-website-update",
-    ),
-    path(
         "gallery/",
         WebsiteGalleryInfoList.as_view(),
         name="website-gallery",
+    ),
+    path(
+        "update/<uuid:uid>/",
+        SchoolWebsiteUpdateAPIView.as_view(),
+        name="school-website-update",
     ),
 ]

@@ -433,10 +433,13 @@ class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "uid",
-            "slug",
             "image",
             "school_website_gallery",
         ]
+
+    def create(self, validated_data):
+        website_info = WebSiteGalleryInformation.objects.create(**validated_data)
+        return website_info
 
 
 class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):
@@ -447,7 +450,6 @@ class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "uid",
-            "slug",
             "image",
             "school_website_gallery",
         ]
