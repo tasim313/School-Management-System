@@ -18,4 +18,8 @@ urlpatterns = [
         "slider/content/",
         include("core.rest.urls.sliderContent"),
     ),
+    path(
+        "school/news/",
+        include("core.rest.urls.news"),
+    ),
 ]
