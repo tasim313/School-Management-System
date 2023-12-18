@@ -3,6 +3,7 @@ from core.rest.views.websiteInfo import (
     SchoolWebsiteAPIView,
     WebsiteInformationListView,
     SchoolWebsiteUpdateAPIView,
+    WebsiteGalleryInfoList,
 )
 
 urlpatterns = [
@@ -10,6 +11,11 @@ urlpatterns = [
         "",
         SchoolWebsiteAPIView.as_view(),
         name="school-website-information-create",
+    ),
+    path(
+        "gallery/",
+        WebsiteGalleryInfoList.as_view(),
+        name="school-gallery",
     ),
     path(
         "<slug:school_slug>/",
