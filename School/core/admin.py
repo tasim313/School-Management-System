@@ -17,6 +17,7 @@ from .models import (
     SchoolAdmission,
     AcademicInformation,
     WebSiteGalleryInformation,
+    NewsEvents,
 )
 
 
@@ -344,3 +345,15 @@ class WebSiteGalleryInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(WebSiteGalleryInformation, WebSiteGalleryInformationAdmin)
+
+
+class NewsEventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "uid",
+        "slug",
+        "image",
+    )
+
+
+admin.site.register(NewsEvents, NewsEventsAdmin)
