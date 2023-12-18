@@ -4,6 +4,7 @@ from core.rest.views.websiteInfo import (
     WebsiteInformationListView,
     SchoolWebsiteUpdateAPIView,
     WebsiteGalleryInfoList,
+    WebsiteGalleryInfoDetail,
 )
 
 urlpatterns = [
@@ -26,5 +27,10 @@ urlpatterns = [
         "update/<uuid:uid>/",
         SchoolWebsiteUpdateAPIView.as_view(),
         name="school-website-update",
+    ),
+    path(
+        "gallery/<uuid:uid>/",
+        WebsiteGalleryInfoDetail.as_view(),
+        name="school-gallery-detail",
     ),
 ]
