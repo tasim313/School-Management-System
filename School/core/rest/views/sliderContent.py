@@ -54,3 +54,19 @@ class SliderContentListView(generics.ListAPIView):
         ).select_related('website_home_slider_content')
 
         return queryset
+    
+
+
+class WebsiteHomeSliderContentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = sliderContent.UpdateWebsiteHomeSliderContentSerializer
+    lookup_field = 'uid' 
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        queryset = WebsiteHomeSliderContent.objects.filter(
+            website_home_slider_content__school_website__slug=school_slug
+        ).select_related('website_home_slider_content')
+        
+        return queryset

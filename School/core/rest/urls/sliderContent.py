@@ -1,7 +1,8 @@
 from django.urls import path
 from core.rest.views.sliderContent import (
     WebsiteHomeSliderContentAPIView,
-    SliderContentListView
+    SliderContentListView,
+    WebsiteHomeSliderContentDetailView
 )
 
 
@@ -12,6 +13,11 @@ urlpatterns = [
     path(
         "<slug:school_slug>/",
         SliderContentListView.as_view(),
-        name="school_website_information",
+        name="website-homeSlider-content-list",
+    ),
+    path(
+        "<slug:school_slug>/update/<uuid:uid>/",
+        WebsiteHomeSliderContentDetailView.as_view(),
+        name="website-homeSlider-content-details",
     ),
 ]
