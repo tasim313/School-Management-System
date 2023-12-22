@@ -88,3 +88,55 @@ class SliderContentListSerializer(serializers.ModelSerializer):
             'file',
             'websiteInfo'
         ]
+
+
+class UpdateWebsiteHomeSliderContentSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=30, trim_whitespace=True, required=False, label="Title", allow_blank=True)
+    description = serializers.CharField(max_length=100, trim_whitespace=True, required=False, label="Short Description", allow_blank=True, validators=[MinLengthValidator(11)])
+    image = serializers.ImageField(max_length=None, allow_empty_file=False, use_url=get_website_home_slider_content_image, label="Image", required=False)
+
+    def validate(self, data):
+        title = data.get('title')
+        description = data.get('description')
+
+        if not title and not description:
+            raise serializers.ValidationError("Either title or description must be provided.")
+
+        return data
+
+    def update(self, instance, validated_data):
+        request = self.context["request"]
+        user = request.user
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.user_updated = user
+        instance.status = validated_data.get("status", instance.status)
+        
+        instance.save()
+
+        content_file_instance = WebsiteHomeSliderContentFile.objects.get(home_content=instance)
+
+        if 'image' in validated_data:
+            content_file_instance.image = validated_data['image']
+
+        content_file_instance.user_updated = user
+        content_file_instance.save()
+
+        return instance
+    
+    def to_representation(self, instance):
+        if self.context['request'].method == 'GET':
+            return {
+                'uid': str(instance.uid),
+                'title': instance.title,
+                'description': instance.description,
+                'status': instance.status,
+                'image': instance.home_content_info.first().image.url if instance.home_content_info.exists() else None,
+            }
+        
+        return {
+            'title': instance.title,
+            'description': instance.description,
+            'image': instance.home_content_info.first().image.url if instance.home_content_info.exists() else None,
+           
+        }
