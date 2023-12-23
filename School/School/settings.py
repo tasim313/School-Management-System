@@ -1,4 +1,4 @@
-from School.Settings.auth import(
+from School.Settings.auth import (
     ALLOWED_HOSTS,
     AUTH_PASSWORD_VALIDATORS,
     AUTH_USER_MODEL,
@@ -11,12 +11,13 @@ from School.Settings.auth import(
     SECRET_KEY,
     WSGI_APPLICATION,
     INTERNAL_IPS,
+    SIMPLE_JWT,
 )
 
 
-from School.Settings.base import(
+from School.Settings.base import (
     INSTALLED_APPS,
-    LANGUAGE_CODE ,
+    LANGUAGE_CODE,
     TIME_ZONE,
     USE_I18N,
     USE_TZ,
@@ -29,31 +30,24 @@ from School.Settings.base import(
     SESSION_COOKIE_SECURE,
     CSRF_COOKIE_HTTPONLY,
     CSRF_COOKIE_PATH,
-    CSRF_COOKIE_SECURE
+    CSRF_COOKIE_SECURE,
 )
 
 
-from School.Settings.database import(
-    DATABASES
-)
+from School.Settings.database import DATABASES
 
 
-from School.Settings.middleware import(
-    MIDDLEWARE
-)
+from School.Settings.middleware import MIDDLEWARE
 
-from School.Settings.static import(
+from School.Settings.static import (
     STATIC_URL,
     MEDIA_ROOT,
     MEDIA_URL,
-    MEDIA_URL_2 ,
+    MEDIA_URL_2,
     STATIC_ROOT,
 )
 
-from School.Settings.templates import(
-    TEMPLATES
-)
-
+from School.Settings.templates import TEMPLATES
 
 
 ALLOWED_HOSTS,
@@ -70,7 +64,7 @@ WSGI_APPLICATION,
 INTERNAL_IPS,
 
 INSTALLED_APPS,
-LANGUAGE_CODE ,
+LANGUAGE_CODE,
 TIME_ZONE,
 USE_I18N,
 USE_TZ,
@@ -94,3 +88,4 @@ MEDIA_URL_2,
 STATIC_ROOT,
 TEMPLATES,
 
+SIMPLE_JWT
