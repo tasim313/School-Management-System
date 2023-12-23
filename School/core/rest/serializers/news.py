@@ -50,5 +50,4 @@ class NewsEventListSerializer(WebsiteInfoMixin, ModelSerializer):
                 serializers.ValidationError("Website info not found!")
 
         validated_data["school"] = request.user.school
-        print(validated_data)
         return super().create(validated_data)
