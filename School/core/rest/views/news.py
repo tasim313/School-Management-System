@@ -10,5 +10,5 @@ from core.rest.serializers.news import NewsEventListSerializer
 class NewsEventList(ListCreateAPIView):
     queryset = NewsEvents.objects.all()
     authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = NewsEventListSerializer
