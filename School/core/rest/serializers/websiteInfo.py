@@ -30,6 +30,7 @@ class SchoolWebsiteLiteSerializer(serializers.ModelSerializer):
         model = WebsiteInformation
         fields = [
             "id",
+            "uid",
             "slug",
             "name",
             "logo",

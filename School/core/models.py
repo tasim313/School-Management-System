@@ -1,3 +1,4 @@
+from tokenize import blank_re
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.validators import MinLengthValidator
@@ -11,7 +12,7 @@ from versatileimagefield.fields import VersatileImageField
 from school_auth.models import User
 
 from common.models import SchoolInformationOnBoarding
-from common.models import BaseModel
+from common.models import BaseModel, SchoolInformationOnBoarding
 
 from .utills import (
     get_school_class_slug,
@@ -560,7 +561,16 @@ class NewsEvents(UniversalModel):
     school_website_news_events = models.OneToOneField(
         WebsiteInformation,
         on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
         related_name="school_website_news_events_information",
+    )
+    school = models.ForeignKey(
+        SchoolInformationOnBoarding,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="news_schools",
     )
     news_events_status = models.CharField(
         max_length=100,
