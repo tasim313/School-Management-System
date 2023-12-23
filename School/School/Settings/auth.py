@@ -63,7 +63,7 @@ AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=15),
     "SLIDING_TOKEN_LIFETIME": timedelta(days=10),
