@@ -11,7 +11,7 @@ from School.Urls.common import urlpatterns as common
 
 from School.Urls.school_auth import urlpatterns as authentication
 from School.Urls.core import urlpatterns as website
-
+from School.Urls.student import urlpatterns as student
 
 
 urlpatterns = []
@@ -24,6 +24,7 @@ urlpatterns.extend(swagger)
 urlpatterns.extend(common)
 urlpatterns.extend(authentication)
 urlpatterns.extend(website)
+urlpatterns.extend(student)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(
