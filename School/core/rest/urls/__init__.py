@@ -22,4 +22,8 @@ urlpatterns = [
         "school/news/",
         include("core.rest.urls.news"),
     ),
+    path(
+        "school/about/",
+        include("core.rest.urls.about"),
+    )
 ]

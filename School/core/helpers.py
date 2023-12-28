@@ -15,3 +15,16 @@ def get_website_information_instance(uid):
     except ObjectDoesNotExist:
         logging.error("This website information does not exist")
         return None
+    
+
+def get_website_about(uid):
+    from django.core.exceptions import ObjectDoesNotExist
+    from .models import WebsiteAbout
+
+    try:
+        instance = WebsiteAbout.objects.get(uid=uid)
+        about = instance.id
+        return about
+    except ObjectDoesNotExist:
+        logging.error("This website  about information does not exist")
+        return None
