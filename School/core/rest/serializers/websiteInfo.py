@@ -429,6 +429,11 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
 
 
 class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
+    school_website_gallery = serializers.SlugRelatedField(
+        queryset=WebsiteInformation.objects.all(),
+        slug_field="uid",
+    )
+
     class Meta:
         model = WebSiteGalleryInformation
         fields = [
