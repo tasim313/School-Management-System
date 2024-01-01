@@ -48,6 +48,8 @@ from .utills import (
     get_website_managing_committee_member_slug,
     get_website_staff_slug,
     get_website_faculty_slug,
+    get_blog_image,
+    get_blog_image_slug
 )
 
 from .choice import (
@@ -685,6 +687,23 @@ class Blog(UniversalModel):
 
     def __str__(self):
         return self.title
+
+
+class BlogImage(UniversalModel):
+    blog_info = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="blog_image_information")
+    slug = AutoSlugField(
+        populate_from=get_blog_image_slug,
+        unique=True,
+        null=True,
+        db_index=True,
+    )
+    image = VersatileImageField(
+        upload_to=get_blog_image,
+        null=True,
+        blank=True,
+    )
+
+
 
 
 class SocialMedia(UniversalModel):

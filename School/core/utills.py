@@ -126,6 +126,11 @@ def get_website_get_gallery_image(instance, filename):
     return f"image/{instance.uid}/{clean_filename}"
 
 
+def get_blog_image(instance, filename):
+    clean_filename = os.path.basename(filename)  # Get clean filename
+    return f"image/{instance.uid}/{clean_filename}"
+
+
 def get_news_events_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'news-events'}{str(instance.uid).split('-')[0]}"
@@ -137,6 +142,10 @@ def get_news_events_image(instance, filename):
 
 
 def get_blog_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'blog'}{str(instance.uid).split('-')[0]}"
+
+def get_blog_image_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'blog'}{str(instance.uid).split('-')[0]}"
 
