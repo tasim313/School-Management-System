@@ -8,7 +8,7 @@ from ...models import (
 from core.choice import Status
 
 from ...helpers import get_website_information_instance , get_website_about
-from ...models import WebsiteAbout
+from ...models import WebsiteAbout, WebsiteAboutFile
 from ..serializers import websiteInfo
 from ...utills import(
     get_website_about_file_image
@@ -98,7 +98,7 @@ class SchoolAboutInformationList(serializers.ModelSerializer):
         ]
 
 
-class SchoolAboutFileCreate(serializers.ModelSerializer):
+class SchoolAboutFileCreate(serializers.Serializer):
     uid = serializers.UUIDField(format="hex_verbose", write_only=True)
     image = serializers.ImageField(
         max_length=None,
@@ -134,3 +134,21 @@ class SchoolAboutFileCreate(serializers.ModelSerializer):
         )
             
         return about
+    
+
+class SchoolAboutFileList(serializers.ModelSerializer):
+    about = SchoolAboutInformationList(
+        many=False, read_only=True
+    )
+
+    class Meta:
+        model = WebsiteAboutFile
+        fields = [
+            'uid',
+            'slug',
+            'image',
+            'status',
+            'user_created',
+            'user_updated',
+            'about'
+        ]
