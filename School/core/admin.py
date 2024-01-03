@@ -99,7 +99,7 @@ class SchoolAddressInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "school_address__school_website__name",
+        "school_address__name",
         "divisions",
         "district",
         "upazila",
@@ -131,7 +131,7 @@ class SchoolContactInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "school_contact__school_website__name",
+        "school_contact__name",
         "phone",
         "email",
         "slug",
@@ -153,7 +153,7 @@ class WebsiteHomeSliderContentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "website_home_slider_content__school_website__name",
+        "website_home_slider_content__name",
         "title",
         "slug",
     )
@@ -173,7 +173,7 @@ class WebsiteHomeSliderContentFileAdmin(ImportExportModelAdmin, admin.ModelAdmin
         "user_updated",
     )
     list_filter = (
-        "home_content__website_home_slider_content__school_website__name",
+        "home_content__website_home_slider_content__name",
         "slug",
     )
 
@@ -198,7 +198,7 @@ class WebsiteAboutAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "website_about_content__school_website__name",
+        "website_about_content__name",
         "title",
         "slug",
         "start_year",
@@ -219,7 +219,7 @@ class WebsiteAboutFileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "about__website_about_content__school_website__name",
+        "about__website_about_content__name",
         "about__title",
         "slug",
         "about__start_year",
@@ -242,7 +242,7 @@ class WebsiteFunFactContentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "about_info__website_about_content__school_website__name",
+        "about_info__website_about_content__name",
         "years_of_experience",
         "number_of_students",
         "number_of_alumni",
@@ -264,7 +264,7 @@ class WebsiteAboutWinningAwardsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "school_award__website_about_content__school_website__name",
+        "school_award__website_about_content__name",
         "title",
     )
 
@@ -297,7 +297,7 @@ class SchoolAdmissionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "school_admission__school_website__name",
+        "school_admission__name",
         "title",
         "slug",
     )
@@ -326,7 +326,7 @@ class AcademicInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_updated",
     )
     list_filter = (
-        "school_academic_information__school_website__name",
+        "school_academic_information__name",
         "title",
         "slug",
     )
@@ -337,7 +337,6 @@ admin.site.register(AcademicInformation, AcademicInformationAdmin)
 
 class WebSiteGalleryInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        "id",
         "uid",
         "school_website_gallery",
         "image",
@@ -349,7 +348,6 @@ admin.site.register(WebSiteGalleryInformation, WebSiteGalleryInformationAdmin)
 
 class NewsEventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        "id",
         "uid",
         "slug",
         "image",

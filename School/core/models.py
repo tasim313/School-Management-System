@@ -144,7 +144,7 @@ class WebsiteInformation(UniversalModel):
 
 class SchoolAddressInformation(UniversalModel):
     school_address = models.ForeignKey(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_address_information",
     )
@@ -184,7 +184,7 @@ class SchoolAddressInformation(UniversalModel):
 
 class SchoolContactInformation(UniversalModel):
     school_contact = models.ForeignKey(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_contact_information",
     )
@@ -212,7 +212,7 @@ class SchoolContactInformation(UniversalModel):
 
 class WebsiteHomeSliderContent(UniversalModel):
     website_home_slider_content = models.ForeignKey(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_website_slider_information",
     )
@@ -259,7 +259,7 @@ class WebsiteHomeSliderContentFile(UniversalModel):
 
 class WebsiteAbout(UniversalModel):
     website_about_content = models.ForeignKey(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_website_about_information",
     )
@@ -398,7 +398,7 @@ class WebsiteAboutWinningAwards(UniversalModel):
 
 class SchoolAdmission(UniversalModel):
     school_admission = models.ForeignKey(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         blank=True,
         null=True,
@@ -466,7 +466,7 @@ class SchoolAdmission(UniversalModel):
 
 class AcademicInformation(UniversalModel):
     school_academic_information = models.OneToOneField(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="school_academic_information",
     )
@@ -538,9 +538,8 @@ class AcademicInformation(UniversalModel):
 
 
 class WebSiteGalleryInformation(UniversalModel):
-    # TODO: make common and easy to understand FK field name: website_information
     school_website_gallery = models.OneToOneField(
-        WebsiteInformation,
+        SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="school_website_gallery_information",
     )
@@ -560,13 +559,6 @@ class WebSiteGalleryInformation(UniversalModel):
 
 
 class NewsEvents(UniversalModel):
-    school_website_news_events = models.OneToOneField(
-        WebsiteInformation,
-        on_delete=models.DO_NOTHING,
-        null=True,
-        blank=True,
-        related_name="school_website_news_events_information",
-    )
     school = models.ForeignKey(
         SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
@@ -618,11 +610,11 @@ class NewsEvents(UniversalModel):
 
 class BlogCategory(UniversalModel):
     name = models.CharField(max_length=100, unique=True)
-    school_blog_category_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_blog_category = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="blog_categories",
-        verbose_name="School Website Blog Category",
+        verbose_name="School Blog Category",
     )
 
     def __str__(self):
@@ -631,11 +623,11 @@ class BlogCategory(UniversalModel):
 
 class BlogTag(UniversalModel):
     name = models.CharField(max_length=100, unique=True)
-    school_blog_tag_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_blog_tag = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="blog_tags",
-        verbose_name="School Website Blog Tag",
+        verbose_name="School Blog Tag",
     )
 
     def __str__(self):
@@ -643,8 +635,8 @@ class BlogTag(UniversalModel):
 
 
 class Blog(UniversalModel):
-    school_blog_website_information = models.OneToOneField(
-        WebsiteInformation,
+    school_blog = models.OneToOneField(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_website_blog_information",
         verbose_name="School Website Blog Information",
@@ -707,8 +699,8 @@ class BlogImage(UniversalModel):
 
 
 class SocialMedia(UniversalModel):
-    school_social_media_website_information = models.OneToOneField(
-        WebsiteInformation,
+    school_social_media = models.OneToOneField(
+        SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="social_media_info",
         verbose_name="SocialMedia Website Information",
@@ -729,8 +721,8 @@ class SocialMedia(UniversalModel):
 
 
 class AlumniSection(UniversalModel):
-    school_alumni_section_website_information = models.OneToOneField(
-        WebsiteInformation,
+    school_alumni_section = models.OneToOneField(
+        SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="alumni_section_info",
         verbose_name="School Website Alumni Information",
@@ -752,8 +744,8 @@ class AlumniSection(UniversalModel):
 
 
 class WebsiteTeacherInformation(UniversalModel):
-    school_teacher_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_teacher = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="teachers",
         verbose_name="School Website Teacher Information",
@@ -780,8 +772,8 @@ class WebsiteTeacherInformation(UniversalModel):
 
 
 class WebsiteManagingCommitteeMemberInformation(UniversalModel):
-    school_managing_committee_member_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_managing_committee_member = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="ManagingCommitteeMember",
         verbose_name="School Website ManagingCommitteeMember Information",
@@ -811,8 +803,8 @@ class WebsiteManagingCommitteeMemberInformation(UniversalModel):
 
 
 class WebsiteStaffInformation(UniversalModel):
-    school_staff_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_staff = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="staff",
         verbose_name="School Website Staff Information",
@@ -839,8 +831,8 @@ class WebsiteStaffInformation(UniversalModel):
 
 
 class WebSiteFacultyInformation(UniversalModel):
-    school_faculty_website_information = models.ForeignKey(
-        WebsiteInformation,
+    school_faculty = models.ForeignKey(
+        SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="faculty_members",
         verbose_name="School Faculty Website Information",
