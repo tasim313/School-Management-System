@@ -437,7 +437,6 @@ class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebSiteGalleryInformation
         fields = [
-            "id",
             "uid",
             "image",
             "school_website_gallery",
@@ -450,7 +449,6 @@ class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebSiteGalleryInformation
         fields = [
-            "id",
             "uid",
             "image",
             "school_website_gallery",
