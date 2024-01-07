@@ -16,6 +16,7 @@ from core.choice import Status
 from ...utills import (
     get_school_website_logo,
     get_school_website_favicon,
+    get_website_get_gallery_image
 )
 
 from common.rest.serializers import schoolInformation
@@ -24,17 +25,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-class SchoolWebsiteLiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WebsiteInformation
-        fields = [
-            "id",
-            "uid",
-            "slug",
-            "name",
-            "logo",
-        ]
 
 
 class SchoolWebsiteCreateSerializer(serializers.Serializer):
@@ -179,7 +169,7 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
             )
 
             school_address = SchoolAddressInformation.objects.create(
-                school_address_id=website.id,
+                school_address_id=school_information_instance,
                 divisions=validated_data.get("divisions"),
                 district=validated_data.get("district"),
                 upazila=validated_data.get("upazila"),
@@ -194,7 +184,7 @@ class SchoolWebsiteCreateSerializer(serializers.Serializer):
             )
 
             school_contact = SchoolContactInformation.objects.create(
-                school_contact_id=website.id,
+                school_contact_id=school_information_instance,
                 school_contact_address_id=school_address.id,
                 phone=validated_data.get("phone"),
                 email=validated_data.get("email"),
@@ -372,10 +362,8 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
         return attrs
 
     def update(self, instance, validated_data):
-        """
-        Update and return an existing `WebsiteInformation` instance,
-        given the validated data.
-        """
+        
+        uid = validated_data["uid"]
         request = self.context["request"]
         user = request.user
 
@@ -386,7 +374,8 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
         instance.status = validated_data.get("status", instance.status)
 
         # Update SchoolAddressInformation related to the website
-        school_address = SchoolAddressInformation.objects.get(school_address=instance)
+        school_information_instance = get_school_instance(uid)
+        school_address = SchoolAddressInformation.objects.get(school_address_id=school_information_instance)
         school_address.divisions = validated_data.get(
             "divisions", school_address.divisions
         )
@@ -416,7 +405,7 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
         school_address.save()
 
         # Update SchoolContactInformation related to the website
-        school_contact = SchoolContactInformation.objects.get(school_contact=instance)
+        school_contact = SchoolContactInformation.objects.get(school_contact_id=school_information_instance)
         school_contact.phone = validated_data.get("phone", school_contact.phone)
         school_contact.email = validated_data.get("email", school_contact.email)
         school_contact.user_updated = user
@@ -428,28 +417,79 @@ class SchoolWebsiteUpdateSerializer(serializers.Serializer):
         return instance
 
 
-class WebsiteGalleryInfoPostSerializer(serializers.ModelSerializer):
-    school_website_gallery = serializers.SlugRelatedField(
-        queryset=WebsiteInformation.objects.all(),
-        slug_field="uid",
+class SchoolWebsiteGallerySerializer(serializers.Serializer):
+    uid = serializers.UUIDField(format="hex_verbose", write_only=True)
+    image = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=get_website_get_gallery_image,
+        label="Image",
+        required=False,
     )
 
-    class Meta:
-        model = WebSiteGalleryInformation
-        fields = [
-            "uid",
-            "image",
-            "school_website_gallery",
-        ]
+    def validate(self, attrs):
+        uid = attrs["uid"]
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
+
+        return attrs
+    
+    def create(self, validated_data):
+        uid = validated_data["uid"]
+        image = validated_data["image"]
+        
+        request = self.context["request"]
+        user = request.user
+
+        school_information_instance = get_school_instance(uid)
+        
+        
+        Gallery = WebSiteGalleryInformation.objects.create(
+                school_website_gallery_id=school_information_instance,
+                image=image,
+                user_created=user,
+                status=Status.Active,
+        )
+
+        return Gallery
+
+
+
+class SchoolWebsiteGalleryUpdateSerializer(serializers.Serializer):
+   
+    image = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=get_website_get_gallery_image,
+        label="Image",
+        required=False,
+    )
+
+    
+    def update(self, instance, validated_data):
+        
+        request = self.context["request"]
+        user = request.user
+
+        instance.image  = validated_data.get("image ", instance.image)
+        instance.user_updated = user
+        instance.status = validated_data.get("status", instance.status)
+
+        instance.save()
+        
+       
+        return instance
 
 
 class WebsiteGalleryInfoListSerializer(serializers.ModelSerializer):
-    school_website_gallery = SchoolWebsiteLiteSerializer()
-
+    school_website_gallery = schoolInformation.SchoolInformationOnBoardingListSerializer(
+        many=False, read_only=True
+    )
     class Meta:
         model = WebSiteGalleryInformation
         fields = [
             "uid",
             "image",
-            "school_website_gallery",
+            "school_website_gallery"
         ]

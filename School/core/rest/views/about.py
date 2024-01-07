@@ -42,7 +42,7 @@ class SchoolWebsiteAboutInformationListView(generics.ListAPIView):
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(website_about_content__school_website__slug=school_slug)
+        return self.queryset.filter(website_about_content__slug=school_slug)
     
 
 
@@ -81,4 +81,4 @@ class SchoolWebsiteAboutImageListView(generics.ListAPIView):
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(about__website_about_content__school_website__slug=school_slug)
+        return self.queryset.filter(about__website_about_content__slug=school_slug)

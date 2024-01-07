@@ -1,28 +1,103 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import generics, status, serializers
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 from core.rest.serializers.admission import (
-    SchoolAdmissionSerializer,
-    SchoolAdmissionEditSerializer
+    AdmissionCreateSerializer,
+    AdmissionUpdateSerializer,
+    AdmissionListSerializer
 )
 from core.models import SchoolAdmission
 
 
-class SchoolAdmissionView(ListCreateAPIView):
+
+class AdmissionInformationAPIView(generics.CreateAPIView):
+    serializer_class = AdmissionCreateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = SchoolAdmissionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+
+            response_data = {
+                "message": "Admission Information Create successful.",
+                "data": serializer.data,
+            }
+            return Response(
+                response_data, status=status.HTTP_201_CREATED, headers=headers
+            )
+        except serializers.ValidationError as e:
+            error_data = {
+                "message": "Admission Information failed.",
+                "errors": e.detail,
+            }
+            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdmissionInformationListView(generics.ListAPIView):
+    queryset = SchoolAdmission.objects.all()
+    serializer_class = AdmissionUpdateSerializer
 
     def get_queryset(self):
-        print("User info: ", self.request.user)
-        admission = SchoolAdmission.objects.all()
-        return admission
+        school_slug = self.kwargs.get("school_slug", None)
+        return self.queryset.filter(school_admission__slug=school_slug)
 
 
-class SchoolAdmissionDetail(RetrieveUpdateDestroyAPIView):
+class AdmissionInformationUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = AdmissionListSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = SchoolAdmissionEditSerializer
-    queryset = SchoolAdmission.objects.all()
     lookup_field = "uid"
+    allowed_methods = [
+        "PUT",
+        "PATCH",
+    ]
+
+    def get_queryset(self):
+        return SchoolAdmission.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            response_data = {
+                "message": "Admission Information update successful.",
+                "data": serializer.data,
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        except serializers.ValidationError as e:
+            error_data = {
+                "message": "Admission Information update failed.",
+                "errors": e.detail,
+            }
+            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_update(self, serializer):
+        serializer.save(user_updated=self.request.user)
+
+
+
+class AdmissionInformationDestroy(generics.DestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = SchoolAdmission.objects.all()
+    serializer_class = AdmissionListSerializer
+    lookup_field = "uid"
+    
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        return self.queryset.filter(school_admission__slug=school_slug)
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)

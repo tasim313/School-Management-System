@@ -49,7 +49,7 @@ class SliderContentListView(generics.ListAPIView):
         school_slug = self.kwargs.get("school_slug", None)
         
         queryset = WebsiteHomeSliderContent.objects.filter(
-            website_home_slider_content__school_website__slug=school_slug,
+            website_home_slider_content__slug=school_slug,
             status="Active",
         ).select_related('website_home_slider_content')
 
@@ -66,7 +66,7 @@ class WebsiteHomeSliderContentDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         queryset = WebsiteHomeSliderContent.objects.filter(
-            website_home_slider_content__school_website__slug=school_slug
+            website_home_slider_content__slug=school_slug
         ).select_related('website_home_slider_content')
         
         return queryset

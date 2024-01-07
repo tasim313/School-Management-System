@@ -7,9 +7,7 @@ from ...models import(
 
 )
 
-from ...helpers import (
-    get_website_information_instance
-    )
+from common.helpers import get_school_instance
 
 from ...utills import (
     get_website_home_slider_content_image,
@@ -18,8 +16,6 @@ from ...utills import (
 from core.choice import (
     Status
 )
-
-from ..serializers import websiteInfo
 
 
 class CreateWebsiteHomeSliderContentSerializer(serializers.Serializer):
@@ -30,11 +26,10 @@ class CreateWebsiteHomeSliderContentSerializer(serializers.Serializer):
 
 
     def validate(self, attrs):
-        
-        uid = attrs['uid']
-        website_home_slider_instance = get_website_information_instance(uid)
-        if not website_home_slider_instance:
-            raise serializers.ValidationError({"uid": "Invalid WebsiteInformation UID."})
+        uid = attrs["uid"]
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
         return attrs
     
@@ -48,7 +43,7 @@ class CreateWebsiteHomeSliderContentSerializer(serializers.Serializer):
         user = request.user
 
 
-        website_home_slider_content_instance = get_website_information_instance(uid)
+        website_home_slider_content_instance = get_school_instance(uid)
 
         sliderContent = WebsiteHomeSliderContent.objects.create(
                 website_home_slider_content_id=website_home_slider_content_instance,
@@ -76,7 +71,6 @@ class SliderContentFileListSerializer(serializers.ModelSerializer):
 
 
 class SliderContentListSerializer(serializers.ModelSerializer):
-    websiteInfo = websiteInfo.WebsiteInformationSerializer(many=False, read_only=True, source='website_home_slider_content')
     file = SliderContentFileListSerializer(many=True, read_only=True, source='home_content_info')
     class Meta:
         model =  WebsiteHomeSliderContent
@@ -86,7 +80,6 @@ class SliderContentListSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'file',
-            'websiteInfo'
         ]
 
 

@@ -4,12 +4,23 @@ from core.rest.views import academic
 urlpatterns = [
     path(
         "",
-        academic.AcademicInformationList.as_view(),
-        name="school-admission-list-create",
+        academic.AcademicInformationAPIView.as_view(),
+        name="school-academic-create",
     ),
     path(
         "<uuid:uid>/",
-        academic.AcademicInformationDetail.as_view(),
-        name="school-admission-detail",
+        academic.AcademicInformationUpdateAPIView.as_view(),
+        name="school-academic-update",
     ),
+    path(
+        "<slug:school_slug>/",
+        academic.AcademicInformationListView.as_view(),
+        name="school-academic-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/",
+        academic.AcademicInformationDestroy.as_view(),
+        name="school-academic-delete",
+    ),
+
 ]
