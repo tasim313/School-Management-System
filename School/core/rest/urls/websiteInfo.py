@@ -3,8 +3,10 @@ from core.rest.views.websiteInfo import (
     SchoolWebsiteAPIView,
     WebsiteInformationListView,
     SchoolWebsiteUpdateAPIView,
-    WebsiteGalleryInfoList,
-    WebsiteGalleryInfoDetail,
+    WebsiteGalleryInfoCreate,
+    WebsiteGalleryUpdateAPIView,
+    WebsiteGalleryInfoListView,
+    WebsiteGalleryInfoListDestroyView
 )
 
 urlpatterns = [
@@ -15,7 +17,7 @@ urlpatterns = [
     ),
     path(
         "gallery/",
-        WebsiteGalleryInfoList.as_view(),
+        WebsiteGalleryInfoCreate.as_view(),
         name="school-gallery",
     ),
     path(
@@ -30,7 +32,17 @@ urlpatterns = [
     ),
     path(
         "gallery/<uuid:uid>/",
-        WebsiteGalleryInfoDetail.as_view(),
-        name="school-gallery-detail",
+        WebsiteGalleryUpdateAPIView.as_view(),
+        name="school-gallery-update",
+    ),
+    path(
+        "gallery/<slug:school_slug>/",
+        WebsiteGalleryInfoListView.as_view(),
+        name="school-gallery-list",
+    ),
+    path(
+        "gallery/<slug:school_slug>/<uuid:uid>/",
+        WebsiteGalleryInfoListDestroyView.as_view(),
+        name="school-gallery-delete",
     ),
 ]

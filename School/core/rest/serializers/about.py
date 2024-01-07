@@ -7,7 +7,8 @@ from ...models import (
 
 from core.choice import Status
 
-from ...helpers import get_website_information_instance , get_website_about
+from common.helpers import get_school_instance
+from ...helpers import  get_website_about
 from ...models import WebsiteAbout, WebsiteAboutFile
 from ..serializers import websiteInfo
 from ...utills import(
@@ -37,9 +38,9 @@ class SchoolAboutInformationCreateSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         uid = attrs["uid"]
-        website_instance = get_website_information_instance(uid)
-        if not website_instance:
-            raise serializers.ValidationError({"uid": "Invalid website UID."})
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
 
         return attrs
 
@@ -56,7 +57,7 @@ class SchoolAboutInformationCreateSerializer(serializers.Serializer):
         mission = validated_data['mission']
         about_obj = WebsiteAbout.objects.all().count()
 
-        website_instance = get_website_information_instance(uid)
+        school_instance = get_school_instance(uid)
 
         if about_obj > 0:
             msg = 'Access denied: You Can not create new About Information, Please update previous information or delete previous data'
@@ -65,7 +66,7 @@ class SchoolAboutInformationCreateSerializer(serializers.Serializer):
             
         else:
             about = WebsiteAbout.objects.create(
-                        website_about_content_id = website_instance,
+                        website_about_content_id = school_instance,
                         title=title,
                         short_description=short_description,
                         long_description=long_description,
