@@ -18,6 +18,10 @@ from .models import (
     AcademicInformation,
     WebSiteGalleryInformation,
     NewsEvents,
+    Blog,
+    BlogCategory,
+    BlogImage,
+    BlogTag,
 )
 
 
@@ -355,3 +359,57 @@ class NewsEventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(NewsEvents, NewsEventsAdmin)
+
+
+class BlogAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "uid",
+        "slug",
+        # "school",
+        "title",
+        "content",
+        "publish_date",
+        # "tags",
+        # "categories",
+    )
+
+
+admin.site.register(Blog, BlogAdmin)
+
+
+class BlogImageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "uid",
+        "slug",
+        "blog_info",
+        "image",
+    )
+
+
+admin.site.register(BlogImage, BlogImageAdmin)
+
+
+class BlogTagAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "uid",
+        "name",
+        "school_blog_tag",
+    )
+
+
+admin.site.register(BlogTag, BlogTagAdmin)
+
+
+class BlogCategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "uid",
+        "name",
+        "school_blog_category",
+    )
+
+
+admin.site.register(BlogCategory, BlogCategoryAdmin)
