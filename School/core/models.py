@@ -49,7 +49,9 @@ from .utills import (
     get_website_staff_slug,
     get_website_faculty_slug,
     get_blog_image,
-    get_blog_image_slug
+    get_blog_image_slug,
+    get_testimonials_image,
+    get_testimonials_slug
 )
 
 from .choice import (
@@ -863,3 +865,27 @@ class WebSiteFacultyInformation(UniversalModel):
 
     def __str__(self):
         return f"Faculty Members for {self.school_faculty_website_information.name}"
+
+
+
+
+class Testimonials(BaseModel):
+    school_testimonials = models.ForeignKey(
+        SchoolInformationOnBoarding,
+        on_delete=models.DO_NOTHING,
+        related_name="Testimonials",
+        verbose_name="Testimonials",
+    )
+    name = models.CharField(max_length=255, blank=True, null=True)
+    designation = models.TextField(max_length=None, blank=True, null=True)
+    comment = models.TextField(max_length=None, blank=True, null=True)
+    image = VersatileImageField(
+        upload_to=get_testimonials_image,
+        null=True, blank=True)
+    slug = AutoSlugField(
+        populate_from=get_testimonials_slug, unique=True, null=True, db_index=True
+    )
+    
+    class Meta:
+        verbose_name = 'Testimonials'
+        verbose_name_plural = 'Testimonials'

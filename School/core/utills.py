@@ -178,3 +178,15 @@ def get_website_staff_slug(instance):
 def get_website_faculty_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'website-staff'}{str(instance.school_faculty_website_information.uid).split('-')[0]}"
+
+
+
+
+def get_testimonials_image(instance, filename):
+    clean_filename = os.path.basename(filename)  
+    return f"image/{instance.uid}/{clean_filename}"
+
+
+def get_testimonials_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'testimonials'}{str(instance.uid).split('-')[0]}"
