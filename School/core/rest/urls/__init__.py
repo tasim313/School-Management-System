@@ -27,6 +27,10 @@ urlpatterns = [
         include("core.rest.urls.about"),
     ),
     path(
+        "school/blog/",
+        include("core.rest.urls.blog"),
+    ),
+  path(
         "school/social/media/",
         include("core.rest.urls.socialmedia"),
     ),

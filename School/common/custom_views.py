@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -55,4 +55,17 @@ class CustomRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(
             {"message": "Successful!", "data": serialized_data},
             status=status.HTTP_200_OK,
+        )
+
+
+class CustomListCreateAPIView(ListCreateAPIView):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            {"message": "successful!", "data": serializer.data},
+            status=status.HTTP_201_CREATED,
+            headers=headers,
         )
