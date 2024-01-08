@@ -3,14 +3,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from core.models import NewsEvents
+from core.models import SocialMedia
 
-from core.rest.serializers.news import NewsEventCreateSerializer, NewsEventUpdateSerializer, NewsEventListSerializer
+from core.rest.serializers.socialmedia import SocialMediaCreateSerializer, SocialMediaUpdateSerializer, SocialMediaListSerializer
 
 
 
-class NewsEventAPIView(generics.CreateAPIView):
-    serializer_class = NewsEventCreateSerializer
+class SocialMediaAPIView(generics.CreateAPIView):
+    serializer_class = SocialMediaCreateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -23,7 +23,7 @@ class NewsEventAPIView(generics.CreateAPIView):
             headers = self.get_success_headers(serializer.data)
 
             response_data = {
-                "message": "News Events Create successful.",
+                "message": "Social Media Create successful.",
                 "data": serializer.data,
             }
             return Response(
@@ -31,23 +31,23 @@ class NewsEventAPIView(generics.CreateAPIView):
             )
         except serializers.ValidationError as e:
             error_data = {
-                "message": "News Events Create  failed.",
+                "message": "Social Media Create  failed.",
                 "errors": e.detail,
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class NewsEventListView(generics.ListAPIView):
-    queryset = NewsEvents.objects.all()
-    serializer_class = NewsEventListSerializer
+class SocialMediaListView(generics.ListAPIView):
+    queryset = SocialMedia.objects.all()
+    serializer_class = SocialMediaUpdateSerializer
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(school__slug=school_slug)
+        return self.queryset.filter(school_social_media__slug=school_slug)
 
 
-class NewsEventUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = NewsEventUpdateSerializer
+class SocialMediaUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = SocialMediaListSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_field = "uid"
@@ -57,7 +57,7 @@ class NewsEventUpdateAPIView(generics.UpdateAPIView):
     ]
 
     def get_queryset(self):
-        return NewsEvents.objects.all()
+        return SocialMedia.objects.all()
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -69,13 +69,13 @@ class NewsEventUpdateAPIView(generics.UpdateAPIView):
             self.perform_update(serializer)
 
             response_data = {
-                "message": "News Events update successful.",
+                "message": "Social Media update successful.",
                 "data": serializer.data,
             }
             return Response(response_data, status=status.HTTP_200_OK)
         except serializers.ValidationError as e:
             error_data = {
-                "message": "News Events update failed.",
+                "message": "Social Media update failed.",
                 "errors": e.detail,
             }
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
@@ -85,16 +85,16 @@ class NewsEventUpdateAPIView(generics.UpdateAPIView):
 
 
 
-class NewsEventDestroy(generics.DestroyAPIView):
+class SocialMediaDestroy(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = NewsEvents.objects.all()
-    serializer_class = NewsEventListSerializer
+    queryset = SocialMedia.objects.all()
+    serializer_class = SocialMediaUpdateSerializer
     lookup_field = "uid"
     
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(school__slug=school_slug)
+        return self.queryset.filter(school_social_media__slug=school_slug)
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
