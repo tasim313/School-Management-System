@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+
 from core.models import Blog, BlogTag, BlogImage, BlogCategory
 from core.rest.serializers.blog import (
     BlogListDetailSerializer,
@@ -22,6 +24,11 @@ class BlogListCreateAPIView(CustomListCreateAPIView):
             return BlogListDetailSerializer
         else:
             return BlogPostSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = BlogListDetailSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class BlogRetrieveUpdateDestroyAPIView(CustomRetrieveUpdateDestroyAPIView):
