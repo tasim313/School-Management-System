@@ -14,7 +14,9 @@ from core.models import (
 
 
 from .choice import (
-    Gender
+    Gender,
+    JobType,
+    JobStatus
 )
 
 from .utills import(
@@ -50,3 +52,41 @@ class SchoolAdminImage(UniversalModel):
     school_admin_info = models.ForeignKey(SchoolAdmin, on_delete=models.DO_NOTHING, related_name='school_admin_information')
     slug = AutoSlugField(populate_from=get_school_admin_image_slug, unique=True, null=False, db_index=True)
     image = VersatileImageField(upload_to=get_admin_profile_image, null=True, blank=True)
+
+
+
+
+class Department(UniversalModel):
+    school_department = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_departments')
+    department_id = models.CharField(max_length=100, unique=False)
+    name = models.CharField(max_length=500, blank=True, null=True)
+    head_of_department = models.CharField(max_length=500, blank=True, null=True)
+
+
+class Career(UniversalModel):
+    school_career = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_job_circular')
+    career_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING, blank=True, null=True, related_name="job_department")
+    title = models.CharField(max_length=255, blank=True, null=True)
+    location = models.CharField(max_length=550, blank=True, null=True)
+    experience = models.TextField(max_length=1000, blank=True, null=True)
+    no_of_vacancies = models.CharField(max_length=100, blank=True, null=True)
+    age_limit = models.CharField(max_length=100, blank=True, null=True)
+    salary_from = models.CharField(max_length=255, blank=True, null=True)
+    salary_to = models.CharField(max_length=255, blank=True, null=True)
+    job_type = models.CharField(
+        max_length=50,
+        choices=JobType.choices,
+        blank=True, null=True
+    )
+    job_status = models.CharField(
+        max_length=30,
+        choices=JobStatus.choices,
+        blank=True, null=True
+    )
+    start_date = models.DateTimeField(blank=True, null=True)
+    expired_date = models.DateTimeField(blank=True, null=True)
+    description = models.TextField(max_length=1000, blank=True, null=True)
+
+    class Meta:
+        ordering = ["-createdAt"]
+        verbose_name_plural = "Career"
