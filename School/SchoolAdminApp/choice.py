@@ -18,12 +18,14 @@ class JobType(models.TextChoices):
 
 
 
+    
 class JobStatus(models.TextChoices):
     Open = 'open', 'Open'
     Closed = 'closed', 'Closed'
     Cancelled = 'cancelled', 'Cancelled'
 
 
+    
 class BookType(models.TextChoices):
     Book = 'book', 'Book'
     DVD = 'dvd', 'DVD'
@@ -31,16 +33,20 @@ class BookType(models.TextChoices):
     Newspaper = 'newspaper', 'Newspaper'
 
 
+    
 class BookStatus(models.TextChoices):
     InStock = 'in_stock', 'In Stock'
     OutOfStock = 'out_of_stock', 'Out Of Stock'
 
 
+    
 class HostelRoomType(models.TextChoices):
     Normal = 'normal', 'Normal'
     AC = 'ac', 'AC'
     Suite = 'suite', 'Suite'
 
+    
+    
 class HostelAvailability(models.TextChoices):
     Available = 'available', 'Available'
     NotAvailable = 'not_available', 'Not Available'

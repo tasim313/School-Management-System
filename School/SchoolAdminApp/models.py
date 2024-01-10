@@ -174,3 +174,4 @@ class ClassTimeTable(UniversalModel):
     class_end_time = models.TimeField(blank=True, null=True)
 
 
+
