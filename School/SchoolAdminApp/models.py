@@ -174,3 +174,13 @@ class ClassTimeTable(UniversalModel):
     class_end_time = models.TimeField(blank=True, null=True)
 
 
+class Exam(UniversalModel):
+    school_exam = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_exams')
+    exam_class = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='exam_classes')
+    exam_section = models.ForeignKey(SchoolSection, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='exam_sections')
+    name = models.CharField(max_length=255, blank=True, null=True)
+    subject = models.CharField(max_length=255, blank=True, null=True)
+    fees = models.CharField(max_length=255, blank=True, null=True)
+    exam_start_time = models.TimeField(blank=True, null=True)
+    exam_end_time = models.TimeField(blank=True, null=True)
+    exam_date = models.DateTimeField(blank=True, null=True)
