@@ -34,4 +34,8 @@ urlpatterns = [
         "school/social/media/",
         include("core.rest.urls.socialmedia"),
     ),
+    path(
+        "school/testimonial/",
+        include("core.rest.urls.testimonial"),
+    ),
 ]
