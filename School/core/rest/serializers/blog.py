@@ -14,7 +14,7 @@ from common.models import SchoolInformationOnBoarding
 class BlogImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogImage
-        fields = ("id", "blog_info", "slug", "image")
+        fields = ("blog_info", "slug", "image")
 
 
 class BlogTagSerializer(ModelSerializer):
@@ -23,7 +23,6 @@ class BlogTagSerializer(ModelSerializer):
     class Meta:
         model = BlogTag
         fields = [
-            "id",
             "uid",
             "name",
             "school_blog_tag",
@@ -36,7 +35,6 @@ class BlogCategorySerializer(ModelSerializer):
     class Meta:
         model = BlogCategory
         fields = [
-            "id",
             "uid",
             "name",
             "school_blog_category",
@@ -68,7 +66,6 @@ class BlogCategoryPostSerializer(ModelSerializer):
     class Meta:
         model = BlogCategory
         fields = [
-            "id",
             "uid",
             "name",
             "school_blog_category",
@@ -84,7 +81,6 @@ class BlogListDetailSerializer(ModelSerializer):
     class Meta:
         model = Blog
         fields = [
-            "id",
             "uid",
             "slug",
             "school_blog",
@@ -120,7 +116,6 @@ class BlogPostSerializer(ModelSerializer):
     class Meta:
         model = Blog
         fields = [
-            "id",
             "uid",
             "slug",
             "title",
