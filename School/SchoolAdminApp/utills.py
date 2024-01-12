@@ -36,3 +36,29 @@ def get_school_library_slug(instance):
 def get_school_transport_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'school-transport'}-{str(instance.uid).split('-')[0]}"
+
+
+
+def get_school_vendor_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-vendor'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_product_category_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-product-category'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_product_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-product'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_purchase_request_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-purchase-request'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_purchase_received_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-purchase-received'}-{str(instance.uid).split('-')[0]}"
