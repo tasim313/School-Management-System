@@ -44,3 +44,17 @@ class HostelRoomType(models.TextChoices):
 class HostelAvailability(models.TextChoices):
     Available = 'available', 'Available'
     NotAvailable = 'not_available', 'Not Available'
+
+
+class PurchaseRequestStatus(models.TextChoices):
+    Draft = 'draft', 'Draft'
+    Validated = 'validate', 'Validated'
+    Approved = 'approved', 'Approved'
+    Ordered = 'ordered', 'Ordered'
+    
+
+class PurchaseReceivedStatus(models.TextChoices):
+    PartiallyReceived = 'partially_received', 'Partially Received'
+    AllReceived = 'all_received', 'All Received'
+    Cancelled = 'cancelled', 'Cancelled'
+    Refused = 'refused', 'Refused'

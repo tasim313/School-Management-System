@@ -21,6 +21,8 @@ from .choice import (
     BookStatus,
     HostelRoomType,
     HostelAvailability,
+    PurchaseRequestStatus,
+    PurchaseReceivedStatus
 )
 
 from .utills import(
@@ -29,7 +31,12 @@ from .utills import(
     get_admin_profile_image,
     get_school_career_slug,
     get_school_library_slug,
-    get_school_transport_slug
+    get_school_transport_slug,
+    get_school_vendor_slug,
+    get_school_product_category_slug,
+    get_school_product_slug,
+    get_school_purchase_request_slug,
+    get_school_purchase_received_slug
 )
 
 
@@ -184,3 +191,98 @@ class Exam(UniversalModel):
     exam_start_time = models.TimeField(blank=True, null=True)
     exam_end_time = models.TimeField(blank=True, null=True)
     exam_date = models.DateTimeField(blank=True, null=True)
+
+
+
+
+class Vendor(UniversalModel):
+    school_vendor = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_vendors')
+    slug = AutoSlugField(populate_from=get_school_vendor_slug, unique=True, null=False, db_index=True)
+    name = models.CharField(max_length=255)
+    address = models.TextField(max_length=1000, blank=True, null=True)
+    phone_number = PhoneNumberField(blank=True, null=True, verbose_name='Phone Number')
+
+    def __str__(self):
+        return self.name
+
+
+
+class ProductCategory(UniversalModel):
+    school_product_category = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_product_categories')
+    slug = AutoSlugField(populate_from=get_school_product_category_slug, unique=True, null=False, db_index=True)
+    name = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.name
+
+
+class Product(UniversalModel):
+    school_product = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_products')
+    category = models.ForeignKey(
+        ProductCategory, 
+        on_delete=models.DO_NOTHING,
+        blank=True, 
+        null=True, 
+        related_name='school_product_categories_info')
+    slug = AutoSlugField(populate_from=get_school_product_slug, unique=True, null=False, db_index=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=1000, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+
+class PurchaseRequest(UniversalModel):
+    school_purchase_request = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_purchases_request')
+    purchase_request_vendor = models.ForeignKey(
+        Vendor,
+        on_delete=models.DO_NOTHING, 
+        blank=True, 
+        null=True,
+        related_name='purchase_request_vendors')
+    purchase_request_status = models.CharField(
+        max_length=30,
+        choices=PurchaseRequestStatus.choices
+    )
+    slug = AutoSlugField(populate_from=get_school_purchase_request_slug, unique=True, null=False, db_index=True)
+    product_request = models.ManyToManyField(Product, related_name='product_requests')
+    order_date = models.DateField(blank=True, null=True)
+    delivery_date = models.DateField(blank=True, null=True)
+    quantity = models.PositiveIntegerField(blank=True, null=True)
+    amount_tax = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    payment_method = models.CharField(max_length=100, blank=True, null=True)
+    note_private = models.TextField(blank=True, null=True)
+    note_public = models.TextField(blank=True, null=True)
+
+
+
+
+class PurchaseReceived(UniversalModel):
+    school_purchase_received = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_purchases_received')
+    purchase_received_vendor = models.ForeignKey(
+        Vendor,
+        on_delete=models.DO_NOTHING, 
+        blank=True, 
+        null=True,
+        related_name='purchase_received_vendors')
+    purchase_request = models.ForeignKey(
+        PurchaseRequest,
+        on_delete=models.DO_NOTHING, 
+        blank=True, 
+        null=True,
+        related_name='purchase_requests')
+    purchase_received_status = models.CharField(
+        max_length=30,
+        choices=PurchaseReceivedStatus.choices
+    )
+    slug = AutoSlugField(populate_from=get_school_purchase_received_slug, unique=True, null=False, db_index=True)
+    product = models.ManyToManyField(Product, related_name='product_received')
+    order_date = models.DateField(blank=True, null=True)
+    delivery_date = models.DateField(blank=True, null=True)
+    partially_received = models.PositiveIntegerField(blank=True, null=True)
+    all_received = models.PositiveIntegerField(blank=True, null=True)
+    amount_tax = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    payment_method = models.CharField(max_length=100, blank=True, null=True)
+    note_private = models.TextField(blank=True, null=True)
+    note_public = models.TextField(blank=True, null=True)
