@@ -1,5 +1,6 @@
 from django.conf.urls.static import static
 from django.conf import settings
+from django.urls import path, include
 
 from School.Urls.admin import urlpatterns as admin
 from School.Urls.djoser import urlpatterns as djoser
@@ -14,7 +15,9 @@ from School.Urls.core import urlpatterns as website
 from School.Urls.student import urlpatterns as student
 
 
-urlpatterns = []
+urlpatterns = [
+    path("api/v1/teacher", include("TeacherApp.rest.urls")),
+]
 
 urlpatterns.extend(admin)
 urlpatterns.extend(djoser)
@@ -27,9 +30,6 @@ urlpatterns.extend(website)
 urlpatterns.extend(student)
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(
-        settings.MEDIA_URL_2,
-        document_root=settings.MEDIA_ROOT)
-
-
-
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    ) + static(settings.MEDIA_URL_2, document_root=settings.MEDIA_ROOT)
