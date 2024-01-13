@@ -62,3 +62,23 @@ def get_school_purchase_request_slug(instance):
 def get_school_purchase_received_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'school-purchase-received'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_hostel_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-hostel'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_sports_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-sports'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_class_time_table_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-class-time-table'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_exam_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-exam'}-{str(instance.uid).split('-')[0]}"

@@ -36,7 +36,11 @@ from .utills import(
     get_school_product_category_slug,
     get_school_product_slug,
     get_school_purchase_request_slug,
-    get_school_purchase_received_slug
+    get_school_purchase_received_slug,
+    get_school_class_time_table_slug,
+    get_school_exam_slug,
+    get_school_hostel_slug,
+    get_school_sports_slug
 )
 
 
@@ -75,6 +79,17 @@ class Department(UniversalModel):
     department_id = models.CharField(max_length=100, unique=False)
     name = models.CharField(max_length=500, blank=True, null=True)
     head_of_department = models.CharField(max_length=500, blank=True, null=True)
+
+
+
+class Subject(UniversalModel):
+    school_subject = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_subject_information')
+    class_subject = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='class_subject_information')
+    subject_id = models.CharField(max_length=100, unique=False)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -158,6 +173,7 @@ class Hostel(UniversalModel):
         choices=HostelAvailability.choices,
         blank=True, null=True
     )
+    slug = AutoSlugField(populate_from=get_school_hostel_slug, unique=True, null=False, db_index=True)
 
 
 class SportsInformation(UniversalModel):
@@ -166,6 +182,7 @@ class SportsInformation(UniversalModel):
     sports_name = models.CharField(max_length=255, blank=True, null=True)
     coach_name = models.CharField(max_length=255, blank=True, null=True)
     started_year = models.CharField(max_length=255, blank=True, null=True)
+    slug = AutoSlugField(populate_from=get_school_sports_slug, unique=True, null=False, db_index=True)
 
 
 
@@ -175,10 +192,11 @@ class ClassTimeTable(UniversalModel):
     school_section_time_table = models.ForeignKey(SchoolSection, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='school_section_information')
     teacher_id = models.CharField(max_length=100, unique=False)
     name = models.CharField(max_length=255, blank=True, null=True)
-    subject = models.CharField(max_length=255, blank=True, null=True)
     class_date = models.DateTimeField(blank=True, null=True)
     class_start_time = models.TimeField(blank=True, null=True)
     class_end_time = models.TimeField(blank=True, null=True)
+    class_time_table_subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='school_class_time_table_subjects')
+    slug = AutoSlugField(populate_from=get_school_class_time_table_slug, unique=True, null=False, db_index=True)
 
 
 class Exam(UniversalModel):
@@ -186,11 +204,12 @@ class Exam(UniversalModel):
     exam_class = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='exam_classes')
     exam_section = models.ForeignKey(SchoolSection, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='exam_sections')
     name = models.CharField(max_length=255, blank=True, null=True)
-    subject = models.CharField(max_length=255, blank=True, null=True)
     fees = models.CharField(max_length=255, blank=True, null=True)
     exam_start_time = models.TimeField(blank=True, null=True)
     exam_end_time = models.TimeField(blank=True, null=True)
     exam_date = models.DateTimeField(blank=True, null=True)
+    exam_subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='school_exam_subjects')
+    slug = AutoSlugField(populate_from=get_school_exam_slug, unique=True, null=False, db_index=True)
 
 
 
