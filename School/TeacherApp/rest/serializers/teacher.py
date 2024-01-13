@@ -29,6 +29,8 @@ class TeacherListDetailSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = [
             "id",
+            "uid",
+            "slug",
             "school_teacher",
             "teacher_user",
             "teacher_id",
@@ -39,16 +41,12 @@ class TeacherListDetailSerializer(serializers.ModelSerializer):
             "joining_date",
             "qualification",
             "experience",
-            "slug",
             "teacher_information",
         ]
 
 
 class TeacherPostSerializer(serializers.ModelSerializer):
-    teacher_user = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        slug_field="uid",
-    )
+    teacher_user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     school_teacher = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
         slug_field="uid",
@@ -59,9 +57,9 @@ class TeacherPostSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = [
             "id",
+            "uid",
             "school_teacher",
             "teacher_user",
-            "teacher_id",
             "name",
             "gender",
             "date_Of_birth",
@@ -70,7 +68,6 @@ class TeacherPostSerializer(serializers.ModelSerializer):
             "qualification",
             "experience",
             "slug",
-            "teacher_information",
             "image",
         ]
 
