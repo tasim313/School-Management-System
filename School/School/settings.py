@@ -47,7 +47,7 @@ from School.Settings.static import (
     STATIC_ROOT,
 )
 
-from School.Settings.templates import TEMPLATES
+from School.Settings.templates import TEMPLATES, JAZZMIN_SETTINGS
 
 
 ALLOWED_HOSTS,

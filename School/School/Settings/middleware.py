@@ -11,7 +11,8 @@ DJANGO_MIDDLEWARE = [
 
 THIRD_PARTY_MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 
-MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE 
+MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
