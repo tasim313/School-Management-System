@@ -24,27 +24,24 @@ class LoginView(generics.ListCreateAPIView):
     serializer_class = Login.LoginSerializer
 
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
 
-        if user:
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
+        user = serializer.validated_data['user']
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
 
-            user_serializer = UserSerializer.UserSerializer(user)
-            serialized_user = user_serializer.data
+        user_serializer = UserSerializer.UserSerializer(user)
+        serialized_user = user_serializer.data
 
-            response_data = {
-                'message': 'Login successful!',
-                'data': {
-                    'user': serialized_user,
-                    'access': {
-                        'auth_type': 'Bearer',
-                        'Bearer': access_token,
-                    }
+        response_data = {
+            'message': 'Login successful!',
+            'data': {
+                'user': serialized_user,
+                'access': {
+                    'auth_type': 'Bearer',
+                    'Bearer': access_token,
                 }
             }
-            return Response(response_data)
-        else:
-            return Response({'error': 'Invalid credentials. Please check your username and password.'}, status=status.HTTP_401_UNAUTHORIZED)
+        }
+        return Response(response_data)
