@@ -12,6 +12,10 @@ from core.models import (
     SchoolClass, 
     SchoolSection)
 
+from StudentApp.models import(
+    Student
+)
+
 
 from .choice import (
     Gender,
@@ -40,7 +44,9 @@ from .utills import(
     get_school_class_time_table_slug,
     get_school_exam_slug,
     get_school_hostel_slug,
-    get_school_sports_slug
+    get_school_sports_slug,
+    get_school_grading_slug,
+    get_school_semester_slug
 )
 
 
@@ -305,3 +311,51 @@ class PurchaseReceived(UniversalModel):
     payment_method = models.CharField(max_length=100, blank=True, null=True)
     note_private = models.TextField(blank=True, null=True)
     note_public = models.TextField(blank=True, null=True)
+
+
+
+class GradingConfig(UniversalModel):
+    school_grading = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_grading_info')
+    slug = AutoSlugField(populate_from=get_school_grading_slug, unique=True, null=False, db_index=True)
+    letter_grade_A_plus =  models.CharField(max_length=100, help_text = "A+")
+    letter_grade_A =  models.CharField(max_length=100, help_text = "A")
+    letter_grade_A_minus = models.CharField(max_length=100, help_text = "A-")
+    letter_grade_B = models.CharField(max_length=100, help_text = "B")
+    letter_grade_C = models.CharField(max_length=100, help_text = "C")
+    letter_grade_D = models.CharField(max_length=100, help_text = "D")
+    letter_grade_F = models.CharField(max_length=100, help_text = "F")
+
+    def __str__(self):
+        return self.school_grading.name
+    
+
+class Semester(UniversalModel):
+    school_semester = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_semester_info')
+    slug = AutoSlugField(populate_from=get_school_semester_slug, unique=True, null=False, db_index=True)
+    name = models.CharField(max_length=100, help_text = "Title")
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+
+class Result(UniversalModel):
+    school_result = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_result')
+    result_class = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_classes')
+    result_section = models.ForeignKey(SchoolSection, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_sections')
+    result_semester = models.ForeignKey(Semester, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_semester')
+    result_subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_subject')
+    result_student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_students')
+    mark = models.CharField(max_length=100, help_text = "Mark")
+
+    def __str__(self):
+        return self.mark
+    
+
+
+class StudentSubjectResult(UniversalModel):
+    student_result = models.ForeignKey(Result, on_delete= models.DO_NOTHING, related_name='student_result_info')
+    student_grade = models.ForeignKey(GradingConfig, on_delete= models.DO_NOTHING, related_name='student_grade_info')
+
+    

@@ -82,3 +82,13 @@ def get_school_class_time_table_slug(instance):
 def get_school_exam_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'school-exam'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_grading_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-grading'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_semester_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-semester'}-{str(instance.uid).split('-')[0]}"
