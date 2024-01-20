@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.db.models import Sum
 from autoslug import AutoSlugField
 from phonenumber_field.modelfields import PhoneNumberField
 from versatileimagefield.fields import VersatileImageField
@@ -347,10 +347,64 @@ class Result(UniversalModel):
     result_semester = models.ForeignKey(Semester, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_semester')
     result_subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_subject')
     result_student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_students')
-    mark = models.CharField(max_length=100, help_text = "Mark")
+    mark = models.IntegerField(help_text="Mark")
 
     def __str__(self):
         return self.mark
+    
+    def count_subjects(self):
+        return self.result_subject.count()
+
+    def count_total_marks(self):
+        total_marks = 0
+        for subject_result in self.result_subject.all():
+            if subject_result.mark:  
+                total_marks += subject_result.mark
+        return total_marks
+
+    def average_marks(self):
+        total_marks = 0
+        total_subjects = 0
+        for subject_result in self.result_subject.all():
+            if subject_result.mark is not None:
+                total_marks += subject_result.mark
+                total_subjects += 1
+
+        return total_marks / total_subjects if total_subjects > 0 else 0
+    
+    def total_marks_for_student(self, student):
+        return Result.objects.filter(result_student=student).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+
+    def average_marks_for_student(self, student):
+        total_marks = Result.objects.filter(result_student=student).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+        total_subjects = Result.objects.filter(result_student=student).count()
+        return total_marks / total_subjects if total_subjects > 0 else 0
+
+    def total_marks_for_subject(self, subject):
+        return Result.objects.filter(result_subject=subject).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+
+    def average_marks_for_subject(self, subject):
+        total_marks = Result.objects.filter(result_subject=subject).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+        total_students = Result.objects.filter(result_subject=subject).count()
+        return total_marks / total_students if total_students > 0 else 0
+
+    def total_marks_for_class(self, school_class):
+        return Result.objects.filter(result_class=school_class).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+
+    def average_marks_for_class(self, school_class):
+        total_marks = Result.objects.filter(result_class=school_class).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+        total_students = Result.objects.filter(result_class=school_class).count()
+        return total_marks / total_students if total_students > 0 else 0
+
+    def total_marks_for_section(self, section):
+        return Result.objects.filter(result_section=section).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+
+    def average_marks_for_section(self, section):
+        total_marks = Result.objects.filter(result_section=section).aggregate(total_marks=Sum('mark'))['total_marks'] or 0
+        total_students = Result.objects.filter(result_section=section).count()
+        return total_marks / total_students if total_students > 0 else 0
+
+
     
 
 
