@@ -26,7 +26,8 @@ from .choice import (
     HostelRoomType,
     HostelAvailability,
     PurchaseRequestStatus,
-    PurchaseReceivedStatus
+    PurchaseReceivedStatus,
+    HolidayType
 )
 
 from .utills import(
@@ -46,7 +47,8 @@ from .utills import(
     get_school_hostel_slug,
     get_school_sports_slug,
     get_school_grading_slug,
-    get_school_semester_slug
+    get_school_semester_slug,
+    get_school_holiday_slug
 )
 
 
@@ -405,11 +407,20 @@ class Result(UniversalModel):
         return total_marks / total_students if total_students > 0 else 0
 
 
-    
-
-
 class StudentSubjectResult(UniversalModel):
     student_result = models.ForeignKey(Result, on_delete= models.DO_NOTHING, related_name='student_result_info')
     student_grade = models.ForeignKey(GradingConfig, on_delete= models.DO_NOTHING, related_name='student_grade_info')
 
-    
+
+
+class HolidayManagement(UniversalModel):
+    school_holiday = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_holidays')
+    slug = AutoSlugField(populate_from=get_school_holiday_slug, unique=True, null=False, db_index=True)
+    name = models.CharField(max_length=100, help_text = "Holiday Name")
+    holiday_type =  models.CharField(
+        max_length=30,
+        choices=HolidayType.choices,
+        blank=True, null=True
+    )
+    holiday_start = models.DateField(blank=True, null=True)
+    holiday_end = models.DateField(blank=True, null=True)
