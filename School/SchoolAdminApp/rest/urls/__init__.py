@@ -6,4 +6,8 @@ urlpatterns = [
         "libraries/",
         include("SchoolAdminApp.rest.urls.library"),
     ),
+    path(
+        "transports/",
+        include("SchoolAdminApp.rest.urls.transport"),
+    ),
 ]
