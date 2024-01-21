@@ -34,9 +34,7 @@ class StudentDetail(CustomRetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        school_id = self.request.user.school_id
         student = Student.objects.filter(
             status=Status.Active,
-            school_student_id=school_id,
         )
         return student
