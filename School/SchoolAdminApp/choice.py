@@ -58,3 +58,13 @@ class PurchaseReceivedStatus(models.TextChoices):
     AllReceived = 'all_received', 'All Received'
     Cancelled = 'cancelled', 'Cancelled'
     Refused = 'refused', 'Refused'
+
+
+class HolidayType(models.TextChoices):
+    PublicHoliday = 'public_holiday', 'Public Holiday'
+    GovernmentDeclaredHolidays = 'government_declared_holidays', 'Government Declared Holidays'
+    ReligiousHolidays = 'religious_holidays', 'Religious Holidays'
+    VacationBreaks = 'vacation_breaks', 'Vacation Breaks'
+    SpecialOccasionHolidays = 'special_occasion_holidays', 'Special Occasion Holidays'
+    ExamHoliday = 'exam_holiday', 'Exam Holiday'
+    Others = 'other', 'Other'

@@ -92,3 +92,8 @@ def get_school_grading_slug(instance):
 def get_school_semester_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'school-semester'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_school_holiday_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'school-holiday'}-{str(instance.uid).split('-')[0]}"
