@@ -20,4 +20,4 @@ class LibraryListSerializer(serializers.ModelSerializer):
             "book_type",
             "book_status",
         ]
-        read_only_fields = ["uid"]
+        read_only_fields = ["uid", "slug"]
