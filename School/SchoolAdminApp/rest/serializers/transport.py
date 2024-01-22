@@ -4,8 +4,15 @@ from rest_framework import serializers
 
 from SchoolAdminApp.models import Transport
 
+from common.models import SchoolInformationOnBoarding
+
 
 class TransportListSerializer(serializers.ModelSerializer):
+    school_transport = serializers.SlugRelatedField(
+        queryset=SchoolInformationOnBoarding.objects.all(),
+        slug_field="uid",
+    )
+
     class Meta:
         model = Transport
         fields = [
