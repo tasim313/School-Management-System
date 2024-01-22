@@ -54,6 +54,6 @@ class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         library = Library.objects.filter(
             status=Status.Active,
             school_library__slug=school_slug,
-        )
+        ).select_related("school_library")
 
         return library
