@@ -6,4 +6,8 @@ urlpatterns = [
         "libraries/",
         include("SchoolAdminApp.rest.urls.library"),
     ),
+    path(
+        "hostels/",
+        include("SchoolAdminApp.rest.urls.hostel"),
+    ),
 ]
