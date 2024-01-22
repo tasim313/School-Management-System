@@ -4,8 +4,15 @@ from rest_framework import serializers
 
 from SchoolAdminApp.models import Library
 
+from common.models import SchoolInformationOnBoarding
+
 
 class LibraryListSerializer(serializers.ModelSerializer):
+    school_library = serializers.SlugRelatedField(
+        queryset=SchoolInformationOnBoarding.objects.all(),
+        slug_field="uid",
+    )
+
     class Meta:
         model = Library
         fields = [
