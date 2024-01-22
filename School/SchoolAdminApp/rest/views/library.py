@@ -22,6 +22,7 @@ class LibraryListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
+
         queryset = Library.objects.filter(
             status=Status.Active,
             school_library__slug=school_slug,
@@ -31,9 +32,10 @@ class LibraryListCreateView(generics.ListCreateAPIView):
 
 
 class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = LibraryListSerializer
-    lookup_field = "slug"
+    lookup_field = "uid"
 
     def get_permissions(self):
         # Don't allow non-authenticated user request via PUT, PATCH, DELETE
@@ -47,10 +49,11 @@ class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             return []
 
     def get_queryset(self):
-        school_id = self.request.user.school_id
+        school_slug = self.kwargs.get("school_slug", None)
 
         library = Library.objects.filter(
             status=Status.Active,
-            school_library_id=school_id,
-        )
+            school_library__slug=school_slug,
+        ).select_related("school_library")
+
         return library
