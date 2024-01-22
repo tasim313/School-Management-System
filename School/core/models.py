@@ -51,7 +51,7 @@ from .utills import (
     get_blog_image,
     get_blog_image_slug,
     get_testimonials_image,
-    get_testimonials_slug
+    get_testimonials_slug,
 )
 
 from .choice import (
@@ -60,6 +60,7 @@ from .choice import (
     AdmissionBranch,
     AdmissionDivision,
     NewsEventsStatus,
+    AttendanceType,
 )
 
 
@@ -91,10 +92,22 @@ class SchoolClass(UniversalModel):
         on_delete=models.DO_NOTHING,
         related_name="School_Class_Information",
     )
-    name = models.CharField(max_length=100, unique=True)
-    slug = AutoSlugField(
-        populate_from=get_school_class_slug, unique=True, null=False, db_index=True
+    class_teacher = models.ForeignKey(
+        "TeacherApp.Teacher",
+        on_delete=models.DO_NOTHING,
+        related_name="class_teachers",
+        db_index=True,
     )
+    name = models.CharField(max_length=100)
+    slug = AutoSlugField(
+        populate_from=get_school_class_slug,
+        unique=True,
+        null=False,
+        db_index=True,
+    )
+    total_students = models.PositiveIntegerField(default=0)
+    present_students = models.PositiveIntegerField(default=0)
+    absent_students = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name_plural = "School Class"
@@ -105,7 +118,9 @@ class SchoolClass(UniversalModel):
 
 class SchoolSection(UniversalModel):
     school_class = models.ForeignKey(
-        SchoolClass, on_delete=models.DO_NOTHING, related_name="school_class_section"
+        SchoolClass,
+        on_delete=models.DO_NOTHING,
+        related_name="school_class_section",
     )
     name = models.CharField(max_length=50)
     slug = AutoSlugField(
@@ -684,7 +699,9 @@ class Blog(UniversalModel):
 
 
 class BlogImage(UniversalModel):
-    blog_info = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="blog_image_information")
+    blog_info = models.ForeignKey(
+        Blog, on_delete=models.CASCADE, related_name="blog_image_information"
+    )
     slug = AutoSlugField(
         populate_from=get_blog_image_slug,
         unique=True,
@@ -696,8 +713,6 @@ class BlogImage(UniversalModel):
         null=True,
         blank=True,
     )
-
-
 
 
 class SocialMedia(UniversalModel):
@@ -867,8 +882,6 @@ class WebSiteFacultyInformation(UniversalModel):
         return f"Faculty Members for {self.school_faculty_website_information.name}"
 
 
-
-
 class Testimonials(BaseModel):
     school_testimonials = models.ForeignKey(
         SchoolInformationOnBoarding,
@@ -879,13 +892,61 @@ class Testimonials(BaseModel):
     name = models.CharField(max_length=255, blank=True, null=True)
     designation = models.TextField(max_length=None, blank=True, null=True)
     comment = models.TextField(max_length=None, blank=True, null=True)
-    image = VersatileImageField(
-        upload_to=get_testimonials_image,
-        null=True, blank=True)
+    image = VersatileImageField(upload_to=get_testimonials_image, null=True, blank=True)
     slug = AutoSlugField(
         populate_from=get_testimonials_slug, unique=True, null=True, db_index=True
     )
-    
+
     class Meta:
-        verbose_name = 'Testimonials'
-        verbose_name_plural = 'Testimonials'
+        verbose_name = "Testimonials"
+        verbose_name_plural = "Testimonials"
+
+
+class ClassAttendance(UniversalModel):
+    # foreign_key fields for ClassAttendance
+    attendance_class = models.ForeignKey(
+        "core.SchoolClass",
+        on_delete=models.DO_NOTHING,
+        related_name="class_attendances",
+        db_index=True,
+    )
+    attendance_section = models.ForeignKey(
+        "core.SchoolSection",
+        on_delete=models.DO_NOTHING,
+        related_name="section_attendances",
+        db_index=True,
+    )
+
+    attendance_student = models.ForeignKey(
+        "StudentApp.Student",
+        on_delete=models.DO_NOTHING,
+        related_name="attendant_students",
+        db_index=True,
+    )
+    school = models.ForeignKey(
+        "common.SchoolInformationOnBoarding",
+        on_delete=models.DO_NOTHING,
+        related_name="school_attendances",
+        db_index=True,
+    )
+    marked_by = models.ForeignKey(
+        "school_auth.User",
+        on_delete=models.SET_NULL,
+        related_name="marked_attendances",
+        null=True,
+        blank=True,
+    )
+
+    # model fields
+    is_present = models.BooleanField(default=False)
+    on_leave = models.BooleanField(default=True)
+    date = models.DateTimeField()
+    late_arrival = models.BooleanField(default=False)
+    early_departure = models.BooleanField(default=False)
+    leave_reason = models.CharField(max_length=255, blank=True)
+    attendance_type = models.CharField(
+        max_length=20,
+        choices=AttendanceType,
+        default=AttendanceType.STUDENT,
+    )
+    comments = models.TextField(blank=True)
