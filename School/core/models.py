@@ -91,7 +91,7 @@ class SchoolClass(UniversalModel):
         on_delete=models.DO_NOTHING,
         related_name="School_Class_Information",
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=False)
     slug = AutoSlugField(
         populate_from=get_school_class_slug, unique=True, null=False, db_index=True
     )

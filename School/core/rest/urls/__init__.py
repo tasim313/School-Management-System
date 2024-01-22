@@ -38,4 +38,8 @@ urlpatterns = [
         "school/testimonial/",
         include("core.rest.urls.testimonial"),
     ),
+    path(
+        'school/class/',
+        include("core.rest.urls.schoolClass"),
+    )
 ]
