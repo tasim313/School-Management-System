@@ -10,4 +10,8 @@ urlpatterns = [
         "transports/",
         include("SchoolAdminApp.rest.urls.transport"),
     ),
+    path(
+        "hostels/",
+        include("SchoolAdminApp.rest.urls.hostel"),
+    ),
 ]

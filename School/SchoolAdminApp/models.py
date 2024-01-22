@@ -424,3 +424,28 @@ class HolidayManagement(UniversalModel):
     )
     holiday_start = models.DateField(blank=True, null=True)
     holiday_end = models.DateField(blank=True, null=True)
+
+
+class FeesCategory(UniversalModel):
+    school_fees = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_fees')
+    name = models.CharField(max_length=100, help_text = "Fees Name")
+
+    def __str__(self):
+        return self.name
+    
+
+class FeesInformation(UniversalModel):
+    fees_category = models.ForeignKey(FeesCategory, on_delete=models.DO_NOTHING, related_name='school_fees_category')
+    fess_class = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='fess_classes')
+    fess_section = models.ForeignKey(SchoolSection, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='fess_sections')
+    fees_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    fees_start = models.DateField(blank=True, null=True)
+    fees_end = models.DateField(blank=True, null=True)
+
+
+class FeesCollection(UniversalModel):
+    school_fees_collection = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_fees_collection')
+    student_fees_collection = models.ForeignKey(Student, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='fees_collection_students')
+    fees_collection_category = models.ForeignKey(FeesCategory, on_delete=models.DO_NOTHING, related_name='fees_collection_category')
+    fees_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    paid_date = models.DateField(auto_now_add=True)

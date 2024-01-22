@@ -1,0 +1,58 @@
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from SchoolAdminApp.models import Hostel
+from SchoolAdminApp.rest.serializers.hostel import HostelListSerializer
+
+from common.choice import Status
+
+
+class HostelListCreateView(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = HostelListSerializer
+
+    def get_permissions(self):
+        # Don't allow non-authenticated user to create via POST
+        if self.request.method == "POST":
+            return [IsAuthenticated()]
+        else:
+            return []
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+
+        queryset = Hostel.objects.filter(
+            status=Status.Active,
+            school_hostel__slug=school_slug,
+        ).select_related("school_hostel")
+
+        return queryset
+
+
+class HostelRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = HostelListSerializer
+    lookup_field = "uid"
+
+    def get_permissions(self):
+        # Don't allow non-authenticated user request via PUT, PATCH, DELETE
+        if (
+                self.request.method == "PUT" or
+                self.request.method == "PATCH" or
+                self.request.method == "DELETE"
+        ):
+            return [IsAuthenticated()]
+        else:
+            return []
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+
+        hostel = Hostel.objects.filter(
+            status=Status.Active,
+            school_hostel__slug=school_slug,
+        ).select_related("school_hostel")
+
+        return hostel
