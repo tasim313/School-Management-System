@@ -161,6 +161,12 @@ class StudentCurrentStatus(UniversalModel):
     )
     class_roll_number = models.CharField(max_length=100, blank=True, null=True)
 
+    class Meta:
+        unique_together = ("current_class", "current_section", "student_current_status")
+
+    def __str__(self):
+        return f"{self.student_current_status.student_user.firstName}-{self.current_class.name}-{self.current_section.name}"
+
 
 class StudentPermanentAddress(UniversalModel):
     student_permanent_address = models.ForeignKey(
