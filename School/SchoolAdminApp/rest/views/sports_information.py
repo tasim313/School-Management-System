@@ -1,19 +1,19 @@
-"""Views for Transport model."""""
+"""Views for Sports Information model."""
 
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from SchoolAdminApp.models import Transport
-from SchoolAdminApp.rest.serializers.transport import TransportListSerializer
+from SchoolAdminApp.models import SportsInformation
+from SchoolAdminApp.rest.serializers.sports_information import SportsInformationListSerializer
 
 from common.choice import Status
 
 
-class TransportListCreateView(generics.ListCreateAPIView):
+class SportsInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = TransportListSerializer
+    serializer_class = SportsInformationListSerializer
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST
@@ -26,18 +26,17 @@ class TransportListCreateView(generics.ListCreateAPIView):
         # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
-        queryset = Transport.objects.filter(
+        queryset = SportsInformation.objects.filter(
             status=Status.Active,
-            school_transport__slug=school_slug,
-        ).select_related("school_transport")
+            school_sports__slug=school_slug,
+        ).select_related("school_sports")
 
         return queryset
 
 
-class TransportRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = [JWTAuthentication]
+class SportsInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = TransportListSerializer
+    serializer_class = SportsInformationListSerializer
     lookup_field = "uid"
 
     def get_permissions(self):
@@ -55,9 +54,9 @@ class TransportRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
-        transport = Transport.objects.filter(
+        sports_information = SportsInformation.objects.filter(
             status=Status.Active,
-            school_transport__slug=school_slug,
-        ).select_related("school_transport")
+            school_sports__slug=school_slug,
+        ).select_related("school_sports")
 
-        return transport
+        return sports_information
