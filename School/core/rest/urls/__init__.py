@@ -41,5 +41,9 @@ urlpatterns = [
     path(
         'school/class/',
         include("core.rest.urls.schoolClass"),
+    ),
+    path(
+        'school/class/section/',
+        include("core.rest.urls.SchoolSection"),
     )
 ]

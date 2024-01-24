@@ -96,6 +96,7 @@ class SchoolClass(UniversalModel):
         "TeacherApp.Teacher",
         on_delete=models.DO_NOTHING,
         related_name="class_teachers",
+        blank=True, null=True,
         db_index=True,
     )
     name = models.CharField(max_length=100)
