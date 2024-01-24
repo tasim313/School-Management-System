@@ -1,3 +1,5 @@
+"""Urls for Hostel REST API."""
+
 from django.urls import path
 
 from SchoolAdminApp.rest.views.hostel import (

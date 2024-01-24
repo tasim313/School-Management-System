@@ -1,3 +1,5 @@
+"""Views for Hostel model."""
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -21,6 +23,7 @@ class HostelListCreateView(generics.ListCreateAPIView):
             return []
 
     def get_queryset(self):
+        # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
         queryset = Hostel.objects.filter(
@@ -48,6 +51,7 @@ class HostelRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             return []
 
     def get_queryset(self):
+        # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
         hostel = Hostel.objects.filter(

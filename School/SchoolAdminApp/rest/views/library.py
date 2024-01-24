@@ -1,3 +1,5 @@
+"""Views for Library model."""
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -21,6 +23,7 @@ class LibraryListCreateView(generics.ListCreateAPIView):
             return []
 
     def get_queryset(self):
+        # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
         queryset = Library.objects.filter(
@@ -49,6 +52,7 @@ class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             return []
 
     def get_queryset(self):
+        # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
         library = Library.objects.filter(

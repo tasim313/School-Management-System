@@ -1,3 +1,5 @@
+"""Urls for Transport REST API"""
+
 from django.urls import path
 from SchoolAdminApp.rest.views.transport import (
     TransportListCreateView,
