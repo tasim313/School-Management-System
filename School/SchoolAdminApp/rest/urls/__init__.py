@@ -20,4 +20,8 @@ urlpatterns = [
         "sports/",
         include("SchoolAdminApp.rest.urls.sports_information"),
     ),
+    path(
+        "class-time-tables/",
+        include("SchoolAdminApp.rest.urls.class_time_table"),
+    )
 ]
