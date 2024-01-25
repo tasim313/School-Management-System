@@ -1,19 +1,19 @@
-"""Views for Library model."""
+"""Views for ClassTimeTable model."""
 
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from SchoolAdminApp.models import Library
-from SchoolAdminApp.rest.serializers.library import LibraryListSerializer
+from SchoolAdminApp.models import ClassTimeTable
+from SchoolAdminApp.rest.serializers.class_time_table import ClassTimeTableListSerializer
 
 from common.choice import Status
 
 
-class LibraryListCreateView(generics.ListCreateAPIView):
+class ClassTimeTableListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = LibraryListSerializer
+    serializer_class = ClassTimeTableListSerializer
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST
@@ -26,22 +26,22 @@ class LibraryListCreateView(generics.ListCreateAPIView):
         # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
-        queryset = Library.objects.filter(
+        queryset = ClassTimeTable.objects.filter(
             status=Status.Active,
-            school_library__slug=school_slug,
+            school_class_time_table__slug=school_slug,
         ).select_related(
-            "school_library",
-            "library_department",
-            "library_class",
+            "school_class_time_table",
+            "school_time_table",
+            "school_section_time_table",
+            "class_time_table_subject",
         )
 
         return queryset
 
 
-class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = [JWTAuthentication]
+class ClassTimeTableRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = LibraryListSerializer
+    serializer_class = ClassTimeTableListSerializer
     lookup_field = "uid"
 
     def get_permissions(self):
@@ -59,13 +59,14 @@ class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
-        library = Library.objects.filter(
+        class_time_table = ClassTimeTable.objects.filter(
             status=Status.Active,
-            school_library__slug=school_slug,
+            school_class_time_table__slug=school_slug,
         ).select_related(
-            "school_library",
-            "library_department",
-            "library_class",
+            "school_class_time_table",
+            "school_time_table",
+            "school_section_time_table",
+            "class_time_table_subject",
         )
 
-        return library
+        return class_time_table
