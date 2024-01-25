@@ -2,14 +2,24 @@
 
 from rest_framework import serializers
 
-from SchoolAdminApp.models import Library
+from SchoolAdminApp.models import Library, Department
 
 from common.models import SchoolInformationOnBoarding
+
+from core.models import SchoolClass
 
 
 class LibraryListSerializer(serializers.ModelSerializer):
     school_library = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
+        slug_field="uid",
+    )
+    library_department = serializers.SlugRelatedField(
+        queryset=Department.objects.all(),
+        slug_field="uid",
+    )
+    library_class = serializers.SlugRelatedField(
+        queryset=SchoolClass.objects.all(),
         slug_field="uid",
     )
 
