@@ -49,9 +49,9 @@ class DepartmentRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
 
-        library = Department.objects.filter(
+        department = Department.objects.filter(
             status=Status.Active,
             school_department__slug=school_slug,
         ).select_related("school_department")
 
-        return library
+        return department
