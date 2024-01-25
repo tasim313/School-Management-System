@@ -24,4 +24,9 @@ urlpatterns = [
         "department/",
         include("SchoolAdminApp.rest.urls.department"),
     ),
+    path(
+        "class-time-tables/",
+        include("SchoolAdminApp.rest.urls.class_time_table"),
+    ),
+
 ]
