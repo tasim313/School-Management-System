@@ -97,3 +97,14 @@ def get_school_semester_slug(instance):
 def get_school_holiday_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'school-holiday'}-{str(instance.uid).split('-')[0]}"
+
+
+def get_curriculum_vitae_file(instance, filename):
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    uid = str(uuid4()).split("-")[-1]
+    return f"{'Candidate'}{uid}{'cv'}{timestamp}-{filename}"
+
+
+def get_employee_candidate_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'employee-candidate'}-{str(instance.uid).split('-')[0]}"

@@ -48,7 +48,9 @@ from .utills import(
     get_school_sports_slug,
     get_school_grading_slug,
     get_school_semester_slug,
-    get_school_holiday_slug
+    get_school_holiday_slug,
+    get_curriculum_vitae_file,
+    get_employee_candidate_slug,
 )
 
 
@@ -129,6 +131,25 @@ class Career(UniversalModel):
     class Meta:
         ordering = ["-createdAt"]
         verbose_name_plural = "Career"
+
+
+
+class EmployeeCandidate(UniversalModel):
+    school_candidate = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_candidate')
+    job_category = models.ForeignKey(Career, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='apply_job')
+    name = models.CharField(max_length=500,db_index=True, blank=True, null=True, verbose_name="Full Name")
+    email = models.EmailField(blank=True, null=True, db_index=True,)
+    phone_number = PhoneNumberField(blank=True,
+                                    null=True,
+                                    db_index=True,
+                                    verbose_name="Phone Number")
+    portfolio_link = models.URLField(blank=True, null=True, verbose_name='Portfolio Link')
+    linkedin_link = models.URLField(blank=True, null=True, verbose_name='LinkedIn Profile Link')
+    comment = models.TextField(max_length=None, blank=True, null=True)
+    curriculum_vitae = models.FileField(upload_to =get_curriculum_vitae_file, null=True, blank=True)
+    slug = AutoSlugField(populate_from=get_employee_candidate_slug, unique=True, null=False, db_index=True)
+
+
 
 
 
