@@ -42,5 +42,10 @@ urlpatterns = [
         include("SchoolAdminApp.rest.urls.subject"),
 
     ),
+    path(
+        "career/",
+        include("SchoolAdminApp.rest.urls.career"),
+
+    ),
     
 ]
