@@ -26,5 +26,9 @@ urlpatterns = [
         "department/",
         include("SchoolAdminApp.rest.urls.department"),
     ),
+    path(
+        "exams/",
+        include("SchoolAdminApp.rest.urls.exam"),
+    ),
     
 ]
