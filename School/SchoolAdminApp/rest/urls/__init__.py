@@ -42,19 +42,28 @@ urlpatterns = [
         include("SchoolAdminApp.rest.urls.subject"),
 
     ),
+    
     path(
         "career/",
         include("SchoolAdminApp.rest.urls.career"),
 
     ),
+
     path(
         "candidate/",
         include("SchoolAdminApp.rest.urls.candidate"),
 
     ),
+
     path(
         "vendor/",
         include("SchoolAdminApp.rest.urls.vendor"),
+
+    ),
+
+    path(
+        "product/category/",
+        include("SchoolAdminApp.rest.urls.category"),
 
     ),
     
