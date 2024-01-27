@@ -66,5 +66,11 @@ urlpatterns = [
         include("SchoolAdminApp.rest.urls.category"),
 
     ),
+
+    path(
+        "product/",
+        include("SchoolAdminApp.rest.urls.product"),
+
+    ),
     
 ]
