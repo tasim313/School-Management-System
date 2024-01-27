@@ -52,5 +52,10 @@ urlpatterns = [
         include("SchoolAdminApp.rest.urls.candidate"),
 
     ),
+    path(
+        "vendor/",
+        include("SchoolAdminApp.rest.urls.vendor"),
+
+    ),
     
 ]
