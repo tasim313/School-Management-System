@@ -39,11 +39,19 @@ urlpatterns = [
         include("core.rest.urls.testimonial"),
     ),
     path(
-        'school/class/',
+        "school/class/attendance/",
+        include("core.rest.urls.attendance"),
+    ),
+    path(
+        "school/class/",
         include("core.rest.urls.schoolClass"),
     ),
     path(
-        'school/class/section/',
+        "school/class/section/",
         include("core.rest.urls.SchoolSection"),
-    )
+    ),
+    path(
+        "school/class/attendance/",
+        include("core.rest.urls.attendance"),
+    ),
 ]

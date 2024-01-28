@@ -22,6 +22,7 @@ from .models import (
     BlogCategory,
     BlogImage,
     BlogTag,
+    ClassAttendance,
 )
 
 
@@ -416,3 +417,26 @@ class BlogCategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(BlogCategory, BlogCategoryAdmin)
+
+
+class ClassAttendanceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "id",
+        "uid",
+        "attendance_class",
+        "attendance_section",
+        "attendance_student",
+        "school",
+        "marked_by",
+        "is_present",
+        "on_leave",
+        "date",
+        "late_arrival",
+        "early_departure",
+        "leave_reason",
+        "attendance_type",
+        "comments",
+    ]
+
+
+admin.site.register(ClassAttendance, ClassAttendanceAdmin)
