@@ -30,6 +30,7 @@ THIRD_PARTY_APP = [
     "debug_toolbar",
     "django_seed",
     "axes",
+    "django_filters",
 ]
 
 
