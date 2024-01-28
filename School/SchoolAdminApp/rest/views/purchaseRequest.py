@@ -3,10 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import PurchaseRequest
-from SchoolAdminApp.rest.serializers.purchase_request import PurchaseRequestSerializer
+from SchoolAdminApp.rest.serializers.purchaseRequest import PurchaseRequestSerializer
 
 from common.choice import Status
 
+# purchases request views
 
 class PurchaseRequestListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
@@ -63,3 +64,4 @@ class PurchaseRequestRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
         )
 
         return purchase_request
+

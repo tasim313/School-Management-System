@@ -73,10 +73,10 @@ urlpatterns = [
 
     ),
 
+    # purchases request urls
     path(
         "product/purchase/request/",
-        include("SchoolAdminApp.rest.urls.purchase_request"),
+        include("SchoolAdminApp.rest.urls.purchaseRequest"),
     ),
-    
     
 ]

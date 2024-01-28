@@ -3,7 +3,7 @@ from rest_framework import serializers
 from SchoolAdminApp.models import PurchaseRequest, Vendor, Product
 from common.models import SchoolInformationOnBoarding
 
-
+# purchases request serializers
 
 class PurchaseRequestSerializer(serializers.ModelSerializer):
     

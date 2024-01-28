@@ -1,9 +1,11 @@
 from django.urls import path
 
-from SchoolAdminApp.rest.views.purchase_request import (
+from SchoolAdminApp.rest.views.purchaseRequest import (
     PurchaseRequestListCreateView,
     PurchaseRequestRetrieveUpdateDeleteView,
 )
+
+# purchases request urls
 
 urlpatterns = [
     path(
