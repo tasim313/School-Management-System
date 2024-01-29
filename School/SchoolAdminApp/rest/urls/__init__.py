@@ -82,4 +82,9 @@ urlpatterns = [
         "product/purchase/received/",
         include("SchoolAdminApp.rest.urls.purchaseReceived"),
     ),
+
+    path(
+        "holiday/",
+        include("SchoolAdminApp.rest.urls.holiday"),
+    ),
 ]
