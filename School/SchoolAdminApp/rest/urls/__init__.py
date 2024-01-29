@@ -87,4 +87,9 @@ urlpatterns = [
         "holiday/",
         include("SchoolAdminApp.rest.urls.holiday"),
     ),
+
+    path(
+        "fees/category/",
+        include("SchoolAdminApp.rest.urls.feesCategory"),
+    ),
 ]
