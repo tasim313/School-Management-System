@@ -8,7 +8,7 @@ from StudentApp.models import Student
 from core.rest.serializers.schoolClass import SchoolClassListSerializer
 from core.rest.serializers.SchoolSection import SchoolSectionSerializer
 
-from StudentApp.rest.serializers.student import StudentLiteSerializer
+from StudentApp.rest.serializers.student import StudentInformationListSerializer
 from common.rest.serializers.schoolInformation import (
     SchoolInformationOnBoardingListSerializer,
 )
@@ -27,7 +27,7 @@ class UserSlimSerializer(serializers.ModelSerializer):
 class ClassAttendanceListSerializer(serializers.ModelSerializer):
     attendance_class = SchoolClassListSerializer()
     attendance_section = SchoolSectionSerializer()
-    attendance_student = StudentLiteSerializer()
+    attendance_student = StudentInformationListSerializer()
     school = SchoolInformationOnBoardingListSerializer()
     marked_by = UserSlimSerializer()
 
