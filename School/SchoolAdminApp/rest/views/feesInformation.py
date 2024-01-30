@@ -24,7 +24,7 @@ class FeesInformationListCreateView(generics.ListCreateAPIView):
 
         queryset = FeesInformation.objects.filter(
             status=Status.Active,
-            fees_category__slug=school_slug,
+            fees_category__school_fees__slug=school_slug,
         ).select_related(
             "fees_category",
             "fess_class",
@@ -55,7 +55,7 @@ class FeesInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
 
         fees_information = FeesInformation.objects.filter(
             status=Status.Active,
-            fees_category__slug=school_slug,
+            fees_category__school_fees__slug=school_slug,
         ).select_related(
             "fees_category",
             "fess_class",
