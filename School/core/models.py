@@ -52,6 +52,8 @@ from .utills import (
     get_blog_image_slug,
     get_testimonials_image,
     get_testimonials_slug,
+    get_alumni_section_slug,
+    get_alumni_section_image_slug
 )
 
 from .choice import (
@@ -757,6 +759,24 @@ class AlumniSection(UniversalModel):
 
     def __str__(self):
         return f"Alumni Section Information for {self.school_alumni_section_website_information.name}"
+    
+
+class AlumniSectionImage(UniversalModel):
+    alumni_info = models.ForeignKey(
+        AlumniSection, on_delete=models.CASCADE, related_name="alumni_section_images"
+    )
+    slug = AutoSlugField(
+        populate_from=get_alumni_section_slug,
+        unique=True,
+        null=True,
+        db_index=True,
+    )
+    image = VersatileImageField(
+        upload_to=get_alumni_section_image_slug,
+        null=True,
+        blank=True,
+    )
+
 
 
 class WebsiteTeacherInformation(UniversalModel):

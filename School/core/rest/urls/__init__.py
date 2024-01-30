@@ -54,4 +54,8 @@ urlpatterns = [
         "school/class/attendance/",
         include("core.rest.urls.attendance"),
     ),
+    path(
+        "school/alumni/",
+        include("core.rest.urls.alumni"),
+    ),
 ]

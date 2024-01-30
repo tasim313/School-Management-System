@@ -190,3 +190,12 @@ def get_testimonials_image(instance, filename):
 def get_testimonials_slug(instance):
     uid = str(uuid4()).split("-")[-1]
     return f"{uid}{'testimonials'}{str(instance.uid).split('-')[0]}"
+
+
+def get_alumni_section_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'alumni'}{str(instance.uid).split('-')[0]}"
+
+def get_alumni_section_image_slug(instance):
+    uid = str(uuid4()).split("-")[-1]
+    return f"{uid}{'alumni'}{str(instance.uid).split('-')[0]}"
