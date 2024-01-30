@@ -92,4 +92,14 @@ urlpatterns = [
         "fees/category/",
         include("SchoolAdminApp.rest.urls.feesCategory"),
     ),
+    
+    path(
+        "fees/information/",
+        include("SchoolAdminApp.rest.urls.feesInformation"),
+    ),
+
+    path(
+        "fees/collection/",
+        include("SchoolAdminApp.rest.urls.feesCollection"),
+    ),
 ]
