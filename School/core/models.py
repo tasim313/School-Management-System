@@ -883,7 +883,7 @@ class WebSiteFacultyInformation(UniversalModel):
         verbose_name="Teachers",
     )
     staff_members = models.ManyToManyField(
-        WebsiteManagingCommitteeMemberInformation,
+        WebsiteStaffInformation,
         blank=True,
         related_name="faculty_membership",
         verbose_name="Staff Members",

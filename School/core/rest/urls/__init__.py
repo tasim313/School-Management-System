@@ -58,4 +58,8 @@ urlpatterns = [
         "school/alumni/",
         include("core.rest.urls.alumni"),
     ),
+    path(
+        "school/team/",
+        include("core.rest.urls.team"),
+    ),
 ]
