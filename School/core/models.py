@@ -273,7 +273,7 @@ class WebsiteHomeSliderContentFile(UniversalModel):
 
     class Meta:
         verbose_name_plural = "School Website Home Slider Content File"
-
+ 
 
 class WebsiteAbout(UniversalModel):
     website_about_content = models.ForeignKey(
@@ -350,14 +350,6 @@ class WebsiteAboutFile(UniversalModel):
         return self.about.title
 
 
-# # # def create_website_about_file_content(sender, instance, created, **kwargs):
-
-# # #     if created:
-# # #         WebsiteAboutFile.objects.create(
-# # #             about=instance)
-
-
-# # # post_save.connect(create_website_about_file_content, sender=WebsiteAbout)
 
 
 class WebsiteFunFactContent(UniversalModel):
@@ -383,15 +375,6 @@ class WebsiteFunFactContent(UniversalModel):
         self.years_of_experience = self.about_info.years_of_experience
         super().save(*args, **kwargs)
 
-
-# # # def create_fun_fact_content(sender, instance, created, **kwargs):
-
-# # #     if created:
-# # #         WebsiteFunFactContent.objects.create(
-# # #             about_info=instance)
-
-
-# # # post_save.connect(create_fun_fact_content, sender=WebsiteAbout)
 
 
 class WebsiteAboutWinningAwards(UniversalModel):
