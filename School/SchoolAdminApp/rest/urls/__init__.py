@@ -102,4 +102,8 @@ urlpatterns = [
         "fees/collection/",
         include("SchoolAdminApp.rest.urls.feesCollection"),
     ),
+    path(
+        "grading-config/",
+        include("SchoolAdminApp.rest.urls.grading_config"),
+    )
 ]
