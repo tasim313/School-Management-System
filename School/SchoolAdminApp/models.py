@@ -336,17 +336,16 @@ class PurchaseReceived(UniversalModel):
     note_public = models.TextField(blank=True, null=True)
 
 
-
 class GradingConfig(UniversalModel):
-    school_grading = models.ForeignKey(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_grading_info')
+    school_grading = models.OneToOneField(SchoolInformationOnBoarding, on_delete=models.DO_NOTHING, related_name='school_grading_info')
     slug = AutoSlugField(populate_from=get_school_grading_slug, unique=True, null=False, db_index=True)
-    letter_grade_A_plus =  models.CharField(max_length=100, help_text = "A+")
-    letter_grade_A =  models.CharField(max_length=100, help_text = "A")
-    letter_grade_A_minus = models.CharField(max_length=100, help_text = "A-")
-    letter_grade_B = models.CharField(max_length=100, help_text = "B")
-    letter_grade_C = models.CharField(max_length=100, help_text = "C")
-    letter_grade_D = models.CharField(max_length=100, help_text = "D")
-    letter_grade_F = models.CharField(max_length=100, help_text = "F")
+    letter_grade_A_plus = models.PositiveIntegerField()
+    letter_grade_A = models.PositiveIntegerField()
+    letter_grade_A_minus = models.PositiveIntegerField()
+    letter_grade_B = models.PositiveIntegerField()
+    letter_grade_C = models.PositiveIntegerField()
+    letter_grade_D = models.PositiveIntegerField()
+    letter_grade_F = models.PositiveIntegerField()
 
     def __str__(self):
         return self.school_grading.name
