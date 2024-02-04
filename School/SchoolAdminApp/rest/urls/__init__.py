@@ -105,5 +105,9 @@ urlpatterns = [
     path(
         "grading-config/",
         include("SchoolAdminApp.rest.urls.grading_config"),
+    ),
+    path(
+        "semester/",
+        include("SchoolAdminApp.rest.urls.semester")
     )
 ]
