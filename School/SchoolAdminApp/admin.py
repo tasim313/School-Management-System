@@ -8,7 +8,8 @@ from .models import (
     Subject,
     ClassTimeTable,
     Department,
-    Exam
+    Exam,
+    Semester
 )
 
 
@@ -127,3 +128,18 @@ class ExamAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(Exam, ExamAdmin)
+
+
+class SemesterAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        'school_semester',
+        'uid',
+        'slug',
+        'name',
+        'start_date',
+        'end_date',
+    )
+    list_filter = ('uid', 'slug',)
+
+
+admin.site.register(Semester, SemesterAdmin)
