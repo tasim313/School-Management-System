@@ -23,6 +23,14 @@ from .models import (
     BlogImage,
     BlogTag,
     ClassAttendance,
+    SocialMedia,
+    AlumniSection,
+    AlumniSectionImage,
+    WebsiteTeacherInformation,
+    WebsiteManagingCommitteeMemberInformation,
+    WebsiteStaffInformation,
+    WebSiteFacultyInformation,
+    Testimonials
 )
 
 
@@ -440,3 +448,153 @@ class ClassAttendanceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(ClassAttendance, ClassAttendanceAdmin)
+
+
+
+class SocialMediaAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "facebook_url",
+        "twitter_url",
+        "instagram_url",
+        "linkedin_url",
+        "school_social_media",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register(SocialMedia, SocialMediaAdmin)
+
+
+
+class AlumniSectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "about_alumni",
+        "alumni_events",
+        "alumni_news",
+        "school_alumni_section",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register(AlumniSection, AlumniSectionAdmin)
+
+
+class AlumniSectionImageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "image",
+        "alumni_info",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register(AlumniSectionImage, AlumniSectionImageAdmin)
+
+
+class WebsiteTeacherInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "first_name",
+        "last_name",
+        "position",
+        "bio",
+        "contact_email",
+        "contact_phone",
+        "school_teacher",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register( WebsiteTeacherInformation,  WebsiteTeacherInformationAdmin)
+
+
+class WebsiteManagingCommitteeMemberInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "first_name",
+        "last_name",
+        "position",
+        "bio",
+        "contact_email",
+        "contact_phone",
+        "school_managing_committee_member",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register( WebsiteManagingCommitteeMemberInformation,  WebsiteManagingCommitteeMemberInformationAdmin)
+
+
+class WebsiteStaffInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "first_name",
+        "last_name",
+        "position",
+        "bio",
+        "contact_email",
+        "contact_phone",
+        "school_staff",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register( WebsiteStaffInformation,  WebsiteStaffInformationAdmin)
+
+
+class WebSiteFacultyInformationAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "school_faculty",
+        "slug",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    ]
+
+
+admin.site.register(  WebSiteFacultyInformation,   WebSiteFacultyInformationAdmin)
+
+
+class TestimonialsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = [
+        "uid",
+        "name",
+        "designation",
+        "comment",
+        "image",
+        "school_testimonials",
+        "slug",
+        "createdAt",
+        "updateAt",
+    ]
+
+
+admin.site.register( Testimonials,   TestimonialsAdmin)
