@@ -2,6 +2,20 @@ from django.urls import path
 from StudentApp.rest.views.student import (
     StudentInformationListView,
     StudentDetail,
+    StudentImageCreateView,
+    StudentImageRetrieveUpdateDeleteView,
+    StudentCurrentStatusCreateView,
+    StudentCurrentStatusRetrieveUpdateDeleteView,
+    StudentPermanentAddressListCreateView,
+    StudentPermanentAddressRetrieveUpdateDeleteView,
+    StudentPresentAddressListCreateView,
+    StudentPresentAddressRetrieveUpdateDeleteView,
+    StudentFatherListCreateView,
+    StudentFatherRetrieveUpdateDeleteView,
+    StudentMotherListCreateView,
+    StudentMotherRetrieveUpdateDeleteView,
+    StudentGuardianListCreateView,
+    StudentGuardianRetrieveUpdateDeleteView
 )
 
 
@@ -15,5 +29,75 @@ urlpatterns = [
         "<slug:slug>/",
         StudentDetail.as_view(),
         name="student-details",
+    ),
+    path(
+        "<slug:school_slug>/image/",
+        StudentImageCreateView.as_view(),
+        name="student-image-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/image",
+        StudentImageRetrieveUpdateDeleteView.as_view(),
+        name="student-image-details",
+    ),
+    path(
+        "<slug:school_slug>/current/status/",
+        StudentCurrentStatusCreateView.as_view(),
+        name="student-current-status-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/current/status/",
+        StudentCurrentStatusRetrieveUpdateDeleteView.as_view(),
+        name="student-current-status-details",
+    ),
+    path(
+        "<slug:school_slug>/permanent/address/",
+        StudentPermanentAddressListCreateView.as_view(),
+        name="student-permanent-address-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/permanent/address/",
+        StudentPermanentAddressRetrieveUpdateDeleteView.as_view(),
+        name="student-permanent-address-details",
+    ),
+    path(
+        "<slug:school_slug>/present/address/",
+        StudentPresentAddressListCreateView.as_view(),
+        name="student-present-address-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/present/address/",
+        StudentPresentAddressRetrieveUpdateDeleteView.as_view(),
+        name="student-present-address-details",
+    ),
+    path(
+        "<slug:school_slug>/father/info/",
+        StudentFatherListCreateView.as_view(),
+        name="student-father-info-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/father/info/",
+        StudentFatherRetrieveUpdateDeleteView.as_view(),
+        name="student-father-info-details",
+    ),
+    path(
+        "<slug:school_slug>/mother/info/",
+        StudentMotherListCreateView.as_view(),
+        name="student-mother-info-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/mother/info/",
+        StudentMotherRetrieveUpdateDeleteView.as_view(),
+        name="student-mother-info-details",
+    ),
+    path(
+        "<slug:school_slug>/guardian/info/",
+        StudentGuardianListCreateView.as_view(),
+        name="student-guardian-information-list",
+    ),
+    path(
+        "<slug:school_slug>/<uuid:uid>/guardian/info",
+        StudentGuardianRetrieveUpdateDeleteView.as_view(),
+        name="student-guardian-information-details",
     ),
 ]
