@@ -302,3 +302,6 @@ class StudentGuardian(UniversalModel):
         null=True,
     )
     phone = PhoneNumberField(blank=True, null=True, verbose_name="Phone Number")
+    student_guardian = models.ForeignKey(
+        Student, on_delete=models.DO_NOTHING, related_name="student_guardian_information"
+    )
