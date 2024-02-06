@@ -1,5 +1,5 @@
 """Helper functions for the SchoolAdminApp app"""
-
+from SchoolAdminApp.choice import GradeType
 from SchoolAdminApp.models import GradingConfig
 
 
@@ -20,16 +20,22 @@ def get_gpa_and_grade(mark: int, school_id: int):
     )
 
     if mark >= grade_config.letter_grade_A_plus:
-        return 5.00, "A+"
+        return 5.00, GradeType.A_PLUS
+
     if mark >= grade_config.letter_grade_A:
-        return 4.00, "A"
+        return 4.00, GradeType.A
+
     if mark >= grade_config.letter_grade_A_minus:
-        return 3.50, "A-"
+        return 3.50, GradeType.A_MINUS
+
     if mark >= grade_config.letter_grade_B:
-        return 3.00, "B"
+        return 3.00, GradeType.B
+
     if mark >= grade_config.letter_grade_C:
-        return 2.00, "C"
+        return 2.00, GradeType.C
+
     if mark >= grade_config.letter_grade_D:
-        return 1.00, "D"
+        return 1.00, GradeType.D
+
     else:
-        return 0.00, "F"
+        return 0.00, GradeType.F

@@ -26,7 +26,7 @@ from .models import (
     HolidayManagement,
     FeesCategory,
     FeesInformation,
-    FeesCollection
+    FeesCollection,
 )
 
 
@@ -511,3 +511,27 @@ class FeesCollectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(FeesCollection, FeesCollectionAdmin)
+
+
+class ResultAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "school_result",
+        "result_class",
+        "result_section",
+        "result_semester",
+        "result_subject",
+        "result_student",
+        "mark",
+        "gpa",
+        "grade",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    )
+
+    list_filter = ("uid",)
+
+
+admin.site.register(Result, ResultAdmin)

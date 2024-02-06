@@ -37,6 +37,7 @@ from .models import (
 class SchoolClassAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "school_info",
+        "uid",
         "name",
         "slug",
         "total_students",
@@ -47,7 +48,7 @@ class SchoolClassAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_created",
         "user_updated",
     )
-    list_filter = ("school_info__name", "name", "slug")
+    list_filter = ("school_info__name", "uid", "name", "slug")
 
 
 admin.site.register(SchoolClass, SchoolClassAdmin)
@@ -56,6 +57,7 @@ admin.site.register(SchoolClass, SchoolClassAdmin)
 class SchoolSectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "school_class",
+        "uid",
         "name",
         "slug",
         "createdAt",
@@ -65,6 +67,7 @@ class SchoolSectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     )
     list_filter = (
         "school_class__name",
+        "uid",
         "name",
         "slug",
     )

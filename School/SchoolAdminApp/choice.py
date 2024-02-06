@@ -68,3 +68,13 @@ class HolidayType(models.TextChoices):
     SpecialOccasionHolidays = 'special_occasion_holidays', 'Special Occasion Holidays'
     ExamHoliday = 'exam_holiday', 'Exam Holiday'
     Others = 'other', 'Other'
+
+
+class GradeType(models.TextChoices):
+    A_PLUS = 'A+', 'A+'
+    A = 'A', 'A'
+    A_MINUS = 'A-', 'A-'
+    B = 'B', 'B'
+    C = 'C', 'C'
+    D = 'D', 'D'
+    F = 'F', 'F'
