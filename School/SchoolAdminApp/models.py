@@ -27,7 +27,8 @@ from .choice import (
     HostelAvailability,
     PurchaseRequestStatus,
     PurchaseReceivedStatus,
-    HolidayType
+    HolidayType,
+    GradeType
 )
 
 from .utills import(
@@ -370,9 +371,15 @@ class Result(UniversalModel):
     result_subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_subject')
     result_student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='result_students')
     mark = models.IntegerField(help_text="Mark")
+    gpa = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    grade = models.CharField(
+        max_length=10,
+        choices=GradeType.choices,
+        blank=True, null=True
+    )
 
     def __str__(self):
-        return self.mark
+        return f'{self.result_subject.name} {self.result_student.student_user} - {self.mark}'
     
     def count_subjects(self):
         return self.result_subject.count()

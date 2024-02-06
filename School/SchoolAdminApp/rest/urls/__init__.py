@@ -109,5 +109,9 @@ urlpatterns = [
     path(
         "semester/",
         include("SchoolAdminApp.rest.urls.semester")
-    )
+    ),
+    path(
+        "result/",
+        include("SchoolAdminApp.rest.urls.result"),
+    ),
 ]
