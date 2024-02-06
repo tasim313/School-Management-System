@@ -6,6 +6,11 @@ from .models import (
     Student,
     StudentImage,
     StudentCurrentStatus,
+    StudentPermanentAddress,
+    StudentPresentAddress,
+    StudentFather,
+    StudentMother,
+    StudentGuardian
 )
 
 
@@ -90,3 +95,124 @@ class StudentCurrentStatusAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(StudentCurrentStatus, StudentCurrentStatusAdmin)
+
+
+class StudentPermanentAddressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        'uid',
+        'student_permanent_address',
+        'slug',
+        'divisions',
+        'district',
+        'upazila',
+        'pourashava',
+        'union_parishad',
+        'ward',
+        'mouza',
+        'village',
+        'house_holding_number',
+        'post_office',
+        'post_code',
+        'createdAt',
+        'updateAt',
+        'user_created',
+        'user_updated'
+    )
+    list_filter = ('uid',)
+
+
+admin.site.register(StudentPermanentAddress, StudentPermanentAddressAdmin)
+
+
+class StudentPresentAddressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        'uid',
+        'student_present_address',
+        'slug',
+        'divisions',
+        'district',
+        'upazila',
+        'pourashava',
+        'union_parishad',
+        'ward',
+        'mouza',
+        'village',
+        'house_holding_number',
+        'post_office',
+        'post_code',
+        'createdAt',
+        'updateAt',
+        'user_created',
+        'user_updated'
+    )
+    list_filter = ('uid', )
+
+
+admin.site.register(StudentPresentAddress, StudentPresentAddressAdmin)
+
+
+class StudentFatherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "name_bangla",
+        "name_english_capital",
+        "nid",
+        "date_of_birth",
+        'birth_certificate_number',
+        'phone',
+        'occupation',
+        'father_status',
+        'date_of_death',
+        'student_father',
+        'createdAt',
+        'updateAt',
+        'user_created',
+        'user_updated'
+    )
+    list_filter = ('uid',)
+
+
+admin.site.register(StudentFather, StudentFatherAdmin)
+
+
+class StudentMotherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "name_bangla",
+        "name_english_capital",
+        "nid",
+        "date_of_birth",
+        'birth_certificate_number',
+        'phone',
+        'occupation',
+        'mother_status',
+        'student_mother',
+        'createdAt',
+        'updateAt',
+        'user_created',
+        'user_updated'
+    )
+    list_filter = ('uid', )
+
+
+admin.site.register(StudentMother, StudentMotherAdmin)
+
+
+class StudentGuardianAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "name",
+        "nid",
+        "occupation",
+        'guardian_status',
+        'phone',
+        'student_guardian',
+        'createdAt',
+        'updateAt',
+        'user_created',
+        'user_updated'
+    )
+    list_filter = ('uid', )
+
+
+admin.site.register(StudentGuardian, StudentGuardianAdmin)
