@@ -51,7 +51,7 @@ JAZZMIN_SETTINGS = {
         # external url that opens in a new window (Permissions can be added)
         {
             "name": "Support",
-            "url": "https://www.facebook.com/m.wazedkhan11.01/",
+            "url": "#",
             "new_window": True,
         },
         # model admin to link to (Permissions checked against model)
@@ -68,7 +68,7 @@ JAZZMIN_SETTINGS = {
     "usermenu_links": [
         {
             "name": "Support",
-            "url": "https://www.facebook.com/m.wazedkhan11.01/",
+            "url": "#",
             "new_window": True,
         },
         {"model": "core.User"},

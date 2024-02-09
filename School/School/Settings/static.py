@@ -1,15 +1,12 @@
-from .auth import BASE_DIR
-import os
+from pathlib import Path
 
-ROOT_PATH = os.path.dirname(__file__)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [os.path.join(ROOT_PATH, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-MEDIA_DIR = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
-MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = "http://127.0.0.1:8000/media/"
+MEDIA_URL = "http://195.35.21.202:8000/media/"
 MEDIA_URL_2 = "/media/"
