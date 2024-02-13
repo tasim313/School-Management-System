@@ -9,12 +9,12 @@ urlpatterns = [
     ),
     path(
         "<uuid:uid>/",
-        admission.AdmissionInformationListView.as_view(),
+        admission.AdmissionInformationUpdateAPIView.as_view(),
         name="school-admission-update",
     ),
     path(
         "<slug:school_slug>/",
-        admission.AdmissionInformationUpdateAPIView.as_view(),
+        admission.AdmissionInformationListView.as_view(),
         name="school-admission-list",
     ),
     path(
