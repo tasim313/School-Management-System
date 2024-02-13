@@ -42,7 +42,7 @@ class AdmissionInformationAPIView(generics.CreateAPIView):
 
 class AdmissionInformationListView(generics.ListAPIView):
     queryset = SchoolAdmission.objects.all()
-    serializer_class = AdmissionUpdateSerializer
+    serializer_class = AdmissionListSerializer
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -50,7 +50,7 @@ class AdmissionInformationListView(generics.ListAPIView):
 
 
 class AdmissionInformationUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = AdmissionListSerializer
+    serializer_class = AdmissionUpdateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_field = "uid"
