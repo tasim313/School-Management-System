@@ -16,6 +16,7 @@ PROJECT_APP = [
     "StudentApp",
     "TeacherApp",
     "SchoolAdminApp",
+    "SubscriptionApp",
 ]
 
 
