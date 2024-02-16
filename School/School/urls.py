@@ -14,6 +14,7 @@ from School.Urls.school_auth import urlpatterns as authentication
 from School.Urls.core import urlpatterns as website
 from School.Urls.student import urlpatterns as student
 from School.Urls.school_admin_app import urlpatterns as school_admin_app
+from School.Urls.subscription_app import urlpatterns as subscription_app
 
 
 urlpatterns = [
@@ -30,6 +31,7 @@ urlpatterns.extend(authentication)
 urlpatterns.extend(website)
 urlpatterns.extend(student)
 urlpatterns.extend(school_admin_app)
+urlpatterns.extend(subscription_app)
 
 if settings.DEBUG:
     urlpatterns += static(

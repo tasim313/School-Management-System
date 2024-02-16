@@ -1,3 +1,5 @@
+"""Root URL Configuration for SchoolAdminApp."""
+
 from django.urls import path, include
 
 urlpatterns = [
