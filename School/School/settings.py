@@ -102,3 +102,6 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     "image_key_post_processor": None,
     "progressive_jpeg": False,
 }
+
+STORE_ID = "csslt65cb222edde68"
+STORE_PASS = "csslt65cb222edde68@ssl"
