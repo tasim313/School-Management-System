@@ -14,7 +14,6 @@ from School.Settings.auth import (
     SIMPLE_JWT,
 )
 
-
 from School.Settings.base import (
     INSTALLED_APPS,
     LANGUAGE_CODE,
@@ -33,9 +32,7 @@ from School.Settings.base import (
     CSRF_COOKIE_SECURE,
 )
 
-
 from School.Settings.database import DATABASES
-
 
 from School.Settings.middleware import MIDDLEWARE
 
@@ -48,7 +45,6 @@ from School.Settings.static import (
 )
 
 from School.Settings.templates import TEMPLATES, JAZZMIN_SETTINGS
-
 
 ALLOWED_HOSTS,
 AUTH_PASSWORD_VALIDATORS,
@@ -90,7 +86,6 @@ TEMPLATES,
 
 SIMPLE_JWT
 
-
 VERSATILEIMAGEFIELD_SETTINGS = {
     "cache_length": 2592000,
     "cache_name": "versatileimagefield_cache",
@@ -102,3 +97,9 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     "image_key_post_processor": None,
     "progressive_jpeg": False,
 }
+
+BKASH_USERNAME = "sandboxTokenizedUser02"
+BKASH_PASSWORD = "sandboxTokenizedUser02@12345"
+
+BKASH_APP_KEY = "4f6o0cjiki2rfm34kfdadl1eqq"
+BKASH_APP_SECRET = "2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b"
