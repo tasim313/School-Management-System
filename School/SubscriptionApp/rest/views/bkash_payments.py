@@ -10,6 +10,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from SubscriptionApp.helper import generate_invoice_number
+from SubscriptionApp.models import SubscriptionPlan
+
 
 class BkashPaymentAPI(APIView):
     authentication_classes = [JWTAuthentication]
@@ -18,18 +21,33 @@ class BkashPaymentAPI(APIView):
     def post(self, request, *args, **kwargs):
         """Post method for Bkash payment."""
 
+        # plan_uid = request.data.get("plan_uid")
+        school_username = request.data.get("school_username")
+
+        # plan = SubscriptionPlan.objects.get(uid=plan_uid)
+        #
+        # if not plan:
+        #     return Response(
+        #         "Plan not found", status=status.HTTP_400_BAD_REQUEST
+        #     )
+
         response = self.grant_token()
+
+        website_base_url = "http://localhost:8000/"
 
         if response.status_code == 200:
             token = response.json().get("id_token")
+
+            request.session[f"bkash_token_{school_username}"] = token
+
             data = {
-                "callbackURL": "http://localhost/bkash/agreement/callback",
+                "callbackURL": website_base_url,
                 "payerReference": "01770618575",
                 "mode": "0011",
                 "amount": "1",
                 "currency": "BDT",
                 "intent": "sale",
-                "merchantInvoiceNumber": "Invoice-002",
+                "merchantInvoiceNumber": generate_invoice_number(),
             }
 
             response = self.create_payment(data, token)
@@ -93,3 +111,39 @@ class BkashPaymentAPI(APIView):
             )
 
         return response
+
+
+class BkashPaymentExecuteAPI(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        """Post method for Bkash payment execute."""
+
+        execute_payment_url = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/execute"
+
+        payment_id = request.data.get("paymentID")
+        school_username = request.data.get("school_username")
+
+        token = request.session.get(f"bkash_token_{school_username}")
+
+        headers = {
+            "Accept": "application/json",
+            "Authorization": token,
+            "x-app-key": settings.BKASH_APP_KEY
+        }
+
+        data = {
+            "paymentID": payment_id
+        }
+
+        try:
+            response = requests.post(
+                execute_payment_url, headers=headers, json=data
+            )
+        except requests.exceptions.RequestException as e:
+            response = Response(
+                {"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(response.json(), status=status.HTTP_200_OK)
