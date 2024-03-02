@@ -70,6 +70,7 @@ class Transaction(UniversalModel):
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_id = models.CharField(max_length=255)
+    invoice_number = models.CharField(max_length=255)
     account_number = models.CharField(max_length=55, null=True)
     card_no = models.CharField(max_length=55, null=True)
     card_type = models.CharField(max_length=150)

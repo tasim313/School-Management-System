@@ -3,15 +3,20 @@
 import requests
 
 from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 
 from rest_framework import status
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SubscriptionApp.helper import generate_invoice_number
-from SubscriptionApp.models import SubscriptionPlan
+from SubscriptionApp.models import SubscriptionPlan, Subscription, Transaction
+
+from common.models import SchoolInformationOnBoarding
 
 
 class BkashPaymentAPI(APIView):
@@ -21,15 +26,42 @@ class BkashPaymentAPI(APIView):
     def post(self, request, *args, **kwargs):
         """Post method for Bkash payment."""
 
-        # plan_uid = request.data.get("plan_uid")
-        school_username = request.data.get("school_username")
+        plan_uid = request.data.get("plan_uid", "")
+        school_username = request.data.get("school_username", "")
 
-        # plan = SubscriptionPlan.objects.get(uid=plan_uid)
-        #
-        # if not plan:
-        #     return Response(
-        #         "Plan not found", status=status.HTTP_400_BAD_REQUEST
-        #     )
+        if not plan_uid or not school_username:
+            return Response(
+                {"error": "Plan UID and School username is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        school: SchoolInformationOnBoarding = SchoolInformationOnBoarding.objects.get(
+            username=school_username
+        )
+
+        if not school:
+            return Response(
+                {"error": "School not found"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        subscription = Subscription.objects.filter(
+            school_subscription_id=school.id,
+            is_paid=True,
+            end_date__gte=timezone.now().date()
+        )
+
+        if subscription:
+            return Response(
+                {"error": "Already subscribed"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        plan: SubscriptionPlan = SubscriptionPlan.objects.get(
+            uid=plan_uid
+        )
+
+        if not plan:
+            return Response(
+                {"error": "Plan not found"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         response = self.grant_token()
 
@@ -38,16 +70,21 @@ class BkashPaymentAPI(APIView):
         if response.status_code == 200:
             token = response.json().get("id_token")
 
-            request.session[f"bkash_token_{school_username}"] = token
+            invoice_number = generate_invoice_number()
+
+            request.session[f"bkash_token_{school.username}"] = token
+            request.session[f"plan_uid_{school.username}"] = plan_uid
+            request.session[f"invoice_number_{school.username}"] = invoice_number
+
 
             data = {
                 "callbackURL": website_base_url,
-                "payerReference": "01770618575",
+                "payerReference": str(school.phone),
                 "mode": "0011",
-                "amount": "1",
+                "amount": str(plan.price),
                 "currency": "BDT",
                 "intent": "sale",
-                "merchantInvoiceNumber": generate_invoice_number(),
+                "merchantInvoiceNumber": invoice_number,
             }
 
             response = self.create_payment(data, token)
@@ -126,6 +163,8 @@ class BkashPaymentExecuteAPI(APIView):
         school_username = request.data.get("school_username")
 
         token = request.session.get(f"bkash_token_{school_username}")
+        plan_uid = request.session.get(f"plan_uid_{school_username}")
+        invoice_number = request.session.get(f"invoice_number_{school_username}")
 
         headers = {
             "Accept": "application/json",
@@ -141,9 +180,52 @@ class BkashPaymentExecuteAPI(APIView):
             response = requests.post(
                 execute_payment_url, headers=headers, json=data
             )
+
+            if response.status_code == 200:
+
+                school: SchoolInformationOnBoarding = SchoolInformationOnBoarding.objects.get(
+                    username=school_username
+                )
+
+                if not school:
+                    return Response(
+                        {"error": "School not found"}, status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                plan: SubscriptionPlan = SubscriptionPlan.objects.get(
+                    uid=plan_uid
+                )
+
+                subscription = Subscription.objects.create(
+                    school_subscription_id=school.id,
+                    plan_id=plan.id,
+                    start_date=timezone.now().date(),
+                    end_date=timezone.now().date() + timedelta(days=plan.duration_months * 30),
+                    is_paid=True
+                )
+
+                transaction = Transaction.objects.create(
+                    school_transaction_id=school.id,
+                    subscription_plan_id=plan.id,
+                    amount=plan.price,
+                    transaction_id=payment_id,
+                    invoice_number=invoice_number,
+                    account_number=school.phone,
+                    currency="BDT",
+                    card_type="bkash",
+                    transaction_status="success"
+                )
+
+                return Response(
+                    {
+                        "message": "Payment successful",
+                    },
+                    status=status.HTTP_200_OK
+                )
+
         except requests.exceptions.RequestException as e:
             response = Response(
                 {"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        return Response(response.json(), status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)

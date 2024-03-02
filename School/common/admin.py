@@ -16,6 +16,7 @@ class SchoolInformationOnBoardingAdmin(ImportExportModelAdmin, admin.ModelAdmin)
     list_display = (
         'uid',
         'name',
+        'username',
         'address',
         'phone',
         'school_type',
