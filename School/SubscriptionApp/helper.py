@@ -16,6 +16,6 @@ def generate_invoice_number(prefix="INV", length=8, date_format="%Y%m%d"):
     unique_part = str(uuid.uuid4().hex)[:length]
 
     # Combine date and unique parts to form the invoice number
-    invoice_number = f'{prefix}-{date_part}-{unique_part}'
+    invoice_number = f"{prefix}-{date_part}-{unique_part}"
 
     return invoice_number

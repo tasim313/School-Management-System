@@ -1,5 +1,5 @@
 from django.contrib import admin
-from SubscriptionApp.models import Subscription, SubscriptionPlan
+from SubscriptionApp.models import Subscription, SubscriptionPlan, Transaction
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -38,5 +38,31 @@ class SubscriptionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'user_updated'
     )
 
-    list_filter = ("uid", "s")
+    list_filter = ("uid", "slug",)
 
+
+admin.site.register(Subscription, SubscriptionAdmin)
+
+
+class TransactionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "school_transaction",
+        "subscription_plan",
+        "amount",
+        "transaction_id",
+        "invoice_number",
+        "account_number",
+        "currency",
+        "card_type",
+        "transaction_status",
+        "createdAt",
+        "updateAt",
+        'user_created',
+        'user_updated'
+    )
+
+    list_filter = ("uid", "transaction_id", "invoice_number",)
+
+
+admin.site.register(Transaction, TransactionAdmin)
