@@ -1,7 +1,10 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from common.custom_views import CustomListCreateAPIView
+from common.custom_views import (
+    CustomListCreateAPIView,
+    CustomRetrieveUpdateDestroyAPIView,
+)
 
 from core.models import ClassAttendance
 from core.filters import ClassAttendanceFilter
@@ -9,6 +12,7 @@ from core.rest.serializers.attendance import (
     ClassAttendanceListSerializer,
     ClassAttendancePostSerializer,
 )
+from core.choice import Status
 
 
 class ClassAttendanceListCreate(CustomListCreateAPIView):
@@ -16,7 +20,7 @@ class ClassAttendanceListCreate(CustomListCreateAPIView):
     filterset_class = ClassAttendanceFilter
 
     def get_queryset(self):
-        queryset = ClassAttendance.objects.all().select_related(
+        queryset = ClassAttendance.objects.filter(status=Status.Active).select_related(
             "attendance_class",
             "attendance_section",
             "attendance_student",
@@ -42,3 +46,14 @@ class ClassAttendanceListCreate(CustomListCreateAPIView):
                 list_serializer.data, status=status.HTTP_201_CREATED, headers=headers
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ClassAttendanceDetail(CustomRetrieveUpdateDestroyAPIView):
+    queryset = ClassAttendance.objects.filter(status=Status.Active)
+    lookup_field = "uid"
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ClassAttendanceListSerializer
+        else:
+            return ClassAttendancePostSerializer
