@@ -1,24 +1,19 @@
-from rest_framework import permissions
-from datetime import timedelta
-from rest_framework import generics
-from django.contrib.auth import authenticate
+from django.utils import timezone
+
+from rest_framework import permissions, generics, status
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from ...models import User
+from SubscriptionApp.models import Subscription
 
-from ..serializers import(
+from school_auth.rest.serializers import (
     Login,
     UserSerializer
 )
 
 
-
-
 class LoginView(generics.ListCreateAPIView):
-
-    """User can Login system by username and password"""
+    """User can Log in system by username and password"""
 
     permission_classes = (permissions.AllowAny,)
     serializer_class = Login.LoginSerializer
@@ -27,7 +22,18 @@ class LoginView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
-        user = serializer.validated_data['user']
+        user = serializer.validated_data.get('user')
+
+        if not Subscription.objects.filter(
+                school_subscription_id=user.school_id,
+                is_paid=True,
+                end_date__gte=timezone.now().date()
+        ).exists():
+            return Response(
+                {"error": "You are not subscribed to any plan. Please contact your school admin."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
 

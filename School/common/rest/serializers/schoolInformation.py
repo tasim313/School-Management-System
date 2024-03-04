@@ -63,6 +63,7 @@ class SchoolInformationOnBoardingListSerializer(serializers.ModelSerializer):
             "phone",
             "school_type",
             "slug",
+            "username",
         )
 
 
