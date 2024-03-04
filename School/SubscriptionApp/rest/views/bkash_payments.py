@@ -76,7 +76,6 @@ class BkashPaymentAPI(APIView):
             request.session[f"plan_uid_{school.username}"] = plan_uid
             request.session[f"invoice_number_{school.username}"] = invoice_number
 
-
             data = {
                 "callbackURL": website_base_url,
                 "payerReference": str(school.phone),
@@ -196,15 +195,29 @@ class BkashPaymentExecuteAPI(APIView):
                     uid=plan_uid
                 )
 
-                subscription = Subscription.objects.create(
-                    school_subscription_id=school.id,
-                    plan_id=plan.id,
-                    start_date=timezone.now().date(),
-                    end_date=timezone.now().date() + timedelta(days=plan.duration_months * 30),
-                    is_paid=True
-                )
+                try:
+                    subscription = Subscription.objects.get(
+                        school_subscription_id=school.id,
+                    )
 
-                transaction = Transaction.objects.create(
+                    # If school is already subscribed, update the subscription
+                    subscription.plan_id = plan.id
+                    subscription.start_date = timezone.now().date()
+                    subscription.end_date = timezone.now().date() + timedelta(days=plan.duration_months * 30)
+                    subscription.is_paid = True
+                    subscription.save()
+
+                except Subscription.DoesNotExist:
+                    # Subscription does not exist, create a new one
+                    Subscription.objects.create(
+                        school_subscription_id=school.id,
+                        plan_id=plan.id,
+                        start_date=timezone.now().date(),
+                        end_date=timezone.now().date() + timedelta(days=plan.duration_months * 30),
+                        is_paid=True
+                    )
+
+                Transaction.objects.create(
                     school_transaction_id=school.id,
                     subscription_plan_id=plan.id,
                     amount=plan.price,
