@@ -1,21 +1,21 @@
 """Views for Bkash payment gateway."""
-
 import requests
+
+from datetime import timedelta
 
 from django.conf import settings
 from django.utils import timezone
-from datetime import timedelta
 
 from rest_framework import status
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from SubscriptionApp.helper import generate_invoice_number
+from SubscriptionApp.helper import generate_invoice_number, grant_token, create_payment
 from SubscriptionApp.models import SubscriptionPlan, Subscription, Transaction
 
+from common.helpers import get_base_url
 from common.models import SchoolInformationOnBoarding
 
 
@@ -63,9 +63,9 @@ class BkashPaymentAPI(APIView):
                 {"error": "Plan not found"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        response = self.grant_token()
+        response = grant_token()
 
-        website_base_url = "http://localhost:8000/"
+        website_base_url = get_base_url()
 
         if response.status_code == 200:
             token = response.json().get("id_token")
@@ -86,7 +86,7 @@ class BkashPaymentAPI(APIView):
                 "merchantInvoiceNumber": invoice_number,
             }
 
-            response = self.create_payment(data, token)
+            response = create_payment(data, token)
 
             if response.status_code == 200:
                 return Response(response.json(), status=status.HTTP_200_OK)
@@ -99,54 +99,6 @@ class BkashPaymentAPI(APIView):
             return Response(
                 "Something went wrong on bkash grant token", status=status.HTTP_400_BAD_REQUEST
             )
-
-    def grant_token(self):
-        grant_token_url = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/token/grant"
-
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "username": settings.BKASH_USERNAME,
-            "password": settings.BKASH_PASSWORD
-        }
-
-        body_data = {
-            "app_key": settings.BKASH_APP_KEY,
-            "app_secret": settings.BKASH_APP_SECRET
-        }
-
-        try:
-            response = requests.post(
-                grant_token_url, headers=headers, json=body_data
-            )
-
-        except requests.exceptions.RequestException as e:
-            response = Response(
-                {"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-        return response
-
-    def create_payment(self, data, token):
-        create_payment_url = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/create"
-
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": token,
-            "x-app-key": settings.BKASH_APP_KEY
-        }
-
-        try:
-            response = requests.post(
-                create_payment_url, headers=headers, json=data
-            )
-        except requests.exceptions.RequestException as e:
-            response = Response(
-                {"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-        return response
 
 
 class BkashPaymentExecuteAPI(APIView):
