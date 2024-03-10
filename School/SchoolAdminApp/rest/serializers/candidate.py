@@ -4,9 +4,7 @@ from SchoolAdminApp.models import EmployeeCandidate, Career
 from common.models import SchoolInformationOnBoarding
 
 
-
 class EmployeeCandidateSerializer(serializers.ModelSerializer):
-    
     school_candidate = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
         slug_field="uid",
