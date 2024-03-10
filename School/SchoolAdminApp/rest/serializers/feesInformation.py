@@ -4,9 +4,7 @@ from SchoolAdminApp.models import FeesInformation, FeesCategory
 from core.models import SchoolClass, SchoolSection
 
 
-
 class FeesInformationSerializer(serializers.ModelSerializer):
-    
     fees_category = serializers.SlugRelatedField(
         queryset=FeesCategory.objects.all(),
         slug_field="uid",
