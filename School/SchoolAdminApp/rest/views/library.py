@@ -5,7 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import Library
-from SchoolAdminApp.rest.serializers.library import LibraryListSerializer
+from SchoolAdminApp.rest.serializers.library import (
+    LibraryListSerializer,
+    LibraryPostSerializer,
+)
 
 from common.choice import Status
 
@@ -37,6 +40,11 @@ class LibraryListCreateView(generics.ListCreateAPIView):
 
         return queryset
 
+    def get_serializer(self, *args, **kwargs):
+        if self.request.method == "POST":
+            return LibraryPostSerializer
+        return super().get_serializer(*args, **kwargs)
+
 
 class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
@@ -47,9 +55,9 @@ class LibraryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         # Don't allow non-authenticated user request via PUT, PATCH, DELETE
         if (
-                self.request.method == "PUT" or
-                self.request.method == "PATCH" or
-                self.request.method == "DELETE"
+            self.request.method == "PUT"
+            or self.request.method == "PATCH"
+            or self.request.method == "DELETE"
         ):
             return [IsAuthenticated()]
         else:
