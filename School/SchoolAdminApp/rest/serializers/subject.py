@@ -5,6 +5,7 @@ from SchoolAdminApp.models import Subject
 from common.models import SchoolInformationOnBoarding
 from core.models import SchoolClass
 
+
 class SubjectListSerializer(serializers.ModelSerializer):
     school_subject = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),

@@ -5,14 +5,11 @@ from SchoolAdminApp.models import HolidayManagement
 from common.models import SchoolInformationOnBoarding
 
 
-
-
 class HolidayManagementListSerializer(serializers.ModelSerializer):
     school_holiday = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
         slug_field="uid",
     )
-    
 
     class Meta:
         model = HolidayManagement
@@ -24,7 +21,7 @@ class HolidayManagementListSerializer(serializers.ModelSerializer):
             "holiday_type",
             "holiday_start",
             "holiday_end",
-            
+
         ]
         read_only_fields = ["uid", "slug"]
 

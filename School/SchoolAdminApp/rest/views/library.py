@@ -8,6 +8,7 @@ from SchoolAdminApp.models import Library
 from SchoolAdminApp.rest.serializers.library import (
     LibraryListSerializer,
     LibraryPostSerializer,
+    LibraryDetailSerializer
 )
 
 from common.choice import Status
@@ -24,6 +25,11 @@ class LibraryListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return LibraryDetailSerializer
+        return LibraryListSerializer
 
     def get_queryset(self):
         # Get school_slug from URL

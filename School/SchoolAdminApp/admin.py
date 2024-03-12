@@ -33,6 +33,7 @@ from .models import (
 class SchoolAdminUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         'school_admin',
+        'uid',
         'schoolUser',
         'name',
         'gender',
@@ -47,7 +48,7 @@ class SchoolAdminUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'user_created',
         'user_updated'
     )
-    list_filter = ('name', "gender", "date_Of_birth", 'phone', 'joining_date', 'slug',)
+    list_filter = ('name', "gender", "date_Of_birth", 'phone', 'joining_date', 'slug', 'uid',)
 
 
 admin.site.register(SchoolAdmin, SchoolAdminUserAdmin)
@@ -56,6 +57,7 @@ admin.site.register(SchoolAdmin, SchoolAdminUserAdmin)
 class SchoolAdminImageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         'school_admin_info',
+        'uid',
         'image',
         'slug',
         'createdAt',
@@ -63,7 +65,7 @@ class SchoolAdminImageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'user_created',
         'user_updated'
     )
-    list_filter = ('slug',)
+    list_filter = ('uid', 'slug',)
 
 
 admin.site.register(SchoolAdminImage, SchoolAdminImageAdmin)
@@ -260,7 +262,7 @@ class TransportAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         "user_created",
         "user_updated",
     )
-    list_filter = ('uid',)
+    list_filter = ('uid', 'slug',)
 
 
 admin.site.register(Transport, TransportAdmin)
