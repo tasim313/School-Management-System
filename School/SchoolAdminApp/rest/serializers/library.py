@@ -9,6 +9,30 @@ from common.models import SchoolInformationOnBoarding
 from core.models import SchoolClass
 
 
+class SchoolClassSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolClass
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "total_students",
+            "present_students",
+            "absent_students",
+        ]
+
+
+class SchoolDepartmentSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = [
+            "uid",
+            "department_id",
+            "name",
+            "head_of_department",
+        ]
+
+
 class LibraryListSerializer(serializers.ModelSerializer):
     school_library = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
@@ -56,3 +80,28 @@ class LibraryListSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+
+
+class LibraryDetailSerializer(serializers.ModelSerializer):
+    school_library = serializers.SlugRelatedField(
+        queryset=SchoolInformationOnBoarding.objects.all(),
+        slug_field="uid",
+    )
+    library_department = SchoolDepartmentSlimSerializer(read_only=True)
+    library_class = SchoolClassSlimSerializer(read_only=True)
+
+    class Meta:
+        model = Library
+        fields = [
+            "uid",
+            "slug",
+            "school_library",
+            "library_department",
+            "library_class",
+            "book_id",
+            "book_name",
+            "language",
+            "book_type",
+            "book_status",
+        ]
+        read_only_fields = ["uid", "slug"]
