@@ -3,11 +3,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.core.validators import MinLengthValidator
 
-
 from autoslug import AutoSlugField
 from phonenumber_field.modelfields import PhoneNumberField
 from versatileimagefield.fields import VersatileImageField
-
 
 from school_auth.models import User
 
@@ -136,7 +134,7 @@ class SchoolSection(UniversalModel):
 
 
 class WebsiteInformation(UniversalModel):
-    school_website = models.ForeignKey(
+    school_website = models.OneToOneField(
         SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_website_information",
@@ -148,6 +146,20 @@ class WebsiteInformation(UniversalModel):
     )
     slug = AutoSlugField(
         populate_from=get_school_website_slug, unique=True, null=False, db_index=True
+    )
+    school_address = models.ForeignKey(
+        "core.SchoolAddressInformation",
+        on_delete=models.DO_NOTHING,
+        related_name="school_address_information",
+        blank=True,
+        null=True,
+    )
+    school_contact = models.ForeignKey(
+        "core.SchoolContactInformation",
+        on_delete=models.DO_NOTHING,
+        related_name="school_contact_information",
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -273,7 +285,7 @@ class WebsiteHomeSliderContentFile(UniversalModel):
 
     class Meta:
         verbose_name_plural = "School Website Home Slider Content File"
- 
+
 
 class WebsiteAbout(UniversalModel):
     website_about_content = models.ForeignKey(
@@ -350,8 +362,6 @@ class WebsiteAboutFile(UniversalModel):
         return self.about.title
 
 
-
-
 class WebsiteFunFactContent(UniversalModel):
     about_info = models.ForeignKey(
         WebsiteAbout,
@@ -374,7 +384,6 @@ class WebsiteFunFactContent(UniversalModel):
     def save(self, *args, **kwargs):
         self.years_of_experience = self.about_info.years_of_experience
         super().save(*args, **kwargs)
-
 
 
 class WebsiteAboutWinningAwards(UniversalModel):
@@ -742,7 +751,7 @@ class AlumniSection(UniversalModel):
 
     def __str__(self):
         return f"Alumni Section Information for {self.school_alumni_section_website_information.name}"
-    
+
 
 class AlumniSectionImage(UniversalModel):
     alumni_info = models.ForeignKey(
@@ -759,7 +768,6 @@ class AlumniSectionImage(UniversalModel):
         null=True,
         blank=True,
     )
-
 
 
 class WebsiteTeacherInformation(UniversalModel):

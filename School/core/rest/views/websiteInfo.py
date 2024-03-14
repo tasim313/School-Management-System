@@ -1,10 +1,11 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status, serializers
 from rest_framework.generics import RetrieveAPIView
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 
 from ..serializers import websiteInfo
 
@@ -46,13 +47,28 @@ class SchoolWebsiteAPIView(generics.CreateAPIView):
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class WebsiteInformationListView(generics.ListAPIView):
-    queryset = WebsiteInformation.objects.all()
+class WebsiteInformationListView(APIView):
     serializer_class = websiteInfo.WebsiteInformationSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(school_website__slug=school_slug)
+
+        try:
+            website_info = WebsiteInformation.objects.select_related(
+                "school_website",
+                "school_address",
+                "school_contact",
+            ).get(school_website__slug=school_slug)
+        except WebsiteInformation.DoesNotExist:
+            return Response(
+                {"message": "School Website Information not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = self.serializer_class(website_info)
+        return Response(serializer.data)
 
 
 class SchoolWebsiteUpdateAPIView(generics.UpdateAPIView):
