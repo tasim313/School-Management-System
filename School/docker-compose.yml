@@ -15,6 +15,7 @@ services:
     volumes:
       - .:/app
       - media_volume:/app/media
+      - django_db:/app/db.sqlite3   # Mount SQLite database volume
     ports:
       - "8000:8000"
     depends_on:
@@ -44,7 +45,7 @@ services:
       - "5432:5432"
     restart: unless-stopped
     volumes:
-      - django_db:/var/lib/postgresql/data
+      - django_db:/var/lib/postgresql/data   # Mount PostgreSQL data directory
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
