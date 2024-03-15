@@ -1,41 +1,46 @@
 version: '3'
 
 volumes:
-  django_db:
-  media_volume:  
+  # Descriptive volume names
+  postgres_data:
+  media_volume:
 
 networks:
   my_network:
     driver: bridge
 
 services:
-  web:
+  web_1:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
       - media_volume:/app/media
-      - django_db:/app/db.sqlite3   # Mount SQLite database volume
+    # Connect to PostgreSQL using service name
+    environment:
+      # ... other environment variables
+      DATABASE_URL: postgres://tasim:tasim*#2024@postgres_1:5432/project101
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - postgres_1
     restart: unless-stopped
     networks:
       - my_network
-  
+
   pgadmin:
     image: dpage/pgadmin4:latest
     ports:
       - "8080:80"
     environment:
+      # Consider using a .env file for sensitive information
       PGADMIN_DEFAULT_EMAIL: we@admin.com
       PGADMIN_DEFAULT_PASSWORD: secret*#123
     restart: unless-stopped
     networks:
       - my_network
 
-  postgres:
+  postgres_1:
     image: postgres:latest
     environment:
       POSTGRES_DB: project101
@@ -45,7 +50,7 @@ services:
       - "5432:5432"
     restart: unless-stopped
     volumes:
-      - django_db:/var/lib/postgresql/data   # Mount PostgreSQL data directory
+      - postgres_data:/var/lib/postgresql/data  # Persist data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
