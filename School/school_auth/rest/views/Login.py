@@ -24,7 +24,9 @@ class LoginView(generics.ListCreateAPIView):
 
         user = serializer.validated_data.get('user')
 
-        if not user.is_superuser:
+        dev_school_id = True if user.school_id == 1 else False
+
+        if not user.is_superuser or not dev_school_id:
             if not Subscription.objects.filter(
                     school_subscription_id=user.school_id,
                     is_paid=True,
