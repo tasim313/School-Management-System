@@ -59,8 +59,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5000",
     "http://localhost:3001",
     "http://127.0.0.1:3000",
-    "http://195.35.21.202:3000",
-    "http://195.35.21.202:3001",
     "http://localhost:5175",
 ]
 
@@ -90,10 +88,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://127.0.0.1:3000",
-    "http://195.35.21.202:3000",
-    "http://195.35.21.202:3001",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://195.35.21.202:8000"
+    "http://195.35.21.202:8000"
 ]
 DCS_SESSION_COOKIE_SAMESITE = "None"
 

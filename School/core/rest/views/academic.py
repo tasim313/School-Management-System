@@ -51,7 +51,7 @@ class AcademicInformationListView(generics.ListAPIView):
         return self.queryset.filter(school_academic_information__slug=school_slug)
 
 
-class AcademicInformationUpdateAPIView(generics.UpdateAPIView):
+class AcademicInformationUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AcademicInfoUpdateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -60,6 +60,16 @@ class AcademicInformationUpdateAPIView(generics.UpdateAPIView):
         "PUT",
         "PATCH",
     ]
+
+    def get_permissions(self):
+        if (
+                self.request.method == "PUT" or
+                self.request.method == "PATCH" or
+                self.request.method == "DELETE"
+        ):
+            return [IsAuthenticated()]
+        else:
+            return []
 
     def get_queryset(self):
         return AcademicInformation.objects.all()
