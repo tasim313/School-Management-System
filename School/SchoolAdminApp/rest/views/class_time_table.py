@@ -8,12 +8,14 @@ from SchoolAdminApp.models import ClassTimeTable
 from SchoolAdminApp.rest.serializers.class_time_table import ClassTimeTableListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class ClassTimeTableListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ClassTimeTableListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

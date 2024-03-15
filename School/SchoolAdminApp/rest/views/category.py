@@ -6,12 +6,14 @@ from SchoolAdminApp.models import ProductCategory
 from SchoolAdminApp.rest.serializers.category import ProductCategoryListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class ProductCategoryListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ProductCategoryListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

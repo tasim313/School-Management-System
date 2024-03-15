@@ -5,19 +5,21 @@ from common.custom_views import (
     CustomListCreateAPIView,
     CustomRetrieveUpdateDestroyAPIView,
 )
+from common.pagination import StandardResultsSetPagination
 
-from core.models import ClassAttendance
+from core.choice import Status
 from core.filters import ClassAttendanceFilter
+from core.models import ClassAttendance
 from core.rest.serializers.attendance import (
     ClassAttendanceListSerializer,
     ClassAttendancePostSerializer,
 )
-from core.choice import Status
 
 
 class ClassAttendanceListCreate(CustomListCreateAPIView):
     serializer_class = ClassAttendanceListSerializer
     filterset_class = ClassAttendanceFilter
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = ClassAttendance.objects.filter(status=Status.Active).select_related(

@@ -1,12 +1,16 @@
 from rest_framework import generics, status, serializers
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.pagination import StandardResultsSetPagination
+
 from core.models import SocialMedia
-
-from core.rest.serializers.socialmedia import SocialMediaCreateSerializer, SocialMediaUpdateSerializer, SocialMediaListSerializer
-
+from core.rest.serializers.socialmedia import (
+    SocialMediaCreateSerializer,
+    SocialMediaUpdateSerializer,
+    SocialMediaListSerializer,
+)
 
 
 class SocialMediaAPIView(generics.CreateAPIView):
@@ -40,6 +44,7 @@ class SocialMediaAPIView(generics.CreateAPIView):
 class SocialMediaListView(generics.ListAPIView):
     queryset = SocialMedia.objects.all()
     serializer_class = SocialMediaUpdateSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -82,7 +87,6 @@ class SocialMediaUpdateAPIView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user_updated=self.request.user)
-
 
 
 class SocialMediaDestroy(generics.DestroyAPIView):

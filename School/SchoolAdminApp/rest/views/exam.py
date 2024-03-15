@@ -8,12 +8,14 @@ from SchoolAdminApp.models import Exam
 from SchoolAdminApp.rest.serializers.exam import ExamListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class ExamListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ExamListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

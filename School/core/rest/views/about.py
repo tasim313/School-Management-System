@@ -1,8 +1,10 @@
 from rest_framework import generics
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 from ..serializers.about import (
     WebsiteAboutSerializer,
@@ -11,15 +13,20 @@ from ..serializers.about import (
     WebsiteAboutWinningAwardsSerializer,
     AboutListSerializer
 )
-from ...models import WebsiteAbout, WebsiteAboutFile, WebsiteAboutWinningAwards, WebsiteFunFactContent
 
-from common.choice import Status
+from ...models import (
+    WebsiteAbout,
+    WebsiteAboutFile,
+    WebsiteFunFactContent,
+    WebsiteAboutWinningAwards,
+)
 
 
 class SchoolWebsiteAboutInformationAPIViewListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteAboutSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -56,7 +63,7 @@ class SchoolWebsiteAboutInformationRetrieveUpdateDeleteView(generics.RetrieveUpd
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         about = WebsiteAbout.objects.filter(
@@ -69,11 +76,11 @@ class SchoolWebsiteAboutInformationRetrieveUpdateDeleteView(generics.RetrieveUpd
         return about
 
 
-
 class WebsiteAboutFileListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteAboutFileSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -86,7 +93,7 @@ class WebsiteAboutFileListCreateView(generics.ListCreateAPIView):
 
         queryset = WebsiteAboutFile.objects.filter(
             status=Status.Active,
-             about__website_about_content__slug=school_slug,
+            about__website_about_content__slug=school_slug,
         ).select_related(
             "about"
         )
@@ -110,24 +117,24 @@ class WebsiteAboutFileRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPI
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         about_file = WebsiteAboutFile.objects.filter(
             status=Status.Active,
-             about__website_about_content__slug=school_slug,
+            about__website_about_content__slug=school_slug,
         ).select_related(
             "about"
         )
 
-        return  about_file
+        return about_file
 
 
-
-class  WebsiteFunFactContentListCreateView(generics.ListCreateAPIView):
+class WebsiteFunFactContentListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteFunFactContentSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -138,7 +145,7 @@ class  WebsiteFunFactContentListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
 
-        queryset =  WebsiteFunFactContent.objects.filter(
+        queryset = WebsiteFunFactContent.objects.filter(
             status=Status.Active,
             about_info__website_about_content__slug=school_slug,
         ).select_related(
@@ -148,7 +155,7 @@ class  WebsiteFunFactContentListCreateView(generics.ListCreateAPIView):
         return queryset
 
 
-class  WebsiteFunFactContentRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+class WebsiteFunFactContentRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteFunFactContentSerializer
     lookup_field = "uid"
@@ -164,10 +171,10 @@ class  WebsiteFunFactContentRetrieveUpdateDeleteView(generics.RetrieveUpdateDest
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
-        content=  WebsiteFunFactContent.objects.filter(
+        content = WebsiteFunFactContent.objects.filter(
             status=Status.Active,
             about_info__website_about_content__slug=school_slug,
         ).select_related(
@@ -177,11 +184,11 @@ class  WebsiteFunFactContentRetrieveUpdateDeleteView(generics.RetrieveUpdateDest
         return content
 
 
-
 class WebsiteAboutWinningAwardsListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteAboutWinningAwardsSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -218,7 +225,7 @@ class WebsiteAboutWinningAwardsRetrieveUpdateDeleteView(generics.RetrieveUpdateD
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         award = WebsiteAboutWinningAwards.objects.filter(
@@ -233,6 +240,7 @@ class WebsiteAboutWinningAwardsRetrieveUpdateDeleteView(generics.RetrieveUpdateD
 
 class AboutListView(generics.ListAPIView):
     serializer_class = AboutListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         website_about_instance = WebsiteAbout.objects.first()
@@ -241,7 +249,8 @@ class AboutListView(generics.ListAPIView):
         website_about_winning_awards_instance = WebsiteAboutWinningAwards.objects.first()
 
         # Combine related instances into a single queryset
-        queryset = list(website_about_instance) + list(website_about_file_instances) + list(website_fun_fact_content_instance) + list(website_about_winning_awards_instance)
+        queryset = list(website_about_instance) + list(website_about_file_instances) + list(
+            website_fun_fact_content_instance) + list(website_about_winning_awards_instance)
         return queryset
 
     def list(self, request, *args, **kwargs):

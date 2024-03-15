@@ -2,26 +2,28 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.choice import Status
+from common.pagination import StandardResultsSetPagination
+
 from core.models import (
-    WebsiteTeacherInformation, 
-    WebsiteManagingCommitteeMemberInformation, 
-    WebsiteStaffInformation, 
+    WebsiteTeacherInformation,
+    WebsiteManagingCommitteeMemberInformation,
+    WebsiteStaffInformation,
     WebSiteFacultyInformation
-    )
+)
 from core.rest.serializers.team import (
-    WebsiteTeacherInformationListSerializer, 
+    WebsiteTeacherInformationListSerializer,
     WebsiteManagingCommitteeMemberInformationListSerializer,
     WebsiteStaffInformationListSerializer,
     WebSiteFacultyInformationListSerializer,
-    )
-
-from common.choice import Status
+)
 
 
 class WebsiteTeacherInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteTeacherInformationListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -58,7 +60,7 @@ class WebsiteTeacherInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateD
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         school_teacher = WebsiteTeacherInformation.objects.filter(
@@ -71,11 +73,11 @@ class WebsiteTeacherInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateD
         return school_teacher
 
 
-
 class WebsiteManagingCommitteeMemberInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteManagingCommitteeMemberInformationListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -112,7 +114,7 @@ class WebsiteManagingCommitteeMemberInformationRetrieveUpdateDeleteView(generics
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         school_managing_committee_member = WebsiteManagingCommitteeMemberInformation.objects.filter(
@@ -125,12 +127,11 @@ class WebsiteManagingCommitteeMemberInformationRetrieveUpdateDeleteView(generics
         return school_managing_committee_member
 
 
-
-
 class WebsiteStaffInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebsiteStaffInformationListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -167,7 +168,7 @@ class WebsiteStaffInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         school_staff = WebsiteStaffInformation.objects.filter(
@@ -180,11 +181,11 @@ class WebsiteStaffInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
         return school_staff
 
 
-
 class WebSiteFacultyInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = WebSiteFacultyInformationListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -224,7 +225,7 @@ class WebSiteFacultyInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateD
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         school_faculty = WebSiteFacultyInformation.objects.filter(

@@ -10,6 +10,7 @@ from SchoolAdminApp.rest.serializers.result import ResultListSerializer
 from common.choice import Status
 
 from SchoolAdminApp.filters import ResultFilter
+from common.pagination import StandardResultsSetPagination
 
 
 class ResultListCreateView(generics.ListCreateAPIView):
@@ -17,6 +18,7 @@ class ResultListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ResultListSerializer
     filterset_class = ResultFilter
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

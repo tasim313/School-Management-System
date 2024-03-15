@@ -8,12 +8,14 @@ from SchoolAdminApp.models import Hostel
 from SchoolAdminApp.rest.serializers.hostel import HostelListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class HostelListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = HostelListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

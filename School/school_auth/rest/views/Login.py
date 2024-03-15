@@ -24,15 +24,16 @@ class LoginView(generics.ListCreateAPIView):
 
         user = serializer.validated_data.get('user')
 
-        if not Subscription.objects.filter(
-                school_subscription_id=user.school_id,
-                is_paid=True,
-                end_date__gte=timezone.now().date()
-        ).exists():
-            return Response(
-                {"error": "You are not subscribed to any plan. Please contact your school admin."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        if not user.is_superuser:
+            if not Subscription.objects.filter(
+                    school_subscription_id=user.school_id,
+                    is_paid=True,
+                    end_date__gte=timezone.now().date()
+            ).exists():
+                return Response(
+                    {"error": "You are not subscribed to any plan. Please contact your school admin."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)

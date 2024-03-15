@@ -1,6 +1,12 @@
 from rest_framework.response import Response
 
-from core.models import Blog, BlogTag, BlogImage, BlogCategory
+from common.custom_views import (
+    CustomListCreateAPIView,
+    CustomRetrieveUpdateDestroyAPIView,
+)
+from common.pagination import StandardResultsSetPagination
+
+from core.models import Blog, BlogTag, BlogCategory
 from core.rest.serializers.blog import (
     BlogListDetailSerializer,
     BlogPostSerializer,
@@ -10,14 +16,10 @@ from core.rest.serializers.blog import (
     BlogCategoryPostSerializer,
 )
 
-from common.custom_views import (
-    CustomListCreateAPIView,
-    CustomRetrieveUpdateDestroyAPIView,
-)
-
 
 class BlogListCreateAPIView(CustomListCreateAPIView):
     queryset = Blog.objects.all()
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -68,6 +70,7 @@ class BlogTagRetrieveUpdateView(CustomRetrieveUpdateDestroyAPIView):
 class BlogCategoryListCreateView(CustomListCreateAPIView):
     queryset = BlogCategory.objects.all()
     serializer_class = BlogCategorySerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         if self.request.method != "POST":
