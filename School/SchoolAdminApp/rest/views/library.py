@@ -11,12 +11,14 @@ from SchoolAdminApp.rest.serializers.library import (
 )
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class LibraryListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = LibraryListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

@@ -8,12 +8,14 @@ from SchoolAdminApp.models import SportsInformation
 from SchoolAdminApp.rest.serializers.sports_information import SportsInformationListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class SportsInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = SportsInformationListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

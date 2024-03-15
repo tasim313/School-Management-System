@@ -6,12 +6,14 @@ from SchoolAdminApp.models import Vendor
 from SchoolAdminApp.rest.serializers.vendor import VendorListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class VendorListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = VendorListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

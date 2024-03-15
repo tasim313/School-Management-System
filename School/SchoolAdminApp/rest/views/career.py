@@ -6,12 +6,14 @@ from SchoolAdminApp.models import Career
 from SchoolAdminApp.rest.serializers.career import CareerListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class CareerListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CareerListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

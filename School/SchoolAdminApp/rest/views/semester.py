@@ -8,12 +8,14 @@ from SchoolAdminApp.models import Semester
 from SchoolAdminApp.rest.serializers.semester import SemesterListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class SemesterListCreate(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = SemesterListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

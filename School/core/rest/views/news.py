@@ -1,13 +1,16 @@
 from rest_framework import generics, status, serializers
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.pagination import StandardResultsSetPagination
+
 from core.models import NewsEvents
-
-from core.rest.serializers.news import NewsEventCreateSerializer, NewsEventUpdateSerializer, NewsEventListSerializer
-
+from core.rest.serializers.news import (
+    NewsEventCreateSerializer,
+    NewsEventUpdateSerializer,
+    NewsEventListSerializer,
+)
 
 
 class NewsEventAPIView(generics.CreateAPIView):
@@ -41,6 +44,7 @@ class NewsEventAPIView(generics.CreateAPIView):
 class NewsEventListView(generics.ListAPIView):
     queryset = NewsEvents.objects.all()
     serializer_class = NewsEventListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -85,14 +89,13 @@ class NewsEventUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-
 class NewsEventDestroy(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = NewsEvents.objects.all()
     serializer_class = NewsEventListSerializer
     lookup_field = "uid"
-    
+
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_admission__slug=school_slug)

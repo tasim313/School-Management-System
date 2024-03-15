@@ -8,12 +8,14 @@ from SchoolAdminApp.models import Transport
 from SchoolAdminApp.rest.serializers.transport import TransportListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class TransportListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = TransportListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST

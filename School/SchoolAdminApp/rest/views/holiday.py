@@ -6,12 +6,14 @@ from SchoolAdminApp.models import HolidayManagement
 from SchoolAdminApp.rest.serializers.holiday import HolidayManagementListSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class HolidayManagementListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = HolidayManagementListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

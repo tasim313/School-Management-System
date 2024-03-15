@@ -1,15 +1,16 @@
 from rest_framework import generics, status, serializers
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication 
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.pagination import StandardResultsSetPagination
+
+from core.models import SchoolAdmission
 from core.rest.serializers.admission import (
     AdmissionCreateSerializer,
     AdmissionUpdateSerializer,
     AdmissionListSerializer
 )
-from core.models import SchoolAdmission
-
 
 
 class AdmissionInformationAPIView(generics.CreateAPIView):
@@ -43,6 +44,7 @@ class AdmissionInformationAPIView(generics.CreateAPIView):
 class AdmissionInformationListView(generics.ListAPIView):
     queryset = SchoolAdmission.objects.all()
     serializer_class = AdmissionListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -87,14 +89,13 @@ class AdmissionInformationUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-
 class AdmissionInformationDestroy(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = SchoolAdmission.objects.all()
     serializer_class = AdmissionListSerializer
     lookup_field = "uid"
-    
+
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_admission__slug=school_slug)

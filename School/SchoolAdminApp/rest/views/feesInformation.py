@@ -6,12 +6,14 @@ from SchoolAdminApp.models import FeesInformation
 from SchoolAdminApp.rest.serializers.feesInformation import FeesInformationSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class FeesInformationListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = FeesInformationSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

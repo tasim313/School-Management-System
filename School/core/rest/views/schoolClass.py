@@ -1,11 +1,16 @@
 from rest_framework import generics, status, serializers
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from core.models import SchoolClass
+from common.pagination import StandardResultsSetPagination
 
-from core.rest.serializers.schoolClass import SchoolClassCreateSerializer, SchoolClassUpdateSerializer, SchoolClassListSerializer
+from core.models import SchoolClass
+from core.rest.serializers.schoolClass import (
+    SchoolClassCreateSerializer,
+    SchoolClassUpdateSerializer,
+    SchoolClassListSerializer
+)
 
 
 class SchoolClassAPIView(generics.CreateAPIView):
@@ -15,7 +20,6 @@ class SchoolClassAPIView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        
 
         try:
             serializer.is_valid(raise_exception=True)
@@ -40,6 +44,7 @@ class SchoolClassAPIView(generics.CreateAPIView):
 class SchoolClassListView(generics.ListAPIView):
     queryset = SchoolClass.objects.all()
     serializer_class = SchoolClassListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -84,14 +89,13 @@ class SchoolClassUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-
 class SchoolClassDestroy(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = SchoolClass.objects.all()
     serializer_class = SchoolClassListSerializer
     lookup_field = "uid"
-    
+
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_info__slug=school_slug)

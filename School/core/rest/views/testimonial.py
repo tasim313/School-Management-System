@@ -1,16 +1,16 @@
 from rest_framework import generics, status, serializers
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication 
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.pagination import StandardResultsSetPagination
+
+from core.models import Testimonials
 from core.rest.serializers.testimonial import (
     TestimonialsCreateSerializer,
     TestimonialsUpdateSerializer,
     TestimonialsListSerializer
 )
-from core.models import Testimonials
-
-
 
 
 class TestimonialsAPIView(generics.CreateAPIView):
@@ -41,16 +41,14 @@ class TestimonialsAPIView(generics.CreateAPIView):
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 class TestimonialsListView(generics.ListAPIView):
     queryset = Testimonials.objects.all()
     serializer_class = TestimonialsListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_testimonials__slug=school_slug)
-
 
 
 class TestimonialsUpdateAPIView(generics.UpdateAPIView):
@@ -91,14 +89,13 @@ class TestimonialsUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-
 class TestimonialsDestroy(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Testimonials.objects.all()
     serializer_class = TestimonialsListSerializer
     lookup_field = "uid"
-    
+
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_testimonials__slug=school_slug)

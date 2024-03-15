@@ -6,12 +6,14 @@ from SchoolAdminApp.models import PurchaseReceived
 from SchoolAdminApp.rest.serializers.purchaseReceived import PurchaseReceivedSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class PurchaseReceivedListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = PurchaseReceivedSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -51,7 +53,7 @@ class PurchaseReceivedRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPI
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         purchase_received = PurchaseReceived.objects.filter(

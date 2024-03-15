@@ -6,12 +6,14 @@ from SchoolAdminApp.models import EmployeeCandidate
 from SchoolAdminApp.rest.serializers.candidate import EmployeeCandidateSerializer
 
 from common.choice import Status
+from common.pagination import StandardResultsSetPagination
 
 
 class EmployeeCandidateListCreateView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = EmployeeCandidateSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
         if self.request.method == "POST":

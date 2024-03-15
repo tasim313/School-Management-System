@@ -1,11 +1,12 @@
-from rest_framework import generics
-from rest_framework.response import Response
+import logging
+
+from rest_framework import generics, status, serializers
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework import status, serializers
-from rest_framework.generics import RetrieveAPIView
-from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from common.pagination import StandardResultsSetPagination
 
 from ..serializers import websiteInfo
 
@@ -13,8 +14,6 @@ from ...models import (
     WebsiteInformation,
     WebSiteGalleryInformation,
 )
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +136,6 @@ class WebsiteGalleryInfoCreate(generics.CreateAPIView):
             return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class WebsiteGalleryUpdateAPIView(generics.UpdateAPIView):
     serializer_class = websiteInfo.SchoolWebsiteGalleryUpdateSerializer
     authentication_classes = [JWTAuthentication]
@@ -176,15 +174,15 @@ class WebsiteGalleryUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-
 class WebsiteGalleryInfoListView(generics.ListAPIView):
     queryset = WebSiteGalleryInformation.objects.all()
     serializer_class = websiteInfo.WebsiteGalleryInfoListSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
         return self.queryset.filter(school_website_gallery__slug=school_slug)
-    
+
 
 class WebsiteGalleryInfoListDestroyView(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
