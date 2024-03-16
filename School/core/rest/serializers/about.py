@@ -92,6 +92,7 @@ class WebsiteFunFactContentSerializer(serializers.ModelSerializer):
             'number_of_students',
             'number_of_alumni',
             'winning_awards',
+            "years_of_experience",
             'about_info'
         )
         read_only_fields = ["uid", "years_of_experience"]
