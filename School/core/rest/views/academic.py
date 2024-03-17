@@ -1,5 +1,5 @@
 from rest_framework import generics, status, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -54,7 +54,6 @@ class AcademicInformationListView(generics.ListAPIView):
 class AcademicInformationUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AcademicInfoUpdateSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
     lookup_field = "uid"
     allowed_methods = [
         "PUT",
@@ -62,15 +61,13 @@ class AcademicInformationUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     ]
 
     def get_permissions(self):
-        if (
-                self.request.method == "PUT" or
-                self.request.method == "PATCH" or
-                self.request.method == "DELETE"
-        ):
+        if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsAuthenticated()]
+        elif self.request.method == "GET":
+            return [IsAuthenticatedOrReadOnly()]  # Allow unauthenticated GET requests
         else:
             return []
-
+        
     def get_queryset(self):
         return AcademicInformation.objects.all()
 
