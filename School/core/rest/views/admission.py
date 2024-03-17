@@ -102,3 +102,14 @@ class AdmissionInformationDestroy(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
+
+
+class AdmissionInformationDetailsListView(generics.ListAPIView):
+    queryset = SchoolAdmission.objects.all()
+    serializer_class = AdmissionListSerializer
+    pagination_class = StandardResultsSetPagination
+    lookup_field = "uid"
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        return self.queryset.filter(school_admission__slug=school_slug)

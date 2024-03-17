@@ -54,6 +54,7 @@ class AcademicInformationListView(generics.ListAPIView):
 class AcademicInformationUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AcademicInfoUpdateSerializer
     authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     lookup_field = "uid"
     allowed_methods = [
         "PUT",
@@ -109,3 +110,14 @@ class AcademicInformationDestroy(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
+
+
+class AcademicInformationDetailsListView(generics.ListAPIView):
+    queryset = AcademicInformation.objects.all()
+    serializer_class = AcademicInformationListSerializer
+    pagination_class = StandardResultsSetPagination
+    lookup_field = "uid"
+
+    def get_queryset(self):
+        school_slug = self.kwargs.get("school_slug", None)
+        return self.queryset.filter(school_academic_information__slug=school_slug)

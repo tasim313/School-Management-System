@@ -22,5 +22,10 @@ urlpatterns = [
         academic.AcademicInformationDestroy.as_view(),
         name="school-academic-delete",
     ),
+    path(
+        "<slug:school_slug>/details/<uuid:uid>/",
+        academic.AcademicInformationDetailsListView.as_view(),
+        name="school-academic-list",
+    ),
 
 ]
