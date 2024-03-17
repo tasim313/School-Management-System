@@ -645,7 +645,7 @@ class BlogTag(UniversalModel):
 
 
 class Blog(UniversalModel):
-    school_blog = models.OneToOneField(
+    school_blog = models.ForeignKey(
         SchoolInformationOnBoarding,
         on_delete=models.DO_NOTHING,
         related_name="school_website_blog_information",
