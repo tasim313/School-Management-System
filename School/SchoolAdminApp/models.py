@@ -653,3 +653,29 @@ class FeesCollection(UniversalModel):
     )
     fees_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     paid_date = models.DateField(auto_now_add=True)
+
+
+class Testimonial(UniversalModel):
+    school_testimonial = models.ForeignKey(
+        SchoolInformationOnBoarding,
+        on_delete=models.DO_NOTHING,
+        related_name='school_testimonials'
+    )
+    student_testimonial = models.ForeignKey(
+        Student,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='student_testimonials'
+    )
+    student_passing_year = models.CharField(max_length=255, blank=True, null=True)
+    student_gpa = models.CharField(max_length=255, blank=True, null=True)
+    student_session = models.CharField(max_length=255, blank=True, null=True)
+    student_roll = models.IntegerField(blank=True, null=True)
+    student_reg = models.IntegerField(blank=True, null=True)
+    student_board = models.CharField(max_length=255, blank=True, null=True)
+    student_exam_center = models.CharField(max_length=255, blank=True, null=True)
+    testimonial_serial_number = models.IntegerField(blank=True, null=True)
+    testimonial_issue_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Testimonial of {self.student_testimonial.student_user.username}"
