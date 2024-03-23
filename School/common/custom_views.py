@@ -22,20 +22,21 @@ class CustomRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
         # Get the object instance
         instance = self.get_object()
+        self.perform_destroy(instance)
 
-        try:
-            # Attempt to update the status to 'Inactive'
-            instance.status = Status.Inactive
-            instance.save()  # Save the changes to the instance
-            return Response(
-                {"message": "Successful!"}, status=status.HTTP_204_NO_CONTENT
-            )  # Return success response for 'Inactive' update
-        except Exception as e:
-            # If there's an exception (e.g., status field not available or saving fails), perform regular deletion
-            self.perform_destroy(instance)
-            return Response(
-                {"message": "Successful!"}, status=status.HTTP_204_NO_CONTENT
-            )
+        # try:
+        #     # Attempt to update the status to 'Inactive'
+        #     instance.status = Status.Inactive
+        #     instance.save()  # Save the changes to the instance
+        #     return Response(
+        #         {"message": "Successful!"}, status=status.HTTP_204_NO_CONTENT
+        #     )  # Return success response for 'Inactive' update
+        # except Exception as e:
+        #     # If there's an exception (e.g., status field not available or saving fails), perform regular deletion
+        #     self.perform_destroy(instance)
+        #     return Response(
+        #         {"message": "Successful!"}, status=status.HTTP_204_NO_CONTENT
+        #     )
 
     def update(self, request, *args, **kwargs):
         """
