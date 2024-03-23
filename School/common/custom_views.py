@@ -23,6 +23,9 @@ class CustomRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         # Get the object instance
         instance = self.get_object()
         self.perform_destroy(instance)
+        return Response(
+            {"message": "successfully!"}, status=status.HTTP_204_NO_CONTENT
+        )
 
         # try:
         #     # Attempt to update the status to 'Inactive'
