@@ -63,8 +63,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://195.35.21.202:8000",
     "http://195.35.21.202:8000",
     "http://195.35.21.202:3000",
-    
-    
+    'https://www.mgghschool.edu.bd',
 ]
 
 CORS_ALLOW_METHODS = (
