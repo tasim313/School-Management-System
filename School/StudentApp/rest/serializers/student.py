@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication 
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from phonenumber_field.serializerfields import PhoneNumberField
 
-from ...models import(
+from ...models import (
     Student,
     StudentImage,
     StudentCurrentStatus,
@@ -22,16 +22,16 @@ from school_auth.models import (
     User
 )
 
-from core.models import(
+from core.models import (
     SchoolClass,
     SchoolSection
 )
 
-from school_auth.choice import(
+from school_auth.choice import (
     UserRole, UserStatus
 )
 
-from StudentApp.choice import(
+from StudentApp.choice import (
     Gender,
     BloodGroup,
     Religion,
@@ -45,8 +45,8 @@ from school_auth.rest.serializers import UserSerializer
 
 from common.helpers import get_school_instance
 
+
 class StudentList(serializers.ModelSerializer):
-    
     class Meta:
         model = Student
         fields = [
@@ -70,9 +70,9 @@ class StudentList(serializers.ModelSerializer):
         ]
 
 
-
 class StudentInformationListSerializer(serializers.ModelSerializer):
     basic_info = UserSerializer.UserSerializer(many=False, read_only=True, source='student_user')
+
     class Meta:
         model = Student
         fields = [
@@ -98,12 +98,11 @@ class StudentInformationListSerializer(serializers.ModelSerializer):
 
 
 class StudentImageSerializer(serializers.ModelSerializer):
-    
     student_info = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentImage
         fields = [
@@ -129,9 +128,7 @@ class StudentImageSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class StudentCurrentStatusSerializer(serializers.ModelSerializer):
-    
     student_current_status = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
@@ -144,7 +141,7 @@ class StudentCurrentStatusSerializer(serializers.ModelSerializer):
         queryset=SchoolSection.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentCurrentStatus
         fields = [
@@ -173,12 +170,11 @@ class StudentCurrentStatusSerializer(serializers.ModelSerializer):
 
 
 class StudentPermanentAddressSerializer(serializers.ModelSerializer):
-    
     student_permanent_address = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentPermanentAddress
         fields = [
@@ -214,14 +210,12 @@ class StudentPermanentAddressSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class StudentPresentAddressSerializer(serializers.ModelSerializer):
-    
     student_present_address = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentPresentAddress
         fields = [
@@ -257,14 +251,12 @@ class StudentPresentAddressSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class StudentFatherSerializer(serializers.ModelSerializer):
-    
     student_father = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentFather
         fields = [
@@ -280,7 +272,7 @@ class StudentFatherSerializer(serializers.ModelSerializer):
             'date_of_death',
             'student_father'
         ]
-        read_only_fields = ["uid",]
+        read_only_fields = ["uid", ]
 
     def create(self, validated_data):
         instance = super().create(validated_data=validated_data)
@@ -298,12 +290,11 @@ class StudentFatherSerializer(serializers.ModelSerializer):
 
 
 class StudentMotherSerializer(serializers.ModelSerializer):
-    
     student_mother = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentMother
         fields = [
@@ -319,7 +310,7 @@ class StudentMotherSerializer(serializers.ModelSerializer):
             'date_of_death',
             'student_mother'
         ]
-        read_only_fields = ["uid",]
+        read_only_fields = ["uid", ]
 
     def create(self, validated_data):
         instance = super().create(validated_data=validated_data)
@@ -334,15 +325,14 @@ class StudentMotherSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
-    
+
 
 class StudentGuardianSerializer(serializers.ModelSerializer):
-    
     student_guardian = serializers.SlugRelatedField(
         queryset=Student.objects.all(),
         slug_field="uid",
     )
-    
+
     class Meta:
         model = StudentGuardian
         fields = [
@@ -354,7 +344,7 @@ class StudentGuardianSerializer(serializers.ModelSerializer):
             'phone',
             'student_guardian'
         ]
-        read_only_fields = ["uid",]
+        read_only_fields = ["uid", ]
 
     def create(self, validated_data):
         instance = super().create(validated_data=validated_data)
@@ -369,3 +359,30 @@ class StudentGuardianSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+
+
+class StudentDetailInformationListSerializer(serializers.ModelSerializer):
+    student_father_name_capital = serializers.CharField(source='father_name', read_only=True)
+    student_mother_name_capital = serializers.CharField(source='mother_name', read_only=True)
+    student_village_name = serializers.CharField(source='village_name', read_only=True)
+    student_post_office_name = serializers.CharField(source='post_office_name', read_only=True)
+    student_upazila_name = serializers.CharField(source='upazila_name', read_only=True)
+    student_district_name = serializers.CharField(source='district_name', read_only=True)
+
+    class Meta:
+        model = Student
+        fields = [
+            "uid",
+            "slug",
+            "student_name_english_captial",
+            "student_name_bangla",
+            "phone",
+            "nationality",
+            "student_father_name_capital",
+            "student_mother_name_capital",
+            "student_village_name",
+            "student_post_office_name",
+            "student_upazila_name",
+            "student_district_name",
+        ]
+        read_only_fields = ["uid", "slug", "phone", "student_name_bangla", "nationality",]

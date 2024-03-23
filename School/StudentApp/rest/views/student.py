@@ -1,3 +1,5 @@
+from django.db import models
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -15,7 +17,7 @@ from ..serializers.student import (
     StudentPresentAddressSerializer,
     StudentFatherSerializer,
     StudentMotherSerializer,
-    StudentGuardianSerializer
+    StudentGuardianSerializer, StudentDetailInformationListSerializer
 )
 
 from ...models import (
@@ -98,7 +100,7 @@ class StudentImageRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         student_info = StudentImage.objects.filter(
@@ -109,7 +111,6 @@ class StudentImageRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView
         )
 
         return student_info
-
 
 
 class StudentCurrentStatusCreateView(generics.ListCreateAPIView):
@@ -152,7 +153,7 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentCurrentStatus = StudentCurrentStatus.objects.filter(
@@ -163,7 +164,6 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
         )
 
         return StudentCurrentStatus
-
 
 
 class StudentPermanentAddressListCreateView(generics.ListCreateAPIView):
@@ -206,7 +206,7 @@ class StudentPermanentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentPermanentAddress = StudentPermanentAddress.objects.filter(
@@ -217,8 +217,6 @@ class StudentPermanentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
         )
 
         return StudentPermanentAddress
-
-
 
 
 class StudentPresentAddressListCreateView(generics.ListCreateAPIView):
@@ -240,7 +238,7 @@ class StudentPresentAddressListCreateView(generics.ListCreateAPIView):
             student_present_address__school_student__slug=school_slug,
         ).select_related(
             "student_present_address"
-            
+
         )
 
         return queryset
@@ -262,7 +260,7 @@ class StudentPresentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentPresentAddress = StudentPresentAddress.objects.filter(
@@ -270,11 +268,10 @@ class StudentPresentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
             student_present_address__school_student__slug=school_slug,
         ).select_related(
             "student_present_address"
-            
+
         )
 
         return StudentPresentAddress
-
 
 
 class StudentFatherListCreateView(generics.ListCreateAPIView):
@@ -317,7 +314,7 @@ class StudentFatherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentFather = StudentFather.objects.filter(
@@ -328,7 +325,6 @@ class StudentFatherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
         )
 
         return StudentFather
-
 
 
 class StudentMotherListCreateView(generics.ListCreateAPIView):
@@ -371,7 +367,7 @@ class StudentMotherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentMother = StudentMother.objects.filter(
@@ -382,7 +378,6 @@ class StudentMotherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
         )
 
         return StudentMother
-
 
 
 class StudentGuardianListCreateView(generics.ListCreateAPIView):
@@ -425,7 +420,7 @@ class StudentGuardianRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
             return []
 
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         StudentGuardian = StudentGuardian.objects.filter(
@@ -436,3 +431,26 @@ class StudentGuardianRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
         )
 
         return StudentGuardian
+
+
+class StudentDetailInformationListView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = StudentDetailInformationListSerializer
+
+    def get_queryset(self):
+        school_slug = self.kwargs['school_slug']
+
+        queryset = Student.objects.filter(
+            status=Status.Active,
+            school_student__slug=school_slug,
+        ).annotate(
+            father_name=models.F("student_father_information__name_english_capital"),
+            mother_name=models.F("student_mother_information__name_english_capital"),
+            village_name=models.F("student_present_address_information__village"),
+            post_office_name=models.F("student_present_address_information__post_office"),
+            upazila_name=models.F("student_present_address_information__upazila"),
+            district_name=models.F("student_present_address_information__district"),
+        )
+
+        return queryset

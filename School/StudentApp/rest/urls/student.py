@@ -15,7 +15,8 @@ from StudentApp.rest.views.student import (
     StudentMotherListCreateView,
     StudentMotherRetrieveUpdateDeleteView,
     StudentGuardianListCreateView,
-    StudentGuardianRetrieveUpdateDeleteView
+    StudentGuardianRetrieveUpdateDeleteView,
+    StudentDetailInformationListView,
 )
 
 
@@ -99,5 +100,10 @@ urlpatterns = [
         "<slug:school_slug>/<uuid:uid>/guardian/info",
         StudentGuardianRetrieveUpdateDeleteView.as_view(),
         name="student-guardian-information-details",
+    ),
+    path(
+        "detail-info-list/<slug:school_slug>/",
+        StudentDetailInformationListView.as_view(),
+        name="student-detail-information-list",
     ),
 ]
