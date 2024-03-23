@@ -475,7 +475,7 @@ class SchoolAdmission(UniversalModel):
 
 
 class AcademicInformation(UniversalModel):
-    school_academic_information = models.OneToOneField(
+    school_academic_information = models.ForeignKey(
         SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="school_academic_information",
@@ -548,7 +548,7 @@ class AcademicInformation(UniversalModel):
 
 
 class WebSiteGalleryInformation(UniversalModel):
-    school_website_gallery = models.OneToOneField(
+    school_website_gallery = models.ForeignKey(
         SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="school_website_gallery_information",
