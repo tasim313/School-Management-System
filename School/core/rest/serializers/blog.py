@@ -84,6 +84,7 @@ class BlogListDetailSerializer(ModelSerializer):
             "uid",
             "slug",
             "school_blog",
+            'title',
             "content",
             "publish_date",
             "categories",

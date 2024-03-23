@@ -62,6 +62,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5175",
     "https://195.35.21.202:8000",
     "http://195.35.21.202:8000",
+    "http://195.35.21.202:3000",
+    'https://school-management-system-website.vercel.app/',
+    'https://school-management-system-website.vercel.app',
+    'http://school-management-system-website.vercel.app',
 ]
 
 CORS_ALLOW_METHODS = (
