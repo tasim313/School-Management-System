@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import transaction
 
 from rest_framework.serializers import ModelSerializer
@@ -84,7 +86,7 @@ class BlogListDetailSerializer(ModelSerializer):
             "uid",
             "slug",
             "school_blog",
-            'title',
+            "title",
             "content",
             "publish_date",
             "categories",
@@ -93,26 +95,14 @@ class BlogListDetailSerializer(ModelSerializer):
         ]
 
 
-class BlogPostSerializer(ModelSerializer):
+class BlogPostSerializer(serializers.ModelSerializer):
     school_blog = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
         slug_field="uid",
     )
     blog_image_information = serializers.ImageField(required=False)
-    tags = serializers.SlugRelatedField(
-        many=True,
-        queryset=BlogTag.objects.all(),
-        slug_field="uid",
-        allow_null=True,
-        required=False,
-    )
-    categories = serializers.SlugRelatedField(
-        many=True,
-        queryset=BlogCategory.objects.all(),
-        slug_field="uid",
-        allow_null=True,
-        required=False,
-    )
+    tags = serializers.CharField(allow_blank=True, required=False)
+    categories = serializers.CharField(allow_blank=True, required=False)
 
     class Meta:
         model = Blog
@@ -130,17 +120,27 @@ class BlogPostSerializer(ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        categories_data = validated_data.pop("categories", None)
-        tags_data = validated_data.pop("tags", None)
+        tags_data = validated_data.pop("tags", "")
+        categories_data = validated_data.pop("categories", "")
         images_data = validated_data.pop("blog_image_information", None)
 
         blog = Blog.objects.create(**validated_data)
 
         if tags_data:
-            blog.tags.set(tags_data)
+            tag_uuids = [
+                uuid.UUID(tag.strip()) for tag in tags_data.split(",") if tag.strip()
+            ]
+            tags = BlogTag.objects.filter(uid__in=tag_uuids)
+            blog.tags.set(tags)
 
         if categories_data:
-            blog.categories.set(categories_data)
+            category_uuids = [
+                uuid.UUID(category.strip())
+                for category in categories_data.split(",")
+                if category.strip()
+            ]
+            categories = BlogCategory.objects.filter(uid__in=category_uuids)
+            blog.categories.set(categories)
 
         if images_data:
             BlogImage.objects.create(blog_info=blog, image=images_data)
@@ -148,19 +148,29 @@ class BlogPostSerializer(ModelSerializer):
         return blog
 
     def update(self, instance, validated_data):
-        categories_data = validated_data.pop("categories", None)
-        tags_data = validated_data.pop("tags", None)
+        tags_data = validated_data.pop("tags", "")
+        categories_data = validated_data.pop("categories", "")
         images_data = validated_data.pop("blog_image_information", None)
 
         blog = super().update(instance, validated_data)
 
-        if tags_data is not None:
-            blog.tags.set(tags_data)
+        if tags_data:
+            tag_uuids = [
+                uuid.UUID(tag.strip()) for tag in tags_data.split(",") if tag.strip()
+            ]
+            tags = BlogTag.objects.filter(uid__in=tag_uuids)
+            blog.tags.set(tags)
         else:
             blog.tags.set([])
 
-        if categories_data is not None:
-            blog.categories.set(categories_data)
+        if categories_data:
+            category_uuids = [
+                uuid.UUID(category.strip())
+                for category in categories_data.split(",")
+                if category.strip()
+            ]
+            categories = BlogCategory.objects.filter(uid__in=category_uuids)
+            blog.categories.set(categories)
         else:
             blog.categories.set([])
 
