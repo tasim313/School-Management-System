@@ -17,7 +17,8 @@ from ..serializers.student import (
     StudentPresentAddressSerializer,
     StudentFatherSerializer,
     StudentMotherSerializer,
-    StudentGuardianSerializer, StudentDetailInformationListSerializer
+    StudentGuardianSerializer,
+    StudentDetailInformationListSerializer
 )
 
 from ...models import (
