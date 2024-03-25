@@ -11,14 +11,15 @@ WORKDIR /app
 COPY requirement/development.txt /app/requirement/development.txt
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip && pip install -r requirement/development.txt
+RUN pip install --upgrade pip && \
+    pip install -r requirement/development.txt && \
+    pip install gunicorn
 
 # Copy the content of the local src directory to the working directory
 COPY . /app
-
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
 # Define the command to run on container start
-CMD ["python", "School/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "School.wsgi:application"]

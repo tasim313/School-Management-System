@@ -1,7 +1,7 @@
-version: '3'
+version: '3'  # Use a supported version (3.7 or later)
 
 volumes:
-  # Descriptive volume names
+  # Descriptive volume names for persistence
   postgres_data:
   media_volume:
 
@@ -12,13 +12,12 @@ networks:
 services:
   web_1:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn --bind 0.0.0.0:8000 School.wsgi:application
     volumes:
       - .:/app
-      - media_volume:/app/media
-    # Connect to PostgreSQL using service name
+      - media_volume:/app/media  # Mount media volume if needed
     environment:
-      # ... other environment variables
+      # ... other environment variables (consider using a .env file)
       DATABASE_URL: postgres://tasim:tasim*#2024@postgres_1:5432/project101
     ports:
       - "8000:8000"
@@ -35,7 +34,7 @@ services:
     environment:
       # Consider using a .env file for sensitive information
       PGADMIN_DEFAULT_EMAIL: we@admin.com
-      PGADMIN_DEFAULT_PASSWORD: secret*#123
+      PGADMIN_DEFAULT_PASSWORD: secret*#123  # Update with a strong password
     restart: unless-stopped
     networks:
       - my_network
@@ -45,7 +44,7 @@ services:
     environment:
       POSTGRES_DB: project101
       POSTGRES_USER: tasim
-      POSTGRES_PASSWORD: tasim*#2024
+      POSTGRES_PASSWORD: tasim*#2024  # Update with a strong password
     ports:
       - "5432:5432"
     restart: unless-stopped
