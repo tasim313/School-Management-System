@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-pwc#_n^zb)$_e^76@*rxy!l&kfn^5cck11e2%_n-6vciw#z0kk"
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", 'https://www.mgghschool.edu.bd', 'https://core-sm.online']
 
 INTERNAL_IPS = [
     # ...
