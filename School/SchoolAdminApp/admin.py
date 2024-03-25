@@ -27,6 +27,7 @@ from .models import (
     FeesCategory,
     FeesInformation,
     FeesCollection,
+    Testimonial,
 )
 
 
@@ -537,3 +538,28 @@ class ResultAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(Result, ResultAdmin)
+
+
+class TestimonialAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "uid",
+        "school_testimonial",
+        "student_testimonial",
+        "student_passing_year",
+        "student_gpa",
+        "student_session",
+        "student_roll",
+        "student_reg",
+        "student_board",
+        "student_exam_center",
+        "testimonial_serial_number",
+        "createdAt",
+        "updateAt",
+        "user_created",
+        "user_updated",
+    )
+
+    list_filter = ("uid",)
+
+
+admin.site.register(Testimonial, TestimonialAdmin)

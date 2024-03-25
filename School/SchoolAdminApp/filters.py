@@ -6,7 +6,7 @@ from django_filters.rest_framework import (
     NumberFilter,
 )
 
-from SchoolAdminApp.models import Result
+from SchoolAdminApp.models import Result, Testimonial
 
 
 class ResultFilter(FilterSet):
@@ -64,4 +64,44 @@ class ResultFilter(FilterSet):
             "mark",
             "gpa",
             "grade",
+        ]
+
+
+class TestimonialFilter(FilterSet):
+    """Filter for the Testimonial model."""
+
+    school_uid = CharFilter(
+        field_name="school_testimonial__uid",
+        lookup_expr="iexact",
+    )
+    student_uid = CharFilter(
+        field_name="student_testimonial__uid",
+        lookup_expr="iexact",
+    )
+    student_roll = CharFilter(
+        field_name="student_roll",
+        lookup_expr="iexact",
+    )
+    student_reg = CharFilter(
+        field_name="student_reg",
+        lookup_expr="iexact",
+    )
+    testimonial_serial_number = CharFilter(
+        field_name="testimonial_serial_number",
+        lookup_expr="iexact",
+    )
+    testimonial_issue_date = CharFilter(
+        field_name="testimonial_issue_date",
+        lookup_expr="exact",
+    )
+
+    class Meta:
+        model = Testimonial
+        fields = [
+            "school_uid",
+            "student_uid",
+            "student_roll",
+            "student_reg",
+            "testimonial_serial_number",
+            "testimonial_issue_date",
         ]
