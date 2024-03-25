@@ -1,20 +1,28 @@
-from django.db import models
-from django.db.models import Sum
 from autoslug import AutoSlugField
+
+from decimal import Decimal
+
+from django.db import models
+from django.db.models import Sum, Max, IntegerField
+from django.db.models.functions import Cast
+
 from phonenumber_field.modelfields import PhoneNumberField
+
 from versatileimagefield.fields import VersatileImageField
-
-from common.models import SchoolInformationOnBoarding
-from school_auth.models import User
-
-from core.models import (
-    UniversalModel,
-    SchoolClass,
-    SchoolSection)
 
 from StudentApp.models import (
     Student
 )
+
+from common.models import SchoolInformationOnBoarding
+
+from core.models import (
+    UniversalModel,
+    SchoolClass,
+    SchoolSection
+)
+
+from school_auth.models import User
 
 from .choice import (
     Gender,
@@ -661,7 +669,7 @@ class Testimonial(UniversalModel):
         on_delete=models.DO_NOTHING,
         related_name='school_testimonials'
     )
-    student_testimonial = models.ForeignKey(
+    student_testimonial = models.OneToOneField(
         Student,
         on_delete=models.DO_NOTHING,
         blank=True, null=True,
@@ -670,12 +678,26 @@ class Testimonial(UniversalModel):
     student_passing_year = models.CharField(max_length=255, blank=True, null=True)
     student_gpa = models.CharField(max_length=255, blank=True, null=True)
     student_session = models.CharField(max_length=255, blank=True, null=True)
-    student_roll = models.IntegerField(blank=True, null=True)
-    student_reg = models.IntegerField(blank=True, null=True)
+    student_roll = models.CharField(max_length=255, blank=True, null=True)
+    student_reg = models.CharField(max_length=255, blank=True, null=True)
     student_board = models.CharField(max_length=255, blank=True, null=True)
     student_exam_center = models.CharField(max_length=255, blank=True, null=True)
-    testimonial_serial_number = models.IntegerField(blank=True, null=True)
+    testimonial_serial_number = models.CharField(max_length=255, blank=True, null=True)
     testimonial_issue_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"Testimonial of {self.student_testimonial.student_user.username}"
+
+    def save(self, *args, **kwargs):
+
+        if not self.testimonial_serial_number:
+            # If testimonial_serial_number is not provided, generate a unique one
+            max_serial = Testimonial.objects.aggregate(
+                max_serial_number=Max(Cast('testimonial_serial_number', IntegerField()))
+            )['max_serial_number']
+            if max_serial is None:
+                max_serial = 0
+
+            self.testimonial_serial_number = str(max_serial + 1).zfill(4)
+
+        super().save(*args, **kwargs)

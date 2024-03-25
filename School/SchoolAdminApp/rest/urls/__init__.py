@@ -114,4 +114,8 @@ urlpatterns = [
         "result/",
         include("SchoolAdminApp.rest.urls.result"),
     ),
+    path(
+        "testimonial/",
+        include("SchoolAdminApp.rest.urls.testimonial"),
+    ),
 ]
