@@ -4,6 +4,7 @@ from django.db import transaction
 
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
 
 from core.models import Blog, BlogImage, BlogTag, BlogCategory
 
@@ -96,10 +97,10 @@ class BlogListDetailSerializer(ModelSerializer):
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    school_blog = serializers.SlugRelatedField(
-        queryset=SchoolInformationOnBoarding.objects.all(),
-        slug_field="uid",
-    )
+    # school_blog = serializers.SlugRelatedField(
+    #     queryset=SchoolInformationOnBoarding.objects.all(),
+    #     slug_field="uid",
+    # )
     blog_image_information = serializers.ImageField(required=False)
     tags = serializers.CharField(allow_blank=True, required=False)
     categories = serializers.CharField(allow_blank=True, required=False)
@@ -110,7 +111,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             "uid",
             "slug",
             "title",
-            "school_blog",
+            # "school_blog",
             "content",
             "publish_date",
             "categories",
@@ -123,7 +124,10 @@ class BlogPostSerializer(serializers.ModelSerializer):
         tags_data = validated_data.pop("tags", "")
         categories_data = validated_data.pop("categories", "")
         images_data = validated_data.pop("blog_image_information", None)
-
+        school = self.context["request"].user.school
+        if not school:
+            raise ValidationError("school not found, are you assigned to any school?")
+        validated_data["school_blog"] = school
         blog = Blog.objects.create(**validated_data)
 
         if tags_data:
