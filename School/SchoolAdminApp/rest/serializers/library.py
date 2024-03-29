@@ -2,11 +2,11 @@
 
 from rest_framework import serializers
 
-from SchoolAdminApp.models import Library, Department
+from SchoolAdminApp.models import Library, Department, Subject
 
 from common.models import SchoolInformationOnBoarding
 
-from core.models import SchoolClass
+from core.models import SchoolClass, SchoolSection
 
 
 class SchoolClassSlimSerializer(serializers.ModelSerializer):
@@ -22,6 +22,16 @@ class SchoolClassSlimSerializer(serializers.ModelSerializer):
         ]
 
 
+class SchoolSectionSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolSection
+        fields = [
+            "uid",
+            "slug",
+            "name"
+        ]
+
+
 class SchoolDepartmentSlimSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
@@ -31,6 +41,17 @@ class SchoolDepartmentSlimSerializer(serializers.ModelSerializer):
             "name",
             "head_of_department",
         ]
+
+
+class SchoolSubjectSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = [
+            "uid",
+            "subject_id",
+            "name"
+        ]
+
 
 
 class LibraryListSerializer(serializers.ModelSerializer):

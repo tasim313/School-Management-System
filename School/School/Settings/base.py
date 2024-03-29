@@ -64,6 +64,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://195.35.21.202:8000",
     "http://195.35.21.202:3000",
     'https://www.mgghschool.edu.bd',
+    'https://sm-website-vercel.vercel.app'
 ]
 
 CORS_ALLOW_METHODS = (
@@ -97,6 +98,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://195.35.21.202:8000",
     "http://195.35.21.202:8000",
     'https://www.mgghschool.edu.bd'
+    
 ]
 DCS_SESSION_COOKIE_SAMESITE = "None"
 

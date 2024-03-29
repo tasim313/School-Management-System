@@ -5,6 +5,7 @@ from rest_framework import serializers
 from SchoolAdminApp.models import Exam, Subject
 from common.models import SchoolInformationOnBoarding
 from core.models import SchoolClass, SchoolSection
+from .library import SchoolClassSlimSerializer, SchoolSectionSlimSerializer, SchoolSubjectSlimSerializer
 
 
 class ExamListSerializer(serializers.ModelSerializer):
@@ -62,3 +63,31 @@ class ExamListSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+
+
+
+class ExamListDetailSerializer(serializers.ModelSerializer):
+    school_exam = serializers.SlugRelatedField(
+        queryset=SchoolInformationOnBoarding.objects.all(),
+        slug_field="uid",
+    )
+    exam_class = SchoolClassSlimSerializer(read_only=True)
+    exam_section = SchoolSectionSlimSerializer(read_only=True)
+    exam_subject = SchoolSubjectSlimSerializer(read_only=True)
+
+    class Meta:
+        model = Exam
+        fields = [
+            "uid",
+            "slug",
+            "school_exam",
+            "exam_class",
+            "exam_section",
+            "exam_subject",
+            "name",
+            "fees",
+            "exam_start_time",
+            "exam_end_time",
+            "exam_date",
+        ]
+        read_only_fields = ["uid", "slug"]

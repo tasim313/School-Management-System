@@ -5,6 +5,15 @@ from common.models import SchoolInformationOnBoarding
 from StudentApp.models import Student
 
 
+class SchoolFeesCategorySlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeesCategory
+        fields = [
+            "uid",
+            "name"
+        ]
+
+
 class FeesCollectionSerializer(serializers.ModelSerializer):
     
     fees_collection_category = serializers.SlugRelatedField(
@@ -45,3 +54,4 @@ class FeesCollectionSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+

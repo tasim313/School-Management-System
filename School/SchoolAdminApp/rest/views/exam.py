@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import Exam
-from SchoolAdminApp.rest.serializers.exam import ExamListSerializer
+from SchoolAdminApp.rest.serializers.exam import ExamListSerializer, ExamListDetailSerializer
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -25,6 +25,12 @@ class ExamListCreateView(generics.ListCreateAPIView):
             return [
                 AllowAny()
             ]
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ExamListDetailSerializer
+        return ExamListSerializer
+    
 
     def get_queryset(self):
         # Get school_slug from URL
@@ -58,6 +64,7 @@ class ExamRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             return [IsAuthenticated()]
         else:
             return [AllowAny()]
+
 
     def get_queryset(self):
         # Get school_slug from URL
