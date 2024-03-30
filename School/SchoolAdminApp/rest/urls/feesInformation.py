@@ -17,3 +17,5 @@ urlpatterns = [
         name="fees_information_delete",
     ),
 ]
+
+# url path: api/school-admin-app/fees/information/...

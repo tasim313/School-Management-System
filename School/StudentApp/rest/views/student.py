@@ -157,14 +157,14 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentCurrentStatus = StudentCurrentStatus.objects.filter(
+        queryset = StudentCurrentStatus.objects.filter(
             status=Status.Active,
             student_current_status__school_student__slug=school_slug,
         ).select_related(
             "student_current_status"
         )
 
-        return StudentCurrentStatus
+        return queryset
 
 
 class StudentPermanentAddressListCreateView(generics.ListCreateAPIView):
@@ -210,14 +210,14 @@ class StudentPermanentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentPermanentAddress = StudentPermanentAddress.objects.filter(
+        queryset = StudentPermanentAddress.objects.filter(
             status=Status.Active,
             student_permanent_address__school_student__slug=school_slug,
         ).select_related(
             "student_permanent_address"
         )
 
-        return StudentPermanentAddress
+        return queryset
 
 
 class StudentPresentAddressListCreateView(generics.ListCreateAPIView):
@@ -264,7 +264,7 @@ class StudentPresentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentPresentAddress = StudentPresentAddress.objects.filter(
+        queryset = StudentPresentAddress.objects.filter(
             status=Status.Active,
             student_present_address__school_student__slug=school_slug,
         ).select_related(
@@ -272,7 +272,7 @@ class StudentPresentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
 
         )
 
-        return StudentPresentAddress
+        return queryset
 
 
 class StudentFatherListCreateView(generics.ListCreateAPIView):
@@ -318,14 +318,14 @@ class StudentFatherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentFather = StudentFather.objects.filter(
+        queryset = StudentFather.objects.filter(
             status=Status.Active,
             student_father__school_student__slug=school_slug,
         ).select_related(
             "student_father"
         )
 
-        return StudentFather
+        return queryset
 
 
 class StudentMotherListCreateView(generics.ListCreateAPIView):
@@ -371,14 +371,14 @@ class StudentMotherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentMother = StudentMother.objects.filter(
+        queryset = StudentMother.objects.filter(
             status=Status.Active,
             student_mother__school_student__slug=school_slug,
         ).select_related(
             "student_mother"
         )
 
-        return StudentMother
+        return queryset
 
 
 class StudentGuardianListCreateView(generics.ListCreateAPIView):
@@ -424,14 +424,14 @@ class StudentGuardianRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
 
         school_slug = self.kwargs.get("school_slug", None)
 
-        StudentGuardian = StudentGuardian.objects.filter(
+        queryset = StudentGuardian.objects.filter(
             status=Status.Active,
             student_guardian__school_student__slug=school_slug,
         ).select_related(
             "student_guardian"
         )
 
-        return StudentGuardian
+        return queryset
 
 
 class StudentDetailInformationListView(generics.ListAPIView):

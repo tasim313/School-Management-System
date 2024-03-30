@@ -3,7 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import FeesInformation
-from SchoolAdminApp.rest.serializers.feesInformation import FeesInformationSerializer
+from SchoolAdminApp.rest.serializers.feesInformation import (
+    FeesInformationSerializer,
+    FeesInformationDetailSerializer
+)
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -20,6 +23,11 @@ class FeesInformationListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return FeesInformationDetailSerializer
+        return FeesInformationSerializer
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
@@ -51,8 +59,13 @@ class FeesInformationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
         else:
             return []
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return FeesInformationDetailSerializer
+        return FeesInformationSerializer
+
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         fees_information = FeesInformation.objects.filter(
