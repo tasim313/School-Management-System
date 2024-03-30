@@ -4,6 +4,38 @@ from SchoolAdminApp.models import FeesInformation, FeesCategory
 from core.models import SchoolClass, SchoolSection
 
 
+class FeesCategorySlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeesCategory
+        fields = [
+            "uid",
+            "name",
+        ]
+
+
+class SchoolClassSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolClass
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "total_students",
+            "present_students",
+            "absent_students",
+        ]
+
+
+class SchoolSectionSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolSection
+        fields = [
+            "uid",
+            "slug",
+            "name"
+        ]
+
+
 class FeesInformationSerializer(serializers.ModelSerializer):
     fees_category = serializers.SlugRelatedField(
         queryset=FeesCategory.objects.all(),
@@ -44,3 +76,30 @@ class FeesInformationSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+
+
+class FeesInformationDetailSerializer(serializers.ModelSerializer):
+    fees_category = FeesCategorySlimSerializer()
+    fess_class = SchoolClassSlimSerializer()
+    fess_section = SchoolSectionSlimSerializer()
+
+    class Meta:
+        model = FeesInformation
+        fields = [
+            "uid",
+            "fees_amount",
+            "fees_start",
+            "fees_end",
+            'fees_category',
+            'fess_class',
+            'fess_section'
+        ]
+        read_only_fields = [
+            "uid",
+            "fees_amount",
+            "fees_start",
+            "fees_end",
+            "fees_category",
+            "fess_class",
+            "fess_section"
+        ]

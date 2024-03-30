@@ -53,7 +53,6 @@ class SchoolSubjectSlimSerializer(serializers.ModelSerializer):
         ]
 
 
-
 class LibraryListSerializer(serializers.ModelSerializer):
     school_library = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
