@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import FeesCollection
-from SchoolAdminApp.rest.serializers.feesCollection import FeesCollectionSerializer
+from SchoolAdminApp.rest.serializers.feesCollection import FeesCollectionSerializer, FeesCollectionDetailSerializer
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -20,6 +20,11 @@ class FeesCollectionListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+        
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return FeesCollectionDetailSerializer
+        return FeesCollectionSerializer
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
