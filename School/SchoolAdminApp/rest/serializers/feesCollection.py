@@ -35,9 +35,9 @@ class FeesCollectionSerializer(serializers.ModelSerializer):
             "uid",
             "fees_amount",
             "paid_date",
-            'fees_category',
-            'fess_class',
-            'fess_section'
+            'fees_collection_category',
+            'school_fees_collection',
+            'student_fees_collection'
         ]
         read_only_fields = ["uid"]
 

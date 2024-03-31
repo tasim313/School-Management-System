@@ -184,13 +184,29 @@ class WebsiteGalleryInfoListView(generics.ListAPIView):
         return self.queryset.filter(school_website_gallery__slug=school_slug)
 
 
-class WebsiteGalleryInfoListDestroyView(generics.DestroyAPIView):
+
+class WebsiteGalleryInfoListDestroyView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = WebSiteGalleryInformation.objects.all()
     serializer_class = websiteInfo.WebsiteGalleryInfoListSerializer
-    lookup_fields = 'uid'
+    lookup_field = "uid"
+
+    def get_permissions(self):
+        if (
+                self.request.method == "PUT" or
+                self.request.method == "PATCH" or
+                self.request.method == "DELETE"
+        ):
+            return [IsAuthenticated()]
+        else:
+            return []
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
-        return self.queryset.filter(school_website_gallery__slug=school_slug)
+        gallery = WebSiteGalleryInformation.objects.filter(
+            school_website_gallery__slug=school_slug
+        ).select_related(
+            "school_website_gallery"
+        )
+
+        return gallery
