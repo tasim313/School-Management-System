@@ -89,7 +89,7 @@ class SchoolClassUpdateAPIView(generics.UpdateAPIView):
         serializer.save(user_updated=self.request.user)
 
 
-class SchoolClassDestroy(generics.DestroyAPIView):
+class SchoolClassDestroy(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = SchoolClass.objects.all()
