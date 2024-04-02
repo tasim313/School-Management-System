@@ -6,7 +6,7 @@ from common.choice import Status
 from common.pagination import StandardResultsSetPagination
 
 from core.models import SchoolSection
-from core.rest.serializers.SchoolSection import SchoolSectionSerializer
+from core.rest.serializers.SchoolSection import SchoolSectionSerializer,  SchoolSectionDetailSerializer
 
 
 class SchoolSectionListCreateView(generics.ListCreateAPIView):
@@ -20,6 +20,12 @@ class SchoolSectionListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return SchoolSectionDetailSerializer
+        return SchoolSectionSerializer
+    
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)

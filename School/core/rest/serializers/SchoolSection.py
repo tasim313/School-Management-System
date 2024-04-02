@@ -3,6 +3,18 @@ from core.models import SchoolClass
 
 from core.models import SchoolClass, SchoolSection
 
+class SchoolClassSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolClass
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "total_students",
+            "present_students",
+            "absent_students",
+        ]
+
 class SchoolSectionSerializer(serializers.ModelSerializer):
     school_class = serializers.SlugRelatedField(
         queryset=SchoolClass.objects.all(),
@@ -33,3 +45,18 @@ class SchoolSectionSerializer(serializers.ModelSerializer):
         instance.save(update_fields=["user_updated"])
 
         return instance
+
+
+class SchoolSectionDetailSerializer(serializers.ModelSerializer):
+    school_class = SchoolClassSlimSerializer()
+    
+
+    class Meta:
+        model = SchoolSection
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            'school_class'
+        ]
+        read_only_fields = ["uid", "slug"]
