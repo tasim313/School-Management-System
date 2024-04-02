@@ -1,11 +1,61 @@
 from rest_framework import serializers
 
-from SchoolAdminApp.models import PurchaseRequest, Vendor, Product
+from SchoolAdminApp.models import PurchaseRequest, Vendor, Product, ProductCategory
+
 from common.models import SchoolInformationOnBoarding
 
 
+class CategorySlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = [
+            "uid",
+            "slug",
+            "name",
+        ]
+
+
+class SchoolInformationOnBoardingSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolInformationOnBoarding
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "address",
+            "phone",
+            "school_type",
+            "username"
+        ]
+
+
+class VendorSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "address",
+            "phone_number",
+        ]
+
+
+class ProductSlimSerializer(serializers.ModelSerializer):
+    category = CategorySlimSerializer()
+
+    class Meta:
+        model = Product
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "description",
+            "category",
+        ]
+
+
 class PurchaseRequestSerializer(serializers.ModelSerializer):
-    
     school_purchase_request = serializers.SlugRelatedField(
         queryset=SchoolInformationOnBoarding.objects.all(),
         slug_field="uid",
@@ -42,27 +92,50 @@ class PurchaseRequestSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["uid", "slug"]
 
-
     def create(self, validated_data):
-        products_data = validated_data.pop('product_request', None) 
+        products_data = validated_data.pop('product_request', None)
         instance = super().create(validated_data=validated_data)
 
-        if products_data: 
+        if products_data:
             for product_data in products_data:
-                instance.product_request.add(product_data) 
+                instance.product_request.add(product_data)
 
         instance.user_created = self.context["request"].user
         instance.save(update_fields=["user_created"])
         return instance
 
-
     def update(self, instance, validated_data):
-        products_data = validated_data.pop('product_request', None) 
+        products_data = validated_data.pop('product_request', None)
         instance = super().update(instance, validated_data=validated_data)
 
-        if products_data is not None: 
-            instance.product_request.set(products_data)  
+        if products_data is not None:
+            instance.product_request.set(products_data)
 
         instance.user_updated = self.context["request"].user
         instance.save(update_fields=["user_updated"])
         return instance
+
+
+class PurchaseRequestListSerializer(serializers.ModelSerializer):
+    school_purchase_request = SchoolInformationOnBoardingSlimSerializer()
+    purchase_request_vendor = VendorSlimSerializer()
+    product_request = ProductSlimSerializer(many=True)
+
+    class Meta:
+        model = PurchaseRequest
+        fields = [
+            "uid",
+            "slug",
+            "purchase_request_status",
+            "order_date",
+            "delivery_date",
+            "quantity",
+            "amount_tax",
+            "payment_method",
+            "note_private",
+            'note_public',
+            'school_purchase_request',
+            'purchase_request_vendor',
+            'product_request'
+        ]
+        read_only_fields = ["uid", "slug"]

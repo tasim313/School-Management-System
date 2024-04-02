@@ -3,7 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import PurchaseRequest
-from SchoolAdminApp.rest.serializers.purchasesRequest import PurchaseRequestSerializer
+from SchoolAdminApp.rest.serializers.purchasesRequest import (
+    PurchaseRequestSerializer,
+    PurchaseRequestListSerializer,
+)
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -21,16 +24,24 @@ class PurchaseRequestListCreateView(generics.ListCreateAPIView):
         else:
             return []
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return PurchaseRequestSerializer
+        else:
+            return PurchaseRequestListSerializer
+
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
 
         queryset = PurchaseRequest.objects.filter(
             status=Status.Active,
             school_purchase_request__slug=school_slug,
-        ).prefetch_related(
+        ).select_related(
             "school_purchase_request",
             "purchase_request_vendor",
-            'product_request'
+        ).prefetch_related(
+            "product_request",
+            "product_request__category",
         )
 
         return queryset
@@ -51,17 +62,26 @@ class PurchaseRequestRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
         else:
             return []
 
+    def get_serializer_class(self):
+        if (self.request.method == "PUT" or
+                self.request.method == "PATCH"):
+            return PurchaseRequestSerializer
+        else:
+            return PurchaseRequestListSerializer
+
     def get_queryset(self):
-       
+
         school_slug = self.kwargs.get("school_slug", None)
 
         purchase_request = PurchaseRequest.objects.filter(
             status=Status.Active,
             school_purchase_request__slug=school_slug,
-        ).prefetch_related(
+        ).select_related(
             "school_purchase_request",
             "purchase_request_vendor",
-            'product_request'
+        ).prefetch_related(
+            "product_request",
+            "product_request__category",
         )
 
         return purchase_request
