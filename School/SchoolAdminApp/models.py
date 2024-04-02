@@ -701,3 +701,72 @@ class Testimonial(UniversalModel):
             self.testimonial_serial_number = str(max_serial + 1).zfill(4)
 
         super().save(*args, **kwargs)
+
+
+class SchoolResult(UniversalModel):
+    school = models.ForeignKey(
+        SchoolInformationOnBoarding,
+        on_delete=models.DO_NOTHING,
+        related_name='school_student_results'
+    )
+    school_class = models.ForeignKey(
+        SchoolClass,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='class_student_results'
+    )
+    school_section = models.ForeignKey(
+        SchoolSection,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='section_student_results'
+    )
+    school_semester = models.ForeignKey(
+        Semester,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='semester_student_results'
+    )
+    school_student = models.ForeignKey(
+        Student,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='student_results'
+    )
+    marks = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Total Marks"
+    )
+    gpa = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        blank=True,
+        null=True,
+    )
+    grade = models.CharField(
+        max_length=10,
+        choices=GradeType.choices,
+        blank=True,
+        null=True
+    )
+    passed_subjects_result = models.ManyToManyField(
+        Result,
+        blank=True,
+        related_name='passed_subjects_results'
+    )
+    failed_subjects_result = models.ManyToManyField(
+        Result,
+        blank=True,
+        related_name='failed_subjects_results'
+    )
+
+    def __str__(self):
+        return f'{self.school_student.student_user} - {self.grade}'
+
+    unique_together = (
+        "school", "school_class", "school_section", "school_semester", "school_student"
+    )  # one student can have only one result for a semester
+
+    ordering = ["-createdAt"]  # latest result will be shown first
