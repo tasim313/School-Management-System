@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import ClassTimeTable
-from SchoolAdminApp.rest.serializers.class_time_table import ClassTimeTableListSerializer
+from SchoolAdminApp.rest.serializers.class_time_table import ClassTimeTableListSerializer, ClassTimeTableDetailsSerializer
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -23,6 +23,11 @@ class ClassTimeTableListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ClassTimeTableDetailsSerializer
+        return ClassTimeTableListSerializer
 
     def get_queryset(self):
         # Get school_slug from URL
