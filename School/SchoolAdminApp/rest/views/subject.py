@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import Subject
-from SchoolAdminApp.rest.serializers.subject import SubjectListSerializer
+from SchoolAdminApp.rest.serializers.subject import SubjectListSerializer, SubjectDetailSerializer
 
 from common.choice import Status
 from common.pagination import StandardResultsSetPagination
@@ -20,6 +20,12 @@ class SubjectListCreateView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return SubjectDetailSerializer
+        return SubjectListSerializer
+    
 
     def get_queryset(self):
         school_slug = self.kwargs.get("school_slug", None)
