@@ -43,7 +43,7 @@ class SocialMediaAPIView(generics.CreateAPIView):
 
 class SocialMediaListView(generics.ListAPIView):
     queryset = SocialMedia.objects.all()
-    serializer_class = SocialMediaUpdateSerializer
+    serializer_class = SocialMediaListSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
