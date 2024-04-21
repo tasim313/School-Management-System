@@ -152,7 +152,7 @@ def get_blog_image_slug(instance):
 
 def get_social_media_slug(instance):
     uid = str(uuid4()).split("-")[-1]
-    return f"{uid}{'social-media'}{str(instance.school_social_media_website_information.uid).split('-')[0]}"
+    return f"{uid}{'social-media'}{str(instance.uid).split('-')[0]}"
 
 
 def get_alumni_section_slug(instance):
