@@ -733,12 +733,12 @@ class SchoolResult(UniversalModel):
         blank=True, null=True,
         related_name='student_results'
     )
-    marks = models.IntegerField(
+    total_marks = models.IntegerField(
         blank=True,
         null=True,
         help_text="Total Marks"
     )
-    gpa = models.DecimalField(
+    cgpa = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0,
