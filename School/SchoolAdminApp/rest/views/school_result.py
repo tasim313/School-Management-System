@@ -3,6 +3,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from SchoolAdminApp.filters import SchoolResultFilter
 from SchoolAdminApp.models import SchoolResult
 from SchoolAdminApp.rest.serializers.school_result import (
     SchoolResultListSerializer,
@@ -12,6 +13,7 @@ from SchoolAdminApp.rest.serializers.school_result import (
 class SchoolResultListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SchoolResultListSerializer
+    filterset_class = SchoolResultFilter
 
     def get_queryset(self):
         # Get school_slug from URL

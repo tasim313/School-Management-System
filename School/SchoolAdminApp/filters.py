@@ -6,7 +6,7 @@ from django_filters.rest_framework import (
     NumberFilter,
 )
 
-from SchoolAdminApp.models import Result, Testimonial
+from SchoolAdminApp.models import Result, Testimonial, SchoolResult
 
 
 class ResultFilter(FilterSet):
@@ -104,4 +104,57 @@ class TestimonialFilter(FilterSet):
             "student_reg",
             "testimonial_serial_number",
             "testimonial_issue_date",
+        ]
+
+
+class SchoolResultFilter(FilterSet):
+    """Filter for the SchoolResult model."""
+
+    school_uid = CharFilter(
+        field_name="school__uid",
+        lookup_expr="iexact",
+    )
+    class_uid = CharFilter(
+        field_name="school_class__uid",
+        lookup_expr="iexact",
+    )
+    section_uid = CharFilter(
+        field_name="school_section__uid",
+        lookup_expr="iexact",
+    )
+    semester_uid = CharFilter(
+        field_name="school_semester__uid",
+        lookup_expr="iexact",
+    )
+    student_uid = CharFilter(
+        field_name="school_student__uid",
+        lookup_expr="iexact",
+    )
+    total_marks = NumberFilter(
+        field_name="total_marks",
+        lookup_expr="gte",
+    )
+    cgpa = NumberFilter(
+        field_name="cgpa",
+        method="filter_cgpa_exact",
+    )
+    grade = CharFilter(
+        field_name="grade",
+        lookup_expr="iexact",
+    )
+
+    def filter_cgpa_exact(self, queryset, name, value):
+        return queryset.filter(**{name: value})
+
+    class Meta:
+        model = SchoolResult
+        fields = [
+            "school_uid",
+            "class_uid",
+            "section_uid",
+            "semester_uid",
+            "student_uid",
+            "total_marks",
+            "cgpa",
+            "grade",
         ]
