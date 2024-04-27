@@ -1,7 +1,7 @@
 """Views for Result model."""
 
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from SchoolAdminApp.models import Result
@@ -11,6 +11,8 @@ from common.choice import Status
 
 from SchoolAdminApp.filters import ResultFilter
 from common.pagination import StandardResultsSetPagination
+
+from common.custom_permission import IsSchoolAdmin, IsStudent, IsTeacher
 
 
 class ResultListCreateView(generics.ListCreateAPIView):
@@ -23,9 +25,13 @@ class ResultListCreateView(generics.ListCreateAPIView):
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST
         if self.request.method == "POST":
-            return [IsAuthenticated()]
+            return [
+                IsAdminUser() or
+                IsTeacher() or
+                IsSchoolAdmin(),
+            ]
         else:
-            return [AllowAny()]
+            return [IsAuthenticated()]
 
     def get_queryset(self):
         # Get school_slug from URL
@@ -58,9 +64,13 @@ class ResultRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
                 self.request.method == "PATCH" or
                 self.request.method == "DELETE"
         ):
-            return [IsAuthenticated()]
+            return [
+                IsAdminUser() or
+                IsTeacher() or
+                IsSchoolAdmin(),
+            ]
         else:
-            return [AllowAny()]
+            return [IsAuthenticated()]
 
     def get_queryset(self):
         # Get school_slug from URL
