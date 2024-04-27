@@ -3,7 +3,7 @@ from core.rest.views.socialmedia import SocialMediaAPIView,  SocialMediaListView
 
 urlpatterns = [
     path(
-        "",
+        "<slug:school_slug>/add/",
         SocialMediaAPIView.as_view(),
         name="school-social-media-create",
     ),

@@ -13,32 +13,32 @@ from core.rest.serializers.socialmedia import (
 )
 
 
-class SocialMediaAPIView(generics.CreateAPIView):
+class SocialMediaAPIView(generics.ListCreateAPIView):
     serializer_class = SocialMediaCreateSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def get_permissions(self):
+        # Don't allow non-authenticated user to create via POST
+        if self.request.method == "POST":
+            return [IsAuthenticated()]
+        else:
+            return []
 
-        try:
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return SocialMediaListSerializer
+        return SocialMediaCreateSerializer
 
-            response_data = {
-                "message": "Social Media Create successful.",
-                "data": serializer.data,
-            }
-            return Response(
-                response_data, status=status.HTTP_201_CREATED, headers=headers
-            )
-        except serializers.ValidationError as e:
-            error_data = {
-                "message": "Social Media Create  failed.",
-                "errors": e.detail,
-            }
-            return Response(error_data, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        # Get school_slug from URL
+        school_slug = self.kwargs.get("school_slug", None)
+
+        queryset = SocialMedia.objects.filter(
+            school_social_media__slug=school_slug,
+        )
+        return queryset
+
 
 
 class SocialMediaListView(generics.ListAPIView):

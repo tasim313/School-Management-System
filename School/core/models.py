@@ -709,7 +709,7 @@ class BlogImage(UniversalModel):
 
 
 class SocialMedia(UniversalModel):
-    school_social_media = models.OneToOneField(
+    school_social_media = models.ForeignKey(
         SchoolInformationOnBoarding,
         on_delete=models.CASCADE,
         related_name="social_media_info",
