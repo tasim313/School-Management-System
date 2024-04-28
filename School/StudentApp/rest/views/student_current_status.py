@@ -10,6 +10,7 @@ from StudentApp.rest.serializers.student import (
 from StudentApp.models import StudentCurrentStatus
 
 from common.pagination import StandardResultsSetPagination
+from StudentApp.filters import StudentCurrentStatusFilter
 
 
 class StudentCurrentStatusListCreateView(generics.ListCreateAPIView):
@@ -17,6 +18,7 @@ class StudentCurrentStatusListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StudentCurrentStatusListSerializer
     pagination_class = StandardResultsSetPagination
+    filterset_class = StudentCurrentStatusFilter
 
     def get_permissions(self):
         # Don't allow non-authenticated user to create via POST
