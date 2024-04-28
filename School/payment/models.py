@@ -1,6 +1,15 @@
+import datetime
 from django.db import models
-from django.contrib.auth.models import User
+
 from core.models import UniversalModel
+
+from SchoolAdminApp.models import FeesInformation
+
+from common.models import SchoolInformationOnBoarding
+
+from core.models import SchoolClass, SchoolSection
+
+from payment.choices import InvoiceStatus, FeeFor
 
 
 # Create your models here.
@@ -14,43 +23,74 @@ class InvoiceType(UniversalModel):
 
 
 class Invoice(UniversalModel):
+    name = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    invoice_number = models.CharField(max_length=20, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey("school_auth.User", on_delete=models.DO_NOTHING)
     issue_date = models.DateField()
-    due_date = models.DateField()
-    total_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    status_choices = [
-        ("Draft", "Draft"),
-        ("Pending", "Pending"),
-        ("Paid", "Paid"),
-        ("Overdue", "Overdue"),
-        ("Cancelled", "Cancelled"),
-    ]
-    status = models.CharField(max_length=10, choices=status_choices, default="Draft")
-    school = models.ForeignKey(School, on_delete=models.CASCADE, null=True, blank=True)
-    class_field = models.ForeignKey(
-        Class, on_delete=models.CASCADE, null=True, blank=True
+    due_date = models.DateField(blank=True, null=True)
+    # start of finance related fields
+    total_item = models.PositiveBigIntegerField(default=0)
+    total_amount = models.DecimalField(max_digits=19, decimal_places=3, default=0.00)
+    total_discount = models.DecimalField(max_digits=19, decimal_places=3, default=0.00)
+    grand_total = models.DecimalField(max_digits=19, decimal_places=3, default=0.00)
+    # end of finance related fields
+    invoice_status = models.CharField(
+        max_length=10,
+        choices=InvoiceStatus,
+        default=InvoiceStatus.PENDING,
     )
-    fee_type = models.ForeignKey(
-        FeeType, on_delete=models.CASCADE, null=True, blank=True
+    school = models.ForeignKey(
+        SchoolInformationOnBoarding,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
     )
-
-    # Add more fields as needed
+    student_class = models.ForeignKey(
+        SchoolClass,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    section = models.ForeignKey(
+        SchoolSection,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+    )
+    invoice_type = models.ForeignKey(
+        InvoiceType,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
+    fee_for = models.CharField(
+        max_length=10,
+        choices=FeeFor,
+        default=FeeFor.STUDENT,
+    )
 
     def __str__(self):
-        return f"Invoice #{self.invoice_number}"
+        return f"Invoice #{self.id} Fee For: {self.fee_for} Created for: {self.user}"
 
 
 class InvoiceItem(models.Model):
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    unit_price = models.DecimalField(max_digits=12, decimal_places=2)
-    line_total = models.DecimalField(max_digits=12, decimal_places=2)
+    invoice = models.ForeignKey(Invoice, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    quantity = models.DecimalField(max_digits=19, decimal_places=3)
+    price = models.DecimalField(max_digits=19, decimal_places=3)
+    discount = models.DecimalField(max_digits=19, decimal_places=3)
+    total_price = models.DecimalField(max_digits=19, decimal_places=3)
+
+    fees = models.ForeignKey(
+        FeesInformation,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
 
     # Add more fields as needed
 
     def __str__(self):
-        return self.description
+        return f"ID: {self.id} - Invoice: ({self.invoice})"
