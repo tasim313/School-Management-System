@@ -6,4 +6,8 @@ urlpatterns = [
         "",
         include("StudentApp.rest.urls.student"),
     ),
+     path(
+        "status/",
+        include("StudentApp.rest.urls.student_current_status.py"),
+    ),
 ]
