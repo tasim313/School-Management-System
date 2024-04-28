@@ -8,6 +8,6 @@ urlpatterns = [
     ),
      path(
         "status/",
-        include("StudentApp.rest.urls.student_current_status.py"),
+        include("StudentApp.rest.urls.status"),
     ),
 ]

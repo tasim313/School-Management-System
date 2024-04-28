@@ -422,7 +422,7 @@ class StudentCurrentStatusListSerializer(serializers.ModelSerializer):
         slug_field="uid",
     )
     current_section = serializers.SlugRelatedField(
-        queryset=SchoolClass.objects.all(),
+        queryset=SchoolSection.objects.all(),
         slug_field="uid",
     )
 
@@ -458,18 +458,9 @@ class StudentCurrentStatusListSerializer(serializers.ModelSerializer):
     
 
 class StudentCurrentStatusDetailsSerializer(serializers.ModelSerializer):
-    student_current_status = serializers.SlugRelatedField(
-        queryset=Student.objects.all(),
-        slug_field="uid",
-    )
-    current_class = serializers.SlugRelatedField(
-        queryset=SchoolClass.objects.all(),
-        slug_field="uid",
-    )
-    current_section = serializers.SlugRelatedField(
-        queryset=SchoolClass.objects.all(),
-        slug_field="uid",
-    )
+    student_current_status = StudentList(read_only=True)
+    current_class = SchoolClassSlimSerializer(read_only=True)
+    current_section = SchoolSectionSlimSerializer(read_only=True)
 
     class Meta:
         model = StudentCurrentStatus

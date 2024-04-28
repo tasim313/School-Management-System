@@ -1,8 +1,6 @@
 from django.urls import path
-from StudentApp.rest.views.student_current_status import (
-    StudentCurrentStatusListCreateView,
-    StudentCurrentStatusRetrieveUpdateDeleteView
-)
+
+from StudentApp.rest.views.student_current_status import StudentCurrentStatusListCreateView, StudentCurrentStatusRetrieveUpdateDeleteView
 
 
 urlpatterns = [

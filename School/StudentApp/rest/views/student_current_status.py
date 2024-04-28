@@ -2,16 +2,13 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from ..serializers.student import (
+from StudentApp.rest.serializers.student import (
     StudentCurrentStatusListSerializer,
     StudentCurrentStatusDetailsSerializer
 )
 
-from ...models import (
-    StudentCurrentStatus
-)
+from StudentApp.models import StudentCurrentStatus
 
-from common.choice import Status
 from common.pagination import StandardResultsSetPagination
 
 
@@ -30,18 +27,16 @@ class StudentCurrentStatusListCreateView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return StudentCurrentStatusListSerializer
-        return StudentCurrentStatusDetailsSerializer
+            return StudentCurrentStatusDetailsSerializer
+        return StudentCurrentStatusListSerializer
 
     def get_queryset(self):
         # Get school_slug from URL
         school_slug = self.kwargs.get("school_slug", None)
 
         queryset = StudentCurrentStatus.objects.filter(
-            status=Status.Active,
-            student_current_status__slug=school_slug,
+            student_current_status__school_student__slug=school_slug,
         ).select_related(
-            "student_current_status",
             "current_class",
             "current_section",
         )
@@ -71,9 +66,8 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
         school_slug = self.kwargs.get("school_slug", None)
 
         current_status = StudentCurrentStatus.objects.filter(
-            student_current_status__slug=school_slug,
+            student_current_status__school_student__slug=school_slug,
         ).select_related(
-            "student_current_status",
             "current_class",
             "current_section",
         )
