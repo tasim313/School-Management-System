@@ -46,6 +46,30 @@ from school_auth.rest.serializers import UserSerializer
 from common.helpers import get_school_instance
 
 
+
+class SchoolClassSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolClass
+        fields = [
+            "uid",
+            "slug",
+            "name",
+            "total_students",
+            "present_students",
+            "absent_students",
+        ]
+
+
+class SchoolSectionSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolSection
+        fields = [
+            "uid",
+            "slug",
+            "name"
+        ]
+
+
 class StudentList(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -386,3 +410,75 @@ class StudentDetailInformationListSerializer(serializers.ModelSerializer):
             "student_district_name",
         ]
         read_only_fields = ["uid", "slug", "phone", "student_name_bangla", "nationality",]
+
+
+class StudentCurrentStatusListSerializer(serializers.ModelSerializer):
+    student_current_status = serializers.SlugRelatedField(
+        queryset=Student.objects.all(),
+        slug_field="uid",
+    )
+    current_class = serializers.SlugRelatedField(
+        queryset=SchoolClass.objects.all(),
+        slug_field="uid",
+    )
+    current_section = serializers.SlugRelatedField(
+        queryset=SchoolClass.objects.all(),
+        slug_field="uid",
+    )
+
+    class Meta:
+        model = StudentCurrentStatus
+        fields = [
+            "uid",
+            "slug",
+            "student_current_status",
+            "current_class",
+            "current_section",
+            "class_roll_number",
+        ]
+        read_only_fields = ["uid", "slug",]
+    
+    def create(self, validated_data):
+        instance = super().create(validated_data=validated_data)
+
+        # Add user_created by request user
+        instance.user_created = self.context["request"].user
+        instance.save(update_fields=["user_created"])
+
+        return instance
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data=validated_data)
+
+        # Add user_updated by request user
+        instance.user_updated = self.context["request"].user
+        instance.save(update_fields=["user_updated"])
+
+        return instance
+    
+
+class StudentCurrentStatusDetailsSerializer(serializers.ModelSerializer):
+    student_current_status = serializers.SlugRelatedField(
+        queryset=Student.objects.all(),
+        slug_field="uid",
+    )
+    current_class = serializers.SlugRelatedField(
+        queryset=SchoolClass.objects.all(),
+        slug_field="uid",
+    )
+    current_section = serializers.SlugRelatedField(
+        queryset=SchoolClass.objects.all(),
+        slug_field="uid",
+    )
+
+    class Meta:
+        model = StudentCurrentStatus
+        fields = [
+            "uid",
+            "slug",
+            "student_current_status",
+            "current_class",
+            "current_section",
+            "class_roll_number",
+        ]
+        read_only_fields = ["uid", "slug",]
