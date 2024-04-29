@@ -1,5 +1,11 @@
 from django_filters.rest_framework import FilterSet, DateFromToRangeFilter, UUIDFilter
-from core.models import ClassAttendance
+from core.models import ClassAttendance, SchoolSection
+
+from django_filters.rest_framework import (
+    FilterSet,
+    CharFilter,
+    NumberFilter,
+)
 
 
 class ClassAttendanceFilter(FilterSet):
@@ -20,3 +26,22 @@ class ClassAttendanceFilter(FilterSet):
             "school": ["exact"],
             "attendance_class": ["exact"],
         }
+
+
+
+class SectionFilter(FilterSet):
+    """Filter for the section model."""
+    
+    class_uid = CharFilter(
+        field_name="school_class__uid",
+        lookup_expr="iexact",
+    )
+    
+    def filter_gpa_exact(self, queryset, name, value):
+        return queryset.filter(**{name: value})
+
+    class Meta:
+        model = SchoolSection
+        fields = [
+            "class_uid",
+        ]

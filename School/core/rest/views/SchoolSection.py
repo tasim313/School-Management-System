@@ -7,6 +7,7 @@ from common.pagination import StandardResultsSetPagination
 
 from core.models import SchoolSection
 from core.rest.serializers.SchoolSection import SchoolSectionSerializer,  SchoolSectionDetailSerializer
+from core.filters import SectionFilter
 
 
 class SchoolSectionListCreateView(generics.ListCreateAPIView):
@@ -14,6 +15,7 @@ class SchoolSectionListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SchoolSectionSerializer
     pagination_class = StandardResultsSetPagination
+    filterset_class = SectionFilter
 
     def get_permissions(self):
         if self.request.method == "POST":
