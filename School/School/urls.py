@@ -19,6 +19,7 @@ from School.Urls.subscription_app import urlpatterns as subscription_app
 
 urlpatterns = [
     path("api/v1/teacher", include("TeacherApp.rest.urls")),
+    path("api/v1/payments/", include("payment.rest.urls")),
 ]
 
 urlpatterns.extend(admin)
