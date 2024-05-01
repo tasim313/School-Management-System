@@ -78,10 +78,10 @@ class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    quantity = models.DecimalField(max_digits=19, decimal_places=3)
-    price = models.DecimalField(max_digits=19, decimal_places=3)
-    discount = models.DecimalField(max_digits=19, decimal_places=3)
-    total_price = models.DecimalField(max_digits=19, decimal_places=3)
+    quantity = models.DecimalField(default=0.00, max_digits=19, decimal_places=3)
+    amount = models.DecimalField(default=0.00, max_digits=19, decimal_places=3)
+    discount = models.DecimalField(default=0.00, max_digits=19, decimal_places=3)
+    total_amount = models.DecimalField(default=0.00, max_digits=19, decimal_places=3)
 
     fees = models.ForeignKey(
         FeesInformation,
@@ -89,8 +89,6 @@ class InvoiceItem(models.Model):
         blank=True,
         null=True,
     )
-
-    # Add more fields as needed
 
     def __str__(self):
         return f"ID: {self.id} - Invoice: ({self.invoice})"
