@@ -36,7 +36,7 @@ class LoginView(generics.ListCreateAPIView):
             if not Subscription.objects.filter(
                     school_subscription_id=user.school_id,
                     is_paid=True,
-                    end_date__gte=timezone.now().date()
+                    end_date__gt=timezone.now().date()
             ).exists():
                 return Response(
                     {"error": "You are not subscribed to any plan. Please contact your school admin."},
