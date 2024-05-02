@@ -1,4 +1,6 @@
 from django_filters.rest_framework import FilterSet, DateFromToRangeFilter, UUIDFilter
+from django.db.models import DateTimeField, DateField
+from django.db.models.functions import Cast
 from core.models import ClassAttendance, SchoolSection
 
 from django_filters.rest_framework import (
@@ -26,7 +28,14 @@ class ClassAttendanceFilter(FilterSet):
             "school": ["exact"],
             "attendance_class": ["exact"],
         }
+    
+    def filter_queryset(self, queryset):
+        # Filter by exact date if provided
+        date_exact = self.request.query_params.get('date_exact')
+        if date_exact:
+            queryset = queryset.filter(date__date=date_exact)
 
+        return super().filter_queryset(queryset)
 
 
 class SectionFilter(FilterSet):
