@@ -7,6 +7,7 @@ from versatileimagefield.fields import VersatileImageField
 from common.models import SchoolInformationOnBoarding
 from school_auth.models import User
 from core.models import UniversalModel, SchoolClass, SchoolSection
+from django.db.models.signals import post_save
 
 from .choice import (
     Gender,
@@ -132,6 +133,10 @@ class StudentImage(UniversalModel):
         blank=True,
     )
 
+def create_student_image(sender, instance, created, **kwargs):
+        StudentImage.objects.create(student_info=instance)
+post_save.connect(create_student_image, sender=Student)
+
 
 class StudentCurrentStatus(UniversalModel):
     student_current_status = models.ForeignKey(
@@ -207,6 +212,10 @@ class StudentPermanentAddress(UniversalModel):
     post_office = models.CharField(max_length=255, blank=True, null=True)
     post_code = models.CharField(max_length=255, blank=True, null=True)
 
+def create_student_permanent_address(sender, instance, created, **kwargs):
+        StudentPermanentAddress.objects.create(student_permanent_address=instance)
+post_save.connect(create_student_permanent_address, sender=Student)
+
 
 class StudentPresentAddress(UniversalModel):
     student_present_address = models.ForeignKey(
@@ -247,6 +256,10 @@ class StudentPresentAddress(UniversalModel):
     post_office = models.CharField(max_length=255, blank=True, null=True)
     post_code = models.CharField(max_length=255, blank=True, null=True)
 
+def create_student_present_address(sender, instance, created, **kwargs):
+        StudentPresentAddress.objects.create(student_present_address=instance)
+post_save.connect(create_student_present_address, sender=Student)
+
 
 class StudentFather(UniversalModel):
     student_father = models.ForeignKey(
@@ -269,6 +282,10 @@ class StudentFather(UniversalModel):
     )
     date_of_death = models.DateField(blank=True, null=True)
 
+def create_student_father(sender, instance, created, **kwargs):
+        StudentFather.objects.create(student_father=instance)
+post_save.connect(create_student_father, sender=Student)
+
 
 class StudentMother(UniversalModel):
     student_mother = models.ForeignKey(
@@ -290,6 +307,11 @@ class StudentMother(UniversalModel):
     date_of_death = models.DateField(blank=True, null=True)
 
 
+def create_student_mother(sender, instance, created, **kwargs):
+        StudentMother.objects.create(student_mother=instance)
+post_save.connect(create_student_mother, sender=Student)
+
+
 class StudentGuardian(UniversalModel):
     # "if student parents both die then applicable"
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -305,3 +327,7 @@ class StudentGuardian(UniversalModel):
     student_guardian = models.ForeignKey(
         Student, on_delete=models.DO_NOTHING, related_name="student_guardian_information"
     )
+
+def create_student_guardian(sender, instance, created, **kwargs):
+        StudentGuardian.objects.create(student_guardian=instance)
+post_save.connect(create_student_guardian, sender=Student)
