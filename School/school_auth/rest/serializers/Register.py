@@ -21,6 +21,10 @@ from StudentApp.choice import(
     EthnicGroup
 )
 
+from TeacherApp.models import(
+    Teacher
+)
+
 from StudentApp.models import(
     Student
 )
@@ -356,5 +360,101 @@ class StudentRegisterSerializer(serializers.Serializer):
         )
 
         logger.debug(f"Created Student Information: {student_instance}")
+
+        return user
+
+
+
+class TeacherRegisterSerializer(serializers.Serializer):
+
+    uid = serializers.UUIDField(format='hex_verbose', write_only=True)
+    email = serializers.EmailField(
+            required=False,
+            label="Email Optional Contact Information",
+            allow_blank=True,
+            validators=[UniqueValidator(queryset=User.objects.all())],
+            )
+    firstName = serializers.CharField(max_length=255, required=False, allow_blank=True,  label="School Admin First Name")
+    lastName = serializers.CharField(max_length=255, required=False, allow_blank=True,  label="School Admin Last Name")
+    username = serializers.CharField(
+        max_length=255, 
+        required=True, allow_blank=False, validators=[UniqueValidator(queryset=User.objects.all())],label="User Name or User ID or Email")
+    
+    role = serializers.ChoiceField(
+           label="User Role",
+           choices = UserRole.choices
+    )
+
+    password = serializers.CharField(write_only=True, required=False, validators=[validate_password])
+    
+    password2 = serializers.CharField(write_only=True, required=False)
+    
+    name = serializers.CharField(max_length=255, required=False, allow_blank=True,  label="School Admin Name")
+    
+    gender = serializers.ChoiceField(
+        choices=Gender.choices,
+        required=False, allow_blank=True, 
+        label="School Admin Gender"
+    )
+    date_Of_birth = serializers.DateField(required=False, label="School Admin Date of Birth")
+    
+    phone = PhoneNumberField(required=False,  allow_blank=True, label="School Admin Phone Number or Contact Number")
+    joining_date = serializers.DateField(required=False, label="School Admin Name")
+    qualification = serializers.CharField(required=False, allow_blank=True,  label="School Admin Qualification")
+    experience = serializers.CharField(required=False, allow_blank=True,  label="School Admin Experience")
+
+    
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        uid = attrs['uid']
+        school_instance = get_school_instance(uid)
+        if not school_instance:
+            raise serializers.ValidationError({"uid": "Invalid school UID."})
+
+        return attrs
+
+    def create(self, validated_data):
+        
+        uid = validated_data['uid']
+        email = validated_data.get('email')
+        username = validated_data.get('username')
+        firstName = validated_data.get('firstName')
+        lastName = validated_data.get('lastName')
+        password = validated_data.get('password')
+        
+        school_information_instance = get_school_instance(uid)
+
+        user_email = email
+        
+        user = User.objects.create_user(
+                username= username,
+                firstName=firstName,
+                lastName=lastName,
+                password=password,
+                email=user_email, 
+                school_id = school_information_instance,
+                user_status = UserStatus.Active,
+                role=validated_data['role'],
+                is_active = True,
+                )
+        logger.debug(f"Created new user: {user}")
+        
+        teacher_instance = Teacher.objects.create(
+            school_teacher_id=school_information_instance,
+            teacher_user_id=user.id,
+            name=validated_data.get('name'),
+            gender=validated_data.get('gender'),
+            date_Of_birth=validated_data.get('date_Of_birth'),
+            joining_date=validated_data.get('joining_date'),
+            qualification=validated_data.get('qualification'),
+            experience=validated_data.get('experience'),
+            phone=validated_data.get('phone'),
+            user_created=self.context['request'].user
+        )
+
+        logger.debug(f"Created Teacher Information: {teacher_instance}")
 
         return user

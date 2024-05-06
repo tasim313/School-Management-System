@@ -13,7 +13,7 @@ class TeacherImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeacherImage
         fields = [
-            "id",
+            "uid",
             "teacher_info",
             "slug",
             "image",
@@ -28,7 +28,6 @@ class TeacherListDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = [
-            "id",
             "uid",
             "slug",
             "school_teacher",
@@ -56,7 +55,6 @@ class TeacherPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = [
-            "id",
             "uid",
             "school_teacher",
             "teacher_user",

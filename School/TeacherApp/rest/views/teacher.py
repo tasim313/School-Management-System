@@ -9,8 +9,9 @@ from common.custom_views import (
 from TeacherApp.rest.serializers.teacher import (
     TeacherListDetailSerializer,
     TeacherPostSerializer,
+    TeacherImageSerializer,
 )
-from TeacherApp.models import Teacher
+from TeacherApp.models import Teacher, TeacherImage
 
 
 class TeacherListCreateAPIView(CustomListCreateAPIView):
@@ -41,3 +42,33 @@ class TeacherDetailView(CustomRetrieveUpdateDestroyAPIView):
             return super().get_serializer_class()
         else:
             return TeacherPostSerializer
+
+
+class TeacherImageListCreateAPIView(CustomListCreateAPIView):
+    queryset = TeacherImage.objects.all()
+    serializer_class = TeacherImageSerializer
+
+    def get_authenticators(self):
+        if self.request.method == "POST":
+            return [JWTAuthentication()]
+        return super().get_authenticators()
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return super().get_serializer_class()
+        else:
+            return TeacherImageSerializer
+
+
+class TeacherImageDetailView(CustomRetrieveUpdateDestroyAPIView):
+    queryset = TeacherImage.objects.all()
+    serializer_class = TeacherImageSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_field = "uid"
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return super().get_serializer_class()
+        else:
+            return TeacherImageSerializer

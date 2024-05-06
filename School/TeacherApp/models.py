@@ -3,7 +3,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from phonenumber_field.modelfields import PhoneNumberField
 from versatileimagefield.fields import VersatileImageField
-
+from django.db.models.signals import post_save
 
 from common.models import  SchoolInformationOnBoarding
 from school_auth.models import User
@@ -53,3 +53,8 @@ class TeacherImage(UniversalModel):
     teacher_info = models.ForeignKey(Teacher, on_delete=models.DO_NOTHING, related_name='teacher_information')
     slug = AutoSlugField(populate_from=get_school_teacher_image_slug, unique=True, null=False, db_index=True)
     image = VersatileImageField(upload_to=get_teacher_profile_image, null=True, blank=True)
+
+
+def create_teacher_image(sender, instance, created, **kwargs):
+        TeacherImage.objects.create(teacher_info=instance)
+post_save.connect(create_teacher_image, sender=Teacher)
