@@ -18,7 +18,8 @@ from ..serializers.student import (
     StudentFatherSerializer,
     StudentMotherSerializer,
     StudentGuardianSerializer,
-    StudentDetailInformationListSerializer
+    StudentDetailInformationListSerializer,
+    StudentCurrentStatusDetailsSerializer
 )
 
 from ...models import (
@@ -53,6 +54,11 @@ class StudentDetail(CustomRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StudentInformationListSerializer
     lookup_field = "slug"
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentInformationListSerializer
+        return StudentInformationListSerializer
 
     def get_queryset(self):
         student = Student.objects.filter(
@@ -99,6 +105,11 @@ class StudentImageRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView
             return [IsAuthenticated()]
         else:
             return []
+        
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentImageSerializer
+        return StudentImageSerializer
 
     def get_queryset(self):
 
@@ -152,6 +163,11 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentCurrentStatusSerializer
+        return StudentCurrentStatusSerializer
 
     def get_queryset(self):
 
@@ -205,6 +221,11 @@ class StudentPermanentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDes
             return [IsAuthenticated()]
         else:
             return []
+        
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentPermanentAddressSerializer
+        return StudentPermanentAddressSerializer
 
     def get_queryset(self):
 
@@ -259,6 +280,11 @@ class StudentPresentAddressRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
             return [IsAuthenticated()]
         else:
             return []
+        
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentPresentAddressSerializer
+        return StudentPresentAddressSerializer
 
     def get_queryset(self):
 
@@ -313,6 +339,11 @@ class StudentFatherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentFatherSerializer
+        return StudentFatherSerializer
 
     def get_queryset(self):
 
@@ -367,6 +398,11 @@ class StudentMotherRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIVie
         else:
             return []
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentMotherSerializer
+        return StudentMotherSerializer
+
     def get_queryset(self):
 
         school_slug = self.kwargs.get("school_slug", None)
@@ -419,6 +455,11 @@ class StudentGuardianRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
             return [IsAuthenticated()]
         else:
             return []
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentGuardianSerializer
+        return StudentGuardianSerializer
 
     def get_queryset(self):
 

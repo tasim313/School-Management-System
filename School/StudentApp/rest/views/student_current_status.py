@@ -52,6 +52,11 @@ class StudentCurrentStatusRetrieveUpdateDeleteView(generics.RetrieveUpdateDestro
     serializer_class = StudentCurrentStatusListSerializer
     lookup_field = "uid"
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return StudentCurrentStatusDetailsSerializer
+        return StudentCurrentStatusListSerializer
+
     def get_permissions(self):
         # Don't allow non-authenticated user request via PUT, PATCH, DELETE
         if (
