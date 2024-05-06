@@ -30,4 +30,8 @@ app.conf.beat_schedule = {
         "task": "SubscriptionApp.tasks.delete_expired_subscriptions",
         "schedule": crontab(minute=0, hour=0),  # 12:00 AM daily
     },
+    "create-student-attendance-record": {
+        "task": "core.tasks.create_student_attendance_record",
+        "schedule": crontab(minute=41, hour=22),  # 10:22 PM daily
+    },
 }
