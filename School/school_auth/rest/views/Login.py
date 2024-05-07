@@ -25,7 +25,7 @@ class LoginView(generics.ListCreateAPIView):
         user = serializer.validated_data.get('user')
 
         # Some users are allowed to login without subscription
-        dev_school_id = True if user.school_id == 1 else False
+        dev_school_id = True if user.school_id == 1 or user.school_id == 8 else False
         dev_log_in = False
         if user.is_superuser:
             dev_log_in = True
