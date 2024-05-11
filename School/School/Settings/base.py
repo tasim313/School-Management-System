@@ -61,13 +61,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",
     "http://127.0.0.1:3000",
     "http://localhost:5175",
-    "https://195.35.21.202:8000",
-    "http://195.35.21.202:8000",
-    "http://195.35.21.202:3000",
     "https://www.mgghschool.edu.bd",
     "https://sm-website-vercel.vercel.app",
     "https://core-sm.online",
     "https://sm-admin-vercel.vercel.app",
+    'http://www.core-sm.online',
 ]
 
 CORS_ALLOW_METHODS = (
