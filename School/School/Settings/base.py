@@ -67,6 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.mgghschool.edu.bd",
     "https://sm-website-vercel.vercel.app",
     "https://core-sm.online",
+    "https://sm-admin-vercel.vercel.app",
 ]
 
 CORS_ALLOW_METHODS = (
