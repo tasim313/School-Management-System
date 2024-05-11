@@ -94,6 +94,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://195.35.21.202:8000",
     "https://core-sm.online",
 ]
+
+CORS_ALLOWED_ORIGIN_ALL = True
 DCS_SESSION_COOKIE_SAMESITE = "None"
 # Ensure CSRF protection is enabled
 CSRF_USE_SESSIONS = True
