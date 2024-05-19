@@ -63,6 +63,13 @@ class CustomRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class CustomListCreateAPIView(ListCreateAPIView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        filter_by = self.request.query_params.get('filter_by')
+        if filter_by:
+            queryset = queryset.filter(field_name=filter_by)
+        return queryset
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

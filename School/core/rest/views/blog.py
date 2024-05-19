@@ -31,6 +31,15 @@ class BlogListCreateAPIView(CustomListCreateAPIView):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = BlogListDetailSerializer(queryset, many=True)
         return Response(serializer.data)
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        school_slug = self.kwargs.get('school_slug')
+        if school_slug:
+            queryset = queryset.filter(school_blog__slug=school_slug).select_related(
+                "school_blog"
+            )
+        return queryset
 
 
 class BlogRetrieveUpdateDestroyAPIView(CustomRetrieveUpdateDestroyAPIView):

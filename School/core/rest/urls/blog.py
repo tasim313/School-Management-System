@@ -10,7 +10,7 @@ from core.rest.views.blog import (
 
 urlpatterns = [
     path(
-        "",
+        "<slug:school_slug>/",
         BlogListCreateAPIView.as_view(),
         name="school-blog-list",
     ),

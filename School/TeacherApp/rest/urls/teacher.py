@@ -3,7 +3,7 @@ from TeacherApp.rest.views.teacher import TeacherListCreateAPIView, TeacherDetai
 
 urlpatterns = [
     path(
-        "",
+        "<slug:school_slug>/",
         TeacherListCreateAPIView.as_view(),
         name="teacher-list-create",
     ),

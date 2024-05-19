@@ -13,10 +13,13 @@ from TeacherApp.rest.serializers.teacher import (
 )
 from TeacherApp.models import Teacher, TeacherImage
 
+from common.pagination import StandardResultsSetPagination
+
 
 class TeacherListCreateAPIView(CustomListCreateAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherListDetailSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_authenticators(self):
         if self.request.method == "POST":
@@ -28,6 +31,17 @@ class TeacherListCreateAPIView(CustomListCreateAPIView):
             return super().get_serializer_class()
         else:
             return TeacherPostSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        school_slug = self.kwargs.get('school_slug')
+        if school_slug:
+            queryset = queryset.filter(school_teacher__slug=school_slug).select_related(
+                "school_teacher",
+                "teacher_user",
+            )
+        return queryset
+
 
 
 class TeacherDetailView(CustomRetrieveUpdateDestroyAPIView):
@@ -42,7 +56,7 @@ class TeacherDetailView(CustomRetrieveUpdateDestroyAPIView):
             return super().get_serializer_class()
         else:
             return TeacherPostSerializer
-
+    
 
 class TeacherImageListCreateAPIView(CustomListCreateAPIView):
     queryset = TeacherImage.objects.all()
